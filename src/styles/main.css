@@ -1,0 +1,129 @@
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-color: #4CAF50;
+  --secondary-color: #45a049;
+  --text-color: #333;
+  --background-color: #f5f5f5;
+  --card-background: #ffffff;
+  --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-hover: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1.6;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  min-height: 100vh;
+}
+
+#app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.app-header {
+  text-align: center;
+  padding: 2rem 0;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow);
+}
+
+.app-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.app-header .subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+/* Main Content */
+.app-main {
+  flex: 1;
+}
+
+.welcome-section {
+  background: var(--card-background);
+  padding: 2rem;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow);
+}
+
+.welcome-section h2 {
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+/* Features Grid */
+.features-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.feature-card {
+  background: var(--card-background);
+  padding: 2rem;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-hover);
+}
+
+.feature-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--primary-color);
+}
+
+.feature-card p {
+  color: #666;
+}
+
+/* Footer */
+.app-footer {
+  text-align: center;
+  padding: 2rem 0;
+  margin-top: 2rem;
+  color: #666;
+  border-top: 1px solid #ddd;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .app-header h1 {
+    font-size: 2rem;
+  }
+  
+  .app-header .subtitle {
+    font-size: 1rem;
+  }
+  
+  .features-section {
+    grid-template-columns: 1fr;
+  }
+}

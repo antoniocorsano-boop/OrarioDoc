@@ -1,0 +1,24 @@
+{
+  "name": "orariodoc",
+  "version": "1.0.0",
+  "description": "App didattica docente – PWA open source con IA",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "pwa",
+    "education",
+    "teacher",
+    "schedule",
+    "ai"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^7.1.12",
+    "vite-plugin-pwa": "^1.1.0"
+  }
+}
