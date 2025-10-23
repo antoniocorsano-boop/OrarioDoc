@@ -419,6 +419,46 @@ jobs:
 - [ ] Mobile apps (React Native)
 - [ ] Desktop app (Electron)
 
+## 🗂️ Task operativi e Roadmap
+
+Questa sezione elenca i task concreti del progetto, divisi per fasi e milestone, pronti per la gestione su GitHub Project.
+
+### Fase 1: MVP
+- [ ] Impostazione struttura repository e PWA base
+- [ ] Gestione orario settimanale (UI, drag&drop, storage)
+- [ ] Calendario lezioni (visualizzazione, inserimento, modifica)
+- [ ] Gestione voti/valutazioni (form, analisi base)
+- [ ] Export documenti in PDF/CSV
+- [ ] Implementazione autenticazione locale (PIN/WebAuthn)
+- [ ] Implementazione base AI (suggerimenti orario, analisi pattern semplici)
+- [ ] Test accessibilità (WCAG 2.1, aria-label, navigazione tastiera)
+
+### Fase 2: Enhancement
+- [ ] Raccomandazioni IA avanzate (trend voti, report intelligenti)
+- [ ] Chatbot assistente docente
+- [ ] Import/export avanzato (Excel, JSON)
+- [ ] Dashboard statistiche (grafici, indicatori)
+- [ ] Collaborazione multiutente (se previsto)
+- [ ] Ottimizzazione performance (bundle, lazy loading, caching)
+
+### Fase 3: Scale
+- [ ] Mobile app (React Native)
+- [ ] Desktop app (Electron)
+- [ ] Analytics privacy-first
+- [ ] Integrazioni esterne (registro elettronico, cloud)
+
+## 📅 Milestone
+
+| Nome           | Data stimata    | Task chiave                        |
+|----------------|-----------------|-------------------------------------|
+| MVP            | 2025-11-15      | PWA base, orario, lezioni, storage  |
+| Enhancement 1  | 2026-01-15      | IA avanzata, chatbot, statistiche   |
+| Scale          | 2026-03-30      | Mobile/Desktop, integrazioni        |
+
+---
+
+> Tutti i task e le milestone sono sincronizzati con il Project board GitHub per monitoraggio e collaborazione.
+
 ## 📚 Riferimenti
 
 - [React Documentation](https://react.dev/)
