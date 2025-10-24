@@ -13,13 +13,13 @@ OrarioDoc is a Progressive Web App (PWA) designed to help teachers manage schedu
 ## Technology Stack
 
 - **Frontend**: React 18+
-- **State Management**: Redux Toolkit or Zustand (to be decided during implementation)
-- **Styling**: CSS Modules or Styled Components
+- **State Management**: Redux Toolkit or Zustand (prefer simpler solution for MVP, upgrade if needed)
+- **Styling**: CSS Modules or Styled Components (prefer CSS Modules for consistency)
 - **PWA**: Workbox for service worker
 - **AI Integration**: Custom AI utilities
-- **Build Tool**: Vite or Create React App (to be decided)
+- **Build Tool**: Vite or Create React App (Vite preferred for better performance and modern tooling)
 - **Testing**: Jest, React Testing Library
-- **Language**: JavaScript (ES6+) - TypeScript may be added later
+- **Language**: JavaScript (ES6+) - TypeScript may be added later based on team preference
 
 ## Project Structure
 
@@ -64,7 +64,7 @@ OrarioDoc/
 
 ## Code Style Guidelines
 
-Follow the conventions defined in [docs/STYLE_GUIDE.md](../docs/STYLE_GUIDE.md). Key highlights:
+Follow the conventions defined in [docs/STYLE_GUIDE.md](./docs/STYLE_GUIDE.md). Key highlights:
 
 ### JavaScript/React
 - Use ES6+ modern features
@@ -222,9 +222,9 @@ AI modules are located in `src/ai/` and should be modular and testable.
 
 ## References
 
-- [CONTRIBUTING.md](../CONTRIBUTING.md) - Full contribution guidelines
-- [docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md) - Architecture details
-- [docs/STYLE_GUIDE.md](../docs/STYLE_GUIDE.md) - Complete style guide
+- [CONTRIBUTING.md](./CONTRIBUTING.md) - Full contribution guidelines
+- [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) - Architecture details
+- [docs/STYLE_GUIDE.md](./docs/STYLE_GUIDE.md) - Complete style guide
 - [React Documentation](https://react.dev/)
 - [WCAG 2.1 Guidelines](https://www.w3.org/WAI/WCAG21/quickref/)
 - [PWA Checklist](https://web.dev/pwa-checklist/)
