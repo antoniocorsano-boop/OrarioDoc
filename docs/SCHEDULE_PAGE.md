@@ -80,9 +80,24 @@ The Schedule page follows WCAG 2.1 Level AA guidelines:
 You can customize the schedule by:
 
 1. **Changing time slots**: Edit the `TIME_SLOTS` array in `Schedule.jsx`
-2. **Adding days**: Modify the `DAYS` array to include weekends
+   ```javascript
+   const TIME_SLOTS = ['08:00', '09:00', '10:00', ...];
+   ```
+
+2. **Adding days**: Modify the `DAYS` array to include weekends. Each day is an object with `key` and `label` properties:
+   ```javascript
+   const DAYS = [
+     { key: 'monday', label: 'Lunedì' },
+     { key: 'tuesday', label: 'Martedì' },
+     // Add more days...
+     { key: 'saturday', label: 'Sabato' },
+     { key: 'sunday', label: 'Domenica' }
+   ];
+   ```
+
 3. **Styling**: Update `Schedule.css` with your custom colors and styles
-4. **Initial data**: Modify the `initialSchedule` in `scheduleStore.js`
+
+4. **Initial data**: Modify the `initialSchedule` in `scheduleStore.js`. Remember to add corresponding day keys if you add new days.
 
 ## Future Enhancements
 
