@@ -221,8 +221,8 @@ const SchedulePage = () => {
 
       <Box sx={{ mt: 3 }}>
         <Typography variant="body2" color="text.secondary">
-          💡 <strong>Suggerimento:</strong> L'orario viene salvato automaticamente nel browser.
-          Clicca su "Salva" per confermare le modifiche o su "Cancella" per rimuovere tutto l'orario.
+          💡 <strong>Suggerimento:</strong> Inserisci materia e docente per ogni ora di lezione.
+          Clicca su "Salva" per salvare l'orario nel browser o su "Cancella" per rimuovere tutto.
         </Typography>
       </Box>
     </Container>
