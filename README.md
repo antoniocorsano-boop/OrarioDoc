@@ -1,81 +1,87 @@
-# OrarioDoc
+# OrarioDoc 📚
 
-OrarioDoc è un'app per gestire orari/lezioni/turni. Questo branch (pwa-vanilla) contiene una versione leggera e indipendente dal Node/React: una Progressive Web App che funziona con HTML/CSS/vanilla JS e può essere eseguita facilmente su dispositivi Android anche tramite Termux.
+**App didattica docente – Progressive Web App open source con IA**
 
-## Perché questa scelta
-- Termux non è completamente compatibile con ambienti Node/React per tutti gli utenti: abbiamo scelto una soluzione "vanilla PWA" per massima compatibilità, leggerezza e facilità di esecuzione locale.
-- Nessun build step: file statici (index.html, app.css, app.js, manifest.json, service-worker.js) che si servono direttamente da un server statico.
-- Offline-capable grazie al Service Worker e caching.
+OrarioDoc è una Progressive Web App (PWA) moderna e accessibile progettata per aiutare i docenti a gestire orari, lezioni e attività didattiche. L'applicazione integra funzionalità di intelligenza artificiale per semplificare la pianificazione e migliorare l'esperienza utente.
 
-## Contenuto del branch `pwa-vanilla`
-- index.html — interfaccia utente semplice in HTML
-- app.css — styling di base
-- app.js — logica CRUD lato client usando localStorage (facile da migrare a IndexedDB)
-- manifest.json — renderizza l'app installabile come PWA
-- service-worker.js — caching e supporto offline
-- README.pwa.md — istruzioni rapide specifiche per Termux (se presente)
+## ✨ Caratteristiche principali
 
-## Istruzioni rapide (sviluppo e test su Termux)
-1. Apri Termux e clona / aggiorna il repository o spostati nella cartella del progetto:
-   cd /path/to/OrarioDoc
+- 📱 **Progressive Web App**: Installabile su qualsiasi dispositivo, funziona offline
+- 🤖 **Integrazione IA**: Assistenza intelligente per la pianificazione e organizzazione
+- ♿ **Accessibilità**: Progettata seguendo le linee guida WCAG 2.1
+- 🌐 **Open Source**: Contributi benvenuti dalla community
+- 🎨 **Design moderno**: Interfaccia intuitiva e responsive
+- 🔒 **Privacy**: I dati rimangono sul dispositivo dell'utente
 
-2. Cambia branch (se necessario):
-   git fetch origin
-   git checkout pwa-vanilla
+## 🚀 Quick Start
 
-3. Avvia un server statico locale. Esempio con Python incluso in Termux:
-   python3 -m http.server 8000
+### Prerequisiti
 
-4. Apri il browser del dispositivo e vai su:
-   http://127.0.0.1:8000
+- Node.js >= 18.x
+- npm >= 9.x o yarn >= 1.22.x
 
-5. Prova la PWA:
-   - Apri la pagina e controlla la Console -> Service Worker per verificare l'installazione.
-   - Lascia caricare la pagina per permettere il caching, poi prova a mettere il dispositivo offline e ricaricare per verificare il funzionamento offline.
+### Installazione
 
-## Dati e persistenza
-- Attualmente i dati vengono memorizzati in localStorage sotto la chiave `orariodoc:v1`. È una soluzione semplice e affidabile per cominciare.
-- Se desideri maggiore robustezza (ricerche, indici, transazioni), consigliamo IndexedDB (possibile utilizzo della libreria `idb`) o SQLite su Termux per backup locali.
-- Esportazione/importazione: possiamo aggiungere funzionalità per esportare i dati in JSON e ripristinarli manualmente.
+```bash
+# Clona il repository
+git clone https://github.com/antoniocorsano-boop/OrarioDoc.git
+cd OrarioDoc
 
-## Temi e grafica
-OrarioDoc PWA offre diverse opzioni di personalizzazione per l'interfaccia:
+# Installa le dipendenze
+npm install
 
-### Opzioni tema disponibili
-- **Automatico (sistema)**: Segue le preferenze del sistema operativo (`prefers-color-scheme`). Passa automaticamente tra tema chiaro e scuro in base alle impostazioni del dispositivo.
-- **Chiaro**: Tema con colori luminosi e alta leggibilità su sfondo bianco.
-- **Scuro**: Tema ottimizzato per ambienti con poca luce, riduce l'affaticamento visivo.
-- **Expressive (M3)**: Ispirato a Material Design 3, con palette colori vivaci e dinamici.
+# Avvia in modalità sviluppo
+npm start
+```
 
-### Personalizzazione colori
-Tramite il menu **Impostazioni**, puoi personalizzare i colori principali dell'applicazione:
-- **Colore primario**: Utilizzato per pulsanti, link e elementi interattivi principali
-- **Colore secondario**: Utilizzato per accenti e azioni secondarie
+L'applicazione sarà disponibile su `http://localhost:3000`
 
-Le scelte vengono salvate in `localStorage` (chiavi: `orariodoc:theme`, `orariodoc:colors`) e ripristinate automaticamente al riavvio dell'app.
+### Build per produzione
 
-### Icone e accessibilità
-- Le icone sono in formato **SVG** (scalabili) posizionate nella cartella `/icons`.
-- Attualmente contiene icone placeholder; è consigliato sostituirle con artwork definitivo prima del rilascio in produzione.
-- Tutte le icone hanno attributi `alt` e `aria-label` appropriati per garantire l'accessibilità agli screen reader.
-- I controlli interattivi includono stati di focus visibili per la navigazione da tastiera.
+```bash
+# Crea build ottimizzata
+npm run build
 
-## Migrazione dalla versione React/Node
-- Questo branch è pensato come alternativa quando l'ambiente Node non è disponibile. Non rimuove il lavoro React/Node principale; mantenere la storia/branch originali è consigliato.
-- Se vuoi mantenere entrambe le versioni nel repository, possiamo aggiungere una sezione nel README principale con link e indicazioni su come scegliere quella corretta per il proprio ambiente.
+# Testa la build in locale
+npm run serve
+```
 
-## Come contribuire
-- Apri una issue per proporre cambiamenti, nuove feature o per segnalare bug.
-- Se vuoi proporre aggiornamenti alla PWA, crea una branch a partire da `pwa-vanilla` e apri una PR verso `pwa-vanilla` o `main` a seconda dell'obiettivo.
+## 📖 Documentazione
 
-## Note tecniche e miglioramenti possibili
-- Sostituire localStorage con IndexedDB (`idb`) per dataset più grandi.
-- Aggiungere sincronizzazione remota e backup (API REST o file export).
-- Aggiungere icone reali / file nella cartella `/icons` per migliorare l'esperienza PWA.
-- Aggiungere test automatici o linters leggieri (opzionale, non obbligatori per esecuzione su Termux).
+Per maggiori informazioni, consulta la documentazione completa:
 
-## Contatti
-Per domande o richieste specifiche riguardo a questa migrazione/documentazione scrivi qui su GitHub o apri un'issue nel repository.
+- [Architecture](./docs/ARCHITECTURE.md) - Architettura e design del sistema
+- [Quick Start Guide](./docs/QUICKSTART.md) - Guida dettagliata all'installazione
+- [Style Guide](./docs/STYLE_GUIDE.md) - Linee guida per lo sviluppo
+- [Open Source Components](./docs/OPEN_SOURCE_COMPONENTS.md) - Componenti e librerie utilizzate
+- [Contributing](./CONTRIBUTING.md) - Come contribuire al progetto
+
+## 🛠️ Tecnologie
+
+- **Frontend**: React 18+
+- **State Management**: Redux Toolkit / Zustand
+- **Styling**: CSS Modules / Styled Components
+- **PWA**: Workbox
+- **AI Integration**: Custom AI utilities
+- **Build Tool**: Vite / Create React App
+- **Testing**: Jest, React Testing Library
+
+## 🤝 Contribuire
+
+Apprezziamo molto i contributi dalla community! Leggi la nostra [guida per contribuire](./CONTRIBUTING.md) per iniziare.
+
+## 📄 Licenza
+
+Questo progetto è rilasciato sotto licenza MIT. Vedi il file [LICENSE](./LICENSE) per i dettagli.
+
+## 👥 Autori
+
+- **Antonio Corsano** - *Initial work* - [@antoniocorsano-boop](https://github.com/antoniocorsano-boop)
+
+## 🙏 Ringraziamenti
+
+Grazie a tutti i contributori che hanno aiutato a rendere OrarioDoc migliore!
 
 ---
-Aggiornato per riflettere la scelta tecnica: PWA vanilla (Termux-friendly).
+
+**Nota**: Questo progetto è in fase di sviluppo attivo. Funzionalità e documentazione sono soggette a modifiche.
