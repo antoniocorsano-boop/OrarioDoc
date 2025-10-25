@@ -1,81 +1,142 @@
-# OrarioDoc
+# OrarioDoc - Vanilla PWA
 
-OrarioDoc è un'app per gestire orari/lezioni/turni. Questo branch (pwa-vanilla) contiene una versione leggera e indipendente dal Node/React: una Progressive Web App che funziona con HTML/CSS/vanilla JS e può essere eseguita facilmente su dispositivi Android anche tramite Termux.
+OrarioDoc è una Progressive Web App (PWA) leggera per la gestione di orari e lezioni, costruita con HTML, CSS e JavaScript vanilla senza dipendenze esterne.
 
-## Perché questa scelta
-- Termux non è completamente compatibile con ambienti Node/React per tutti gli utenti: abbiamo scelto una soluzione "vanilla PWA" per massima compatibilità, leggerezza e facilità di esecuzione locale.
-- Nessun build step: file statici (index.html, app.css, app.js, manifest.json, service-worker.js) che si servono direttamente da un server statico.
-- Offline-capable grazie al Service Worker e caching.
+## 🚀 Quickstart
 
-## Contenuto del branch `pwa-vanilla`
-- index.html — interfaccia utente semplice in HTML
-- app.css — styling di base
-- app.js — logica CRUD lato client usando localStorage (facile da migrare a IndexedDB)
-- manifest.json — renderizza l'app installabile come PWA
-- service-worker.js — caching e supporto offline
-- README.pwa.md — istruzioni rapide specifiche per Termux (se presente)
+### Prerequisiti
+- Python 3 (o qualsiasi server HTTP statico)
+- Browser moderno con supporto Service Worker
 
-## Istruzioni rapide (sviluppo e test su Termux)
-1. Apri Termux e clona / aggiorna il repository o spostati nella cartella del progetto:
-   cd /path/to/OrarioDoc
+### Installazione e avvio
 
-2. Cambia branch (se necessario):
-   git fetch origin
-   git checkout pwa-vanilla
+1. **Clona il repository**
+   ```bash
+   git clone https://github.com/antoniocorsano-boop/OrarioDoc.git
+   cd OrarioDoc
+   git checkout migrate/vanilla-pwa
+   ```
 
-3. Avvia un server statico locale. Esempio con Python incluso in Termux:
+2. **Avvia il server locale**
+   ```bash
    python3 -m http.server 8000
+   ```
 
-4. Apri il browser del dispositivo e vai su:
+3. **Apri nel browser**
+   ```
    http://127.0.0.1:8000
+   ```
 
-5. Prova la PWA:
-   - Apri la pagina e controlla la Console -> Service Worker per verificare l'installazione.
-   - Lascia caricare la pagina per permettere il caching, poi prova a mettere il dispositivo offline e ricaricare per verificare il funzionamento offline.
+4. **Testa l'applicazione**
+   - Clicca su "Aggiungi" per creare una nuova lezione
+   - Compila i campi e clicca "Salva"
+   - La lezione verrà salvata e visualizzata nella griglia
+   - Clicca su una lezione per eliminarla
+   - Ricarica la pagina per verificare la persistenza dei dati
 
-## Dati e persistenza
-- Attualmente i dati vengono memorizzati in localStorage sotto la chiave `orariodoc:v1`. È una soluzione semplice e affidabile per cominciare.
-- Se desideri maggiore robustezza (ricerche, indici, transazioni), consigliamo IndexedDB (possibile utilizzo della libreria `idb`) o SQLite su Termux per backup locali.
-- Esportazione/importazione: possiamo aggiungere funzionalità per esportare i dati in JSON e ripristinarli manualmente.
+## 📱 Caratteristiche
 
-## Temi e grafica
-OrarioDoc PWA offre diverse opzioni di personalizzazione per l'interfaccia:
+- **Offline-first**: Funziona anche senza connessione grazie al Service Worker
+- **Persistenza locale**: I dati vengono salvati in localStorage
+- **Design responsive**: Ottimizzato per mobile e desktop
+- **Zero dipendenze**: Nessun framework o libreria esterna
+- **Installabile**: Può essere installata come app nativa
 
-### Opzioni tema disponibili
-- **Automatico (sistema)**: Segue le preferenze del sistema operativo (`prefers-color-scheme`). Passa automaticamente tra tema chiaro e scuro in base alle impostazioni del dispositivo.
-- **Chiaro**: Tema con colori luminosi e alta leggibilità su sfondo bianco.
-- **Scuro**: Tema ottimizzato per ambienti con poca luce, riduce l'affaticamento visivo.
-- **Expressive (M3)**: Ispirato a Material Design 3, con palette colori vivaci e dinamici.
+## 🏗️ Struttura del progetto
 
-### Personalizzazione colori
-Tramite il menu **Impostazioni**, puoi personalizzare i colori principali dell'applicazione:
-- **Colore primario**: Utilizzato per pulsanti, link e elementi interattivi principali
-- **Colore secondario**: Utilizzato per accenti e azioni secondarie
+```
+OrarioDoc/
+├── index.html              # Shell HTML dell'applicazione
+├── style.css               # Stili e layout
+├── manifest.json           # Manifest PWA
+├── service-worker.js       # Service Worker per caching
+├── src/
+│   ├── storage.js          # Layer di persistenza (localStorage)
+│   ├── schedule-grid.js    # Rendering griglia e gestione eventi
+│   └── main.js             # Inizializzazione e wiring UI
+├── docs/
+│   └── progetto.md         # Documento di progetto
+└── README.md               # Questo file
+```
 
-Le scelte vengono salvate in `localStorage` (chiavi: `orariodoc:theme`, `orariodoc:colors`) e ripristinate automaticamente al riavvio dell'app.
+## 🎯 Funzionalità implementate
 
-### Icone e accessibilità
-- Le icone sono in formato **SVG** (scalabili) posizionate nella cartella `/icons`.
-- Attualmente contiene icone placeholder; è consigliato sostituirle con artwork definitivo prima del rilascio in produzione.
-- Tutte le icone hanno attributi `alt` e `aria-label` appropriati per garantire l'accessibilità agli screen reader.
-- I controlli interattivi includono stati di focus visibili per la navigazione da tastiera.
+### MVP (Minimum Viable Product)
+- ✅ Creazione nuove lezioni
+- ✅ Visualizzazione lezioni nella griglia
+- ✅ Eliminazione lezioni
+- ✅ Persistenza con localStorage
+- ✅ Service Worker per offline
+- ✅ Manifest PWA
 
-## Migrazione dalla versione React/Node
-- Questo branch è pensato come alternativa quando l'ambiente Node non è disponibile. Non rimuove il lavoro React/Node principale; mantenere la storia/branch originali è consigliato.
-- Se vuoi mantenere entrambe le versioni nel repository, possiamo aggiungere una sezione nel README principale con link e indicazioni su come scegliere quella corretta per il proprio ambiente.
+### Prossimi sviluppi
+- [ ] Modifica lezioni esistenti
+- [ ] Esportazione/importazione dati
+- [ ] Migrazione da localStorage a IndexedDB
+- [ ] Filtri e ricerca
+- [ ] Notifiche
+- [ ] Temi personalizzabili
+- [ ] Sincronizzazione cloud (opzionale)
 
-## Come contribuire
-- Apri una issue per proporre cambiamenti, nuove feature o per segnalare bug.
-- Se vuoi proporre aggiornamenti alla PWA, crea una branch a partire da `pwa-vanilla` e apri una PR verso `pwa-vanilla` o `main` a seconda dell'obiettivo.
+## 🧪 Test manuali
 
-## Note tecniche e miglioramenti possibili
-- Sostituire localStorage con IndexedDB (`idb`) per dataset più grandi.
-- Aggiungere sincronizzazione remota e backup (API REST o file export).
-- Aggiungere icone reali / file nella cartella `/icons` per migliorare l'esperienza PWA.
-- Aggiungere test automatici o linters leggieri (opzionale, non obbligatori per esecuzione su Termux).
+Per verificare il corretto funzionamento:
 
-## Contatti
-Per domande o richieste specifiche riguardo a questa migrazione/documentazione scrivi qui su GitHub o apri un'issue nel repository.
+1. **Test aggiunta lezione**
+   - Clicca "Aggiungi"
+   - Compila: Nome "Matematica", Giorno "Lunedì", Ora "09:00"
+   - Clicca "Salva"
+   - Verifica che appaia nella griglia
 
----
-Aggiornato per riflettere la scelta tecnica: PWA vanilla (Termux-friendly).
+2. **Test persistenza**
+   - Aggiungi alcune lezioni
+   - Ricarica la pagina (F5)
+   - Verifica che le lezioni siano ancora presenti
+
+3. **Test eliminazione**
+   - Clicca su una lezione nella griglia
+   - Conferma l'eliminazione
+   - Verifica che la lezione sia rimossa
+
+4. **Test offline**
+   - Apri DevTools → Application → Service Workers
+   - Verifica che il SW sia attivo
+   - Attiva la modalità offline
+   - Ricarica la pagina
+   - L'app dovrebbe funzionare ugualmente
+
+## 🛠️ Tecnologie
+
+- **HTML5**: Struttura semantica
+- **CSS3**: Variables, Grid, Flexbox
+- **JavaScript ES6+**: Modules pattern, arrow functions
+- **Service Worker API**: Caching e offline
+- **LocalStorage API**: Persistenza dati
+
+## 📚 Documentazione
+
+Per maggiori dettagli sull'architettura e la roadmap, consulta:
+- [docs/progetto.md](docs/progetto.md) - Documento di progetto completo
+- [CONTRIBUTING.md](CONTRIBUTING.md) - Linee guida per contribuire
+
+## 🤝 Contribuire
+
+Questo progetto è open source e accoglie contributi! Per contribuire:
+
+1. Leggi [CONTRIBUTING.md](CONTRIBUTING.md)
+2. Fork il repository
+3. Crea un branch per la tua feature
+4. Commit le modifiche
+5. Apri una Pull Request
+
+## 📄 Licenza
+
+Vedi il file [LICENSE](LICENSE) per i dettagli.
+
+## 👥 Autori
+
+- Antonio Corsano ([@antoniocorsano-boop](https://github.com/antoniocorsano-boop))
+
+## 🙏 Riconoscimenti
+
+Questo progetto migra da un'architettura React/Node a vanilla PWA per massima portabilità e compatibilità con ambienti come Termux su Android.

@@ -143,7 +143,6 @@ build/
 
 # PWA specific
 sw.js
-service-worker.js
 workbox-*.js
 precache-manifest.*.js
 
