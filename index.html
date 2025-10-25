@@ -1,86 +1,46 @@
 <!doctype html>
 <html lang="it">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>OrarioDoc — PWA</title>
-
-  <link rel="manifest" href="/manifest.json" />
-  <link rel="stylesheet" href="/app.css" />
-  <meta name="theme-color" content="#2b7cff" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>OrarioDoc — MVP</title>
+  <link rel="manifest" href="/manifest.json"/>
+  <link rel="stylesheet" href="/style.css"/>
+  <meta name="theme-color" content="#2f6fe0"/>
 </head>
 <body>
   <header class="topbar">
     <div class="brand">
-      <img src="/icons/icon-192.svg" alt="OrarioDoc" class="brand-icon"/>
-      <h1>OrarioDoc</h1>
+      <div class="logo">OD</div>
+      <span class="title">OrarioDoc</span>
     </div>
-    <div class="controls">
-      <div class="settings-wrapper">
-        <button id="settingsBtn" aria-label="Impostazioni">Impostazioni</button>
-        <div class="settings-menu hidden" id="settingsMenu" aria-hidden="true">
-          <div class="settings-section">
-            <h3>Tema</h3>
-            <div class="theme-options">
-              <button data-theme="auto">Automatico (sistema)</button>
-              <button data-theme="light">Chiaro</button>
-              <button data-theme="dark">Scuro</button>
-              <button data-theme="expressive">Expressive (M3)</button>
-            </div>
-          </div>
-          <div class="settings-section">
-            <h3>Colori personalizzati</h3>
-            <label>Primario
-              <input type="color" id="primaryColor" />
-            </label>
-            <label>Secondario
-              <input type="color" id="secondaryColor" />
-            </label>
-            <div style="display:flex;gap:8px;margin-top:8px">
-              <button id="saveColors" class="secondary">Salva colori</button>
-              <button id="resetColors" class="secondary">Reset</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <button id="addBtn" aria-label="Aggiungi voce">Aggiungi</button>
+    <div class="actions">
+      <button id="settingsBtn" class="btn" aria-label="Impostazioni">Impostazioni</button>
+      <button id="addBtn" class="btn primary" aria-label="Aggiungi lezione">Aggiungi</button>
     </div>
   </header>
-
-  <main id="app">
-    <section id="list">
-      <!-- Lista orario -->
-    </section>
-
-    <section id="form" class="hidden" aria-hidden="true">
-      <h2>Nuova voce</h2>
-      <label>Nome
-        <input id="ev-name" />
-      </label>
-      <label>Giorno
-        <input id="ev-day" />
-      </label>
-      <label>Ora
-        <input id="ev-time" type="time" />
-      </label>
-      <div class="form-actions">
-        <button id="saveBtn">Salva</button>
-        <button id="cancelBtn" class="secondary">Annulla</button>
-      </div>
-    </section>
+  <main class="app">
+    <div class="panel">
+      <div id="scheduleGrid" class="schedule-grid"></div>
+    </div>
   </main>
-
-  <footer class="footer">
-    <img src="/icons/github.svg" alt="GitHub" class="icon"/>
-    <img src="/icons/gmail.svg" alt="Gmail" class="icon"/>
-  </footer>
-
-  <script src="/app.js" defer></script>
-  <script>
-    // register service worker
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/service-worker.js').catch(console.error);
-    }
-  </script>
+  <aside id="panel" class="panel hidden" aria-hidden="true">
+    <h3>Nuova lezione</h3>
+    <label>Nome <input id="inputName" type="text"/></label>
+    <label>Classe <input id="inputClass" type="text"/></label>
+    <label>Giorno <input id="inputDay" type="number" min="0" max="6" value="1"/></label>
+    <label>Ora <input id="inputTime" type="time" value="08:00"/></label>
+    <label>Durata (min) <input id="inputDuration" type="number" value="60"/></label>
+    <div class="form-actions">
+      <button id="saveBtn" class="btn primary">Salva</button>
+      <button id="cancelBtn" class="btn">Annulla</button>
+    </div>
+  </aside>
+  <footer class="footer">OrarioDoc — PWA MVP</footer>
+  <script src="/src/storage.js"></script>
+  <script src="/src/settings.js"></script>
+  <script src="/src/schedule-grid.js"></script>
+  <script src="/src/main.js"></script>
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/service-worker.js').catch(console.error);}</script>
 </body>
 </html>
