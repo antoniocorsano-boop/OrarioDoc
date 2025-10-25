@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>OrarioDoc — PWA</title>
+
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="stylesheet" href="/app.css" />
+  <meta name="theme-color" content="#2b7cff" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img src="/icons/icon-192.svg" alt="OrarioDoc" class="brand-icon"/>
+      <h1>OrarioDoc</h1>
+    </div>
+    <div class="controls">
+      <button id="themeBtn" aria-label="Cambia tema">Tema</button>
+      <div class="theme-menu hidden" id="themeMenu">
+        <button data-theme="auto">Automatico (sistema)</button>
+        <button data-theme="light">Chiaro</button>
+        <button data-theme="dark">Scuro</button>
+        <button data-theme="expressive">Expressive (M3)</button>
+      </div>
+      <button id="addBtn" aria-label="Aggiungi voce">Aggiungi</button>
+    </div>
+  </header>
+
+  <main id="app">
+    <section id="list">
+      <!-- Lista orario -->
+    </section>
+
+    <section id="form" class="hidden" aria-hidden="true">
+      <h2>Nuova voce</h2>
+      <label>Nome
+        <input id="ev-name" />
+      </label>
+      <label>Giorno
+        <input id="ev-day" />
+      </label>
+      <label>Ora
+        <input id="ev-time" type="time" />
+      </label>
+      <div class="form-actions">
+        <button id="saveBtn">Salva</button>
+        <button id="cancelBtn" class="secondary">Annulla</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <img src="/icons/github.svg" alt="GitHub" class="icon"/>
+    <img src="/icons/gmail.svg" alt="Gmail" class="icon"/>
+  </footer>
+
+  <script src="/app.js" defer></script>
+  <script>
+    // register service worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js').catch(console.error);
+    }
+  </script>
+</body>
+</html>
