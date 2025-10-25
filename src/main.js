@@ -11,23 +11,23 @@
     document.getElementById('panel').setAttribute('aria-hidden','true');
   }
 
-  function load(){
-    const data = Storage.read();
+  async function load(){
+    const data = await Storage.read();
     return data;
   }
-  function save(data){ Storage.write(data); }
+  async function save(data){ await Storage.write(data); }
 
   function openAdd(day){
     document.getElementById('inputDay').value = typeof day === 'number' ? String(day) : '1';
     showPanel();
   }
 
-  function init(){
+  async function init(){
     console.log('OrarioDoc init');
     const gridEl = document.getElementById('scheduleGrid');
     ScheduleGrid.createGrid(gridEl);
 
-    const state = load();
+    const state = await load();
     ScheduleGrid.renderLessons(gridEl, state.lessons || []);
 
     const addBtn = document.getElementById('addBtn');
@@ -36,23 +36,23 @@
     const cancelBtn = document.getElementById('cancelBtn');
 
     if(addBtn) addBtn.addEventListener('click', ()=>openAdd());
-    if(settingsBtn) settingsBtn.addEventListener('click', ()=>{
-      const s = AppSettings.loadSettings();
+    if(settingsBtn) settingsBtn.addEventListener('click', async ()=>{
+      const s = await AppSettings.loadSettings();
       alert('Impostazioni (placeholder)\nClasse default: '+(s.defaultClass||'---'));
     });
     if(cancelBtn) cancelBtn.addEventListener('click', ()=>hidePanel());
 
-    if(saveBtn) saveBtn.addEventListener('click', ()=>{
+    if(saveBtn) saveBtn.addEventListener('click', async ()=>{
       const name = document.getElementById('inputName').value.trim();
       const day = parseInt(document.getElementById('inputDay').value,10);
       const start = document.getElementById('inputTime').value || '08:00';
       const duration = parseInt(document.getElementById('inputDuration').value,10) || 60;
       if(!name){ alert('Inserisci il nome della lezione'); return; }
 
-      const data = load();
+      const data = await load();
       data.lessons = data.lessons || [];
       data.lessons.push({ id: uid(), name, class: document.getElementById('inputClass').value, day, start, duration });
-      save(data);
+      await save(data);
       ScheduleGrid.renderLessons(gridEl, data.lessons);
       hidePanel();
     });
