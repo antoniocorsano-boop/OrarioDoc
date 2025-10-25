@@ -51,16 +51,15 @@ function initTheme(){
   if(saved === 'auto') applyTheme('auto'); else applyTheme(saved);
   // Apply persisted colors if any and set inputs
   const colors = JSON.parse(localStorage.getItem(COLORS_KEY) || '{}');
-  if(colors.primary) document.getElementById('primaryColor').value = colors.primary;
-  if(colors.secondary) document.getElementById('secondaryColor').value = colors.secondary;
+  const primaryColorEl = document.getElementById('primaryColor');
+  const secondaryColorEl = document.getElementById('secondaryColor');
+  if(primaryColorEl && colors.primary) primaryColorEl.value = colors.primary;
+  if(secondaryColorEl && colors.secondary) secondaryColorEl.value = colors.secondary;
 }
 
-// DOM refs
-const listEl = document.getElementById('list');
-const formEl = document.getElementById('form');
-const addBtn = document.getElementById('addBtn');
-const saveBtn = document.getElementById('saveBtn');
-const cancelBtn = document.getElementById('cancelBtn');
+// DOM refs - will be initialized in init()
+let listEl, formEl, addBtn, saveBtn, cancelBtn;
+let settingsBtn, settingsMenu, primaryInput, secondaryInput, saveColorsBtn, resetColorsBtn;
 
 let editIndex = -1;
 
@@ -79,80 +78,125 @@ function render(){
   });
 }
 
-function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;})[c]); }
+function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]); }
 function getStyle(varName){ return getComputedStyle(document.documentElement).getPropertyValue(varName) || '#c0392b'; }
 
 // Show form for new or edit
-addBtn.addEventListener('click', () => { openFormForNew(); });
-cancelBtn.addEventListener('click', () => { closeForm(); });
-
-saveBtn.addEventListener('click', () => {
-  const name = document.getElementById('ev-name').value.trim();
-  const day = document.getElementById('ev-day').value.trim();
-  const time = document.getElementById('ev-time').value.trim();
-  if(!name){ alert('Inserisci il nome'); return; }
-  const items = loadData();
-  const entry = {name, day, time, updatedAt: new Date().toISOString()};
-  if(editIndex >= 0){ items[editIndex] = entry; editIndex = -1; } else { items.push(entry); }
-  saveData(items);
-  closeForm(); render();
-});
-
-listEl.addEventListener('click', (e) => {
-  const btn = e.target.closest('button'); if(!btn) return;
-  const action = btn.dataset.action; const idx = Number(btn.dataset.index); const items = loadData();
-  if(action === 'delete'){ if(confirm('Eliminare questa voce?')){ items.splice(idx,1); saveData(items); render(); } }
-  else if(action === 'edit'){ const it = items[idx]; openFormForEdit(it, idx); }
-});
-
 function openFormForNew(){ editIndex = -1; formEl.classList.remove('hidden'); formEl.setAttribute('aria-hidden','false'); listEl.classList.add('hidden'); document.getElementById('ev-name').value = ''; document.getElementById('ev-day').value = ''; document.getElementById('ev-time').value = ''; document.getElementById('ev-name').focus(); }
 function openFormForEdit(item, idx){ editIndex = idx; formEl.classList.remove('hidden'); formEl.setAttribute('aria-hidden','false'); listEl.classList.add('hidden'); document.getElementById('ev-name').value = item.name || ''; document.getElementById('ev-day').value = item.day || ''; document.getElementById('ev-time').value = item.time || ''; }
 function closeForm(){ formEl.classList.add('hidden'); formEl.setAttribute('aria-hidden','true'); listEl.classList.remove('hidden'); editIndex = -1; }
 
-// Settings menu logic
-const settingsBtn = document.getElementById('settingsBtn');
-const settingsMenu = document.getElementById('settingsMenu');
-const primaryInput = document.getElementById('primaryColor');
-const secondaryInput = document.getElementById('secondaryColor');
-const saveColorsBtn = document.getElementById('saveColors');
-const resetColorsBtn = document.getElementById('resetColors');
-
-settingsBtn.addEventListener('click', () => { const hidden = settingsMenu.classList.toggle('hidden'); settingsMenu.setAttribute('aria-hidden', hidden ? 'true' : 'false'); });
-
-// Theme change delegation
-settingsMenu.addEventListener('click', (e) => {
-  const btn = e.target.closest('button[data-theme]'); if(!btn) return;
-  const t = btn.dataset.theme; saveTheme(t); applyTheme(t); refreshThemeLabel();
-});
-
-saveColorsBtn.addEventListener('click', () => {
-  const colors = { primary: primaryInput.value, secondary: secondaryInput.value };
-  saveColors(colors); applyColors(colors);
-  alert('Colori salvati');
-});
-resetColorsBtn.addEventListener('click', () => { if(confirm('Ripristinare colori di default?')){ resetColors(); primaryInput.value = getComputedStyle(document.documentElement).getPropertyValue('--md-sys-color-primary').trim() || '#2b7cff'; secondaryInput.value = getComputedStyle(document.documentElement).getPropertyValue('--md-sys-color-secondary').trim() || '#ff7043'; alert('Colori ripristinati'); } });
-
-// init
-initTheme();
-render();
-
-// Accessibility: close settings when clicking outside
-document.addEventListener('click', (e) => {
-  if(!settingsMenu.contains(e.target) && !settingsBtn.contains(e.target)){
-    if(!settingsMenu.classList.contains('hidden')){ settingsMenu.classList.add('hidden'); settingsMenu.setAttribute('aria-hidden','true'); }
-  }
-});
-
-// listen to system theme changes when auto
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-  const saved = localStorage.getItem(THEME_KEY) || 'auto'; if(saved === 'auto') applyTheme('auto');
-});
-
 // small helper to update settings button label
 function refreshThemeLabel(){
   const saved = localStorage.getItem(THEME_KEY) || 'auto';
-  const btn = document.getElementById('settingsBtn');
-  if(!btn) return;
-  btn.textContent = saved === 'auto' ? 'Impostazioni' : ('Impostazioni — ' + (saved[0].toUpperCase() + saved.slice(1)));
+  if(!settingsBtn) return;
+  settingsBtn.textContent = saved === 'auto' ? 'Impostazioni' : ('Impostazioni — ' + (saved[0].toUpperCase() + saved.slice(1)));
 }
-refreshThemeLabel();
+
+// Initialize function - called on DOMContentLoaded
+function init(){
+  console.log('OrarioDoc init');
+  
+  // Get DOM refs
+  listEl = document.getElementById('list');
+  formEl = document.getElementById('form');
+  addBtn = document.getElementById('addBtn');
+  saveBtn = document.getElementById('saveBtn');
+  cancelBtn = document.getElementById('cancelBtn');
+  settingsBtn = document.getElementById('settingsBtn');
+  settingsMenu = document.getElementById('settingsMenu');
+  primaryInput = document.getElementById('primaryColor');
+  secondaryInput = document.getElementById('secondaryColor');
+  saveColorsBtn = document.getElementById('saveColors');
+  resetColorsBtn = document.getElementById('resetColors');
+  
+  // Add event listeners with null checks
+  if(addBtn){
+    addBtn.addEventListener('click', () => { openFormForNew(); });
+  }
+  
+  if(cancelBtn){
+    cancelBtn.addEventListener('click', () => { closeForm(); });
+  }
+  
+  if(saveBtn){
+    saveBtn.addEventListener('click', () => {
+      const name = document.getElementById('ev-name').value.trim();
+      const day = document.getElementById('ev-day').value.trim();
+      const time = document.getElementById('ev-time').value.trim();
+      if(!name){ alert('Inserisci il nome'); return; }
+      const items = loadData();
+      const entry = {name, day, time, updatedAt: new Date().toISOString()};
+      if(editIndex >= 0){ items[editIndex] = entry; editIndex = -1; } else { items.push(entry); }
+      saveData(items);
+      closeForm(); render();
+    });
+  }
+  
+  if(listEl){
+    listEl.addEventListener('click', (e) => {
+      const btn = e.target.closest('button'); if(!btn) return;
+      const action = btn.dataset.action; const idx = Number(btn.dataset.index); const items = loadData();
+      if(action === 'delete'){ if(confirm('Eliminare questa voce?')){ items.splice(idx,1); saveData(items); render(); } }
+      else if(action === 'edit'){ const it = items[idx]; openFormForEdit(it, idx); }
+    });
+  }
+  
+  if(settingsBtn && settingsMenu){
+    settingsBtn.addEventListener('click', () => { 
+      const hidden = settingsMenu.classList.toggle('hidden'); 
+      settingsMenu.setAttribute('aria-hidden', hidden ? 'true' : 'false'); 
+    });
+  }
+  
+  // Theme change delegation
+  if(settingsMenu){
+    settingsMenu.addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-theme]'); if(!btn) return;
+      const t = btn.dataset.theme; saveTheme(t); applyTheme(t); refreshThemeLabel();
+    });
+  }
+  
+  if(saveColorsBtn && primaryInput && secondaryInput){
+    saveColorsBtn.addEventListener('click', () => {
+      const colors = { primary: primaryInput.value, secondary: secondaryInput.value };
+      saveColors(colors); applyColors(colors);
+      alert('Colori salvati');
+    });
+  }
+  
+  if(resetColorsBtn && primaryInput && secondaryInput){
+    resetColorsBtn.addEventListener('click', () => { 
+      if(confirm('Ripristinare colori di default?')){ 
+        resetColors(); 
+        primaryInput.value = getComputedStyle(document.documentElement).getPropertyValue('--md-sys-color-primary').trim() || '#2b7cff'; 
+        secondaryInput.value = getComputedStyle(document.documentElement).getPropertyValue('--md-sys-color-secondary').trim() || '#ff7043'; 
+        alert('Colori ripristinati'); 
+      } 
+    });
+  }
+  
+  // Accessibility: close settings when clicking outside
+  document.addEventListener('click', (e) => {
+    if(settingsMenu && settingsBtn && !settingsMenu.contains(e.target) && !settingsBtn.contains(e.target)){
+      if(!settingsMenu.classList.contains('hidden')){ 
+        settingsMenu.classList.add('hidden'); 
+        settingsMenu.setAttribute('aria-hidden','true'); 
+      }
+    }
+  });
+  
+  // listen to system theme changes when auto
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+    const saved = localStorage.getItem(THEME_KEY) || 'auto'; 
+    if(saved === 'auto') applyTheme('auto');
+  });
+  
+  // Initialize theme and render
+  initTheme();
+  render();
+  refreshThemeLabel();
+}
+
+// Run init when DOM is ready
+document.addEventListener('DOMContentLoaded', init);
