@@ -1,13 +1,13 @@
 // settings.js - minimal settings panel wiring
 (function(){
-  function loadSettings(){
-    const data = Storage.read();
+  async function loadSettings(){
+    const data = await Storage.read();
     return data.settings || {};
   }
-  function saveSettings(s){
-    const data = Storage.read();
+  async function saveSettings(s){
+    const data = await Storage.read();
     data.settings = Object.assign({}, data.settings || {}, s);
-    Storage.write(data);
+    await Storage.write(data);
   }
   window.AppSettings = { loadSettings, saveSettings };
 })();
