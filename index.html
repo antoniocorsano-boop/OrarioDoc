@@ -16,12 +16,32 @@
       <h1>OrarioDoc</h1>
     </div>
     <div class="controls">
-      <button id="themeBtn" aria-label="Cambia tema">Tema</button>
-      <div class="theme-menu hidden" id="themeMenu">
-        <button data-theme="auto">Automatico (sistema)</button>
-        <button data-theme="light">Chiaro</button>
-        <button data-theme="dark">Scuro</button>
-        <button data-theme="expressive">Expressive (M3)</button>
+      <div class="settings-wrapper">
+        <button id="settingsBtn" aria-label="Impostazioni">Impostazioni</button>
+        <div class="settings-menu hidden" id="settingsMenu" aria-hidden="true">
+          <div class="settings-section">
+            <h3>Tema</h3>
+            <div class="theme-options">
+              <button data-theme="auto">Automatico (sistema)</button>
+              <button data-theme="light">Chiaro</button>
+              <button data-theme="dark">Scuro</button>
+              <button data-theme="expressive">Expressive (M3)</button>
+            </div>
+          </div>
+          <div class="settings-section">
+            <h3>Colori personalizzati</h3>
+            <label>Primario
+              <input type="color" id="primaryColor" />
+            </label>
+            <label>Secondario
+              <input type="color" id="secondaryColor" />
+            </label>
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <button id="saveColors" class="secondary">Salva colori</button>
+              <button id="resetColors" class="secondary">Reset</button>
+            </div>
+          </div>
+        </div>
       </div>
       <button id="addBtn" aria-label="Aggiungi voce">Aggiungi</button>
     </div>
