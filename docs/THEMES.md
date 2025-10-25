@@ -1,7 +1,7 @@
 # Temi e Gestione dello Stile in OrarioDoc
 
 > **⚠️ Nota sullo stato dell'implementazione:**  
-> Questo documento descrive il sistema di gestione dei temi PROGETTATO e PARZIALMENTE IMPLEMENTATO in OrarioDoc. I file `app.css` e `app.js` contengono l'implementazione completa del sistema di temi, ma l'integrazione nell'interfaccia utente principale sarà completata in PR successive. Questo documento serve come riferimento per sviluppatori e contributori che lavoreranno su future implementazioni UI.
+> Questo documento descrive il sistema di gestione dei temi che è PROGETTATO e GIÀ IMPLEMENTATO tecnicamente in OrarioDoc. I file `app.css` e `app.js` contengono l'implementazione completa e funzionale del sistema di temi (CSS variables, logica di switching, persistenza). Tuttavia, l'integrazione nell'interfaccia utente principale (menu settings con selettori) sarà completata in PR successive. Questo documento serve come riferimento completo per sviluppatori e contributori.
 
 ## 📋 Indice
 
@@ -54,7 +54,11 @@ OrarioDoc implementa un sistema di gestione dei temi centralizzato basato su **C
 | `index.html` | 🔄 In sviluppo | Da aggiornare per utilizzare app.css/app.js |
 | `src/settings.js` | 🔄 In sviluppo | Da espandere con UI temi |
 
-**Nota:** L'attuale `index.html` utilizza `style.css` come file CSS principale. In future PR, sarà migrato a `app.css` che contiene il sistema di temi completo, oppure `style.css` sarà aggiornato per includere tutte le funzionalità di `app.css`.
+**Nota:** L'attuale `index.html` utilizza `style.css` come file CSS principale e carica script modulari da `/src/`. Il sistema di temi completo è già implementato in `app.css` e `app.js`, ma richiede integrazione nell'interfaccia utente. In future PR, ci sono due possibili approcci:
+1. Migrare `index.html` per utilizzare `app.css` e `app.js` 
+2. Portare le funzionalità di `app.css` in `style.css` e integrare la logica in `/src/settings.js`
+
+La scelta dell'approccio dipenderà dalle esigenze architetturali del progetto e verrà discussa nelle PR future.
 
 ## Temi Supportati
 
@@ -417,6 +421,8 @@ Quando modifichi o aggiungi colori, usa strumenti come:
 
 ### Esempi di Contrasto nei Temi
 
+I valori di contrasto riportati di seguito sono stati calcolati utilizzando la formula WCAG relativa luminance. Si raccomanda di verificare i rapporti di contrasto con strumenti di test quando si apportano modifiche ai colori.
+
 #### Tema Chiaro
 - `--md-sys-color-on-surface` (#0b1730) su `--md-sys-color-surface` (#ffffff) = **14.7:1** ✅
 - `--muted` (#667) su `--bg` (#f6f8fb) = **5.8:1** ✅
@@ -424,6 +430,8 @@ Quando modifichi o aggiungi colori, usa strumenti come:
 #### Tema Scuro
 - `--md-sys-color-on-surface` (#e6eefc) su `--md-sys-color-surface` (#0f1724) = **13.1:1** ✅
 - `--muted` (#9aa7bf) su `--bg` (#071021) = **6.2:1** ✅
+
+**Nota:** I rapporti di contrasto possono variare leggermente a seconda dello strumento di calcolo utilizzato. Verificare sempre con più strumenti per garantire conformità.
 
 ### Focus e Stati Interattivi
 

@@ -10,7 +10,7 @@ Contenuto e prossimi step: scaffold, storage, settings, export/import, accessibi
 
 ## Temi e Gestione dello Stile
 
-> **📝 Nota:** Il sistema di temi è progettato e parzialmente implementato. L'integrazione completa nell'interfaccia utente sarà completata in PR successive. Questa sezione descrive il sistema PIANIFICATO per guidare lo sviluppo futuro.
+> **📝 Nota:** Il sistema di temi è già tecnicamente implementato in `app.css` e `app.js` (CSS variables, logica di switching, persistenza). L'integrazione nell'interfaccia utente sarà completata in PR successive. Questa sezione descrive il sistema COMPLETO per guidare lo sviluppo dell'interfaccia.
 
 OrarioDoc implementa un **sistema di gestione dei temi centralizzato** basato su CSS Variables (Custom Properties), garantendo consistenza visiva, accessibilità e personalizzazione completa dell'interfaccia.
 
