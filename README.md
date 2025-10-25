@@ -3,7 +3,7 @@
 Scopo: PWA leggera per gestione orario settimanale senza dipendenze (compatibile con Termux).
 
 Quickstart:
-1. python3 -m http.server 8089
+1. python3 -m http.server 8080
 2. apri http://127.0.0.1:8080
 
 Contenuto e prossimi step: scaffold, storage, settings, export/import, accessibility tests.
