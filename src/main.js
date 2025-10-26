@@ -177,16 +177,12 @@
     ScheduleGrid.renderLessons(gridEl, state.lessons || []);
 
     const addBtn = document.getElementById('addBtn');
-    const settingsBtn = document.getElementById('settingsBtn');
     const saveBtn = document.getElementById('saveBtn');
     const cancelBtn = document.getElementById('cancelBtn');
     const deleteBtn = document.getElementById('deleteBtn');
 
     if(addBtn) addBtn.addEventListener('click', ()=>openAdd());
-    if(settingsBtn) settingsBtn.addEventListener('click', async ()=>{
-      const s = await AppSettings.loadSettings();
-      alert('Impostazioni (placeholder)\nClasse default: '+(s.defaultClass||'---'));
-    });
+    // Settings button handler is now in settings-screen.js
     
     if(cancelBtn) {
       cancelBtn.addEventListener('click', ()=>{
