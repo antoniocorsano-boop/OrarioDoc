@@ -141,9 +141,8 @@ vite.config.ts.timestamp-*
 # React build output
 build/
 
-# PWA specific
+# PWA specific (except our custom service-worker.js)
 sw.js
-service-worker.js
 workbox-*.js
 precache-manifest.*.js
 

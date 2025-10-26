@@ -118,6 +118,8 @@ body {
   gap: var(--md-sys-spacing-sm);
   width: 100%;
   min-height: 360px;
+  /* CSS containment per performance */
+  contain: layout style;
 }
 
 .cell {
@@ -128,6 +130,8 @@ body {
   border: 1px dashed var(--md-sys-color-outline-variant);
   transition: background-color 0.2s ease, border-color 0.2s ease;
   position: relative;
+  /* CSS containment per celle */
+  contain: layout paint;
 }
 
 /* Rendi le celle accessibili da tastiera */
@@ -169,6 +173,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: var(--md-sys-spacing-xs);
+  /* Performance: usa transform invece di position per animazioni */
+  will-change: transform;
 }
 
 /* Item text elements */

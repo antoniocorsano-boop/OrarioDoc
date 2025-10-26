@@ -57,52 +57,69 @@
   }
 
   function renderLessons(container, lessons){
+    // Ottimizzato con DocumentFragment per ridurre reflow
     // clear items
     Array.from(container.querySelectorAll('.item')).forEach(n=>n.remove());
-    lessons.forEach(l=>{
+    
+    // Raggruppa lezioni per giorno per ottimizzare il rendering
+    const lessonsByDay = {};
+    lessons.forEach(l => {
       const day = String(l.day);
+      if (!lessonsByDay[day]) lessonsByDay[day] = [];
+      lessonsByDay[day].push(l);
+    });
+    
+    // Render usando fragment per minimizzare DOM manipulation
+    Object.entries(lessonsByDay).forEach(([day, dayLessons]) => {
       const col = container.querySelector(`.cell[data-day="${day}"]`);
       if(!col) return;
-      const el = document.createElement('div');
-      el.className = 'item';
       
-      // Format display text with more details
-      const displayText = l.class ? `${l.name} (${l.class})` : l.name;
-      const durationText = l.duration ? ` • ${l.duration}min` : '';
+      const fragment = document.createDocumentFragment();
       
-      // Create elements safely using textContent to prevent XSS
-      const nameDiv = document.createElement('div');
-      nameDiv.className = 'item-name';
-      nameDiv.textContent = displayText;
-      
-      const timeDiv = document.createElement('div');
-      timeDiv.className = 'item-time';
-      timeDiv.textContent = `${l.start}${durationText}`;
-      
-      el.appendChild(nameDiv);
-      el.appendChild(timeDiv);
-      
-      el.dataset.id = l.id;
-      el.setAttribute('role', 'button');
-      el.setAttribute('tabindex', '0');
-      el.setAttribute('aria-label', `Lezione: ${l.name}${l.class ? ' classe ' + l.class : ''} alle ${l.start}${l.duration ? ', durata ' + l.duration + ' minuti' : ''}, clicca per modificare`);
-      
-      // Click handler
-      el.addEventListener('click', (ev)=>{
-        ev.stopPropagation();
-        window.dispatchEvent(new CustomEvent('lesson-click',{detail:{id:l.id}}));
-      });
-      
-      // Keyboard handler per item
-      el.addEventListener('keydown', (ev)=>{
-        if(ev.key === 'Enter' || ev.key === ' '){
-          ev.preventDefault();
+      dayLessons.forEach(l => {
+        const el = document.createElement('div');
+        el.className = 'item';
+        
+        // Format display text with more details
+        const displayText = l.class ? `${l.name} (${l.class})` : l.name;
+        const durationText = l.duration ? ` • ${l.duration}min` : '';
+        
+        // Create elements safely using textContent to prevent XSS
+        const nameDiv = document.createElement('div');
+        nameDiv.className = 'item-name';
+        nameDiv.textContent = displayText;
+        
+        const timeDiv = document.createElement('div');
+        timeDiv.className = 'item-time';
+        timeDiv.textContent = `${l.start}${durationText}`;
+        
+        el.appendChild(nameDiv);
+        el.appendChild(timeDiv);
+        
+        el.dataset.id = l.id;
+        el.setAttribute('role', 'button');
+        el.setAttribute('tabindex', '0');
+        el.setAttribute('aria-label', `Lezione: ${l.name}${l.class ? ' classe ' + l.class : ''} alle ${l.start}${l.duration ? ', durata ' + l.duration + ' minuti' : ''}, clicca per modificare`);
+        
+        // Click handler
+        el.addEventListener('click', (ev)=>{
           ev.stopPropagation();
           window.dispatchEvent(new CustomEvent('lesson-click',{detail:{id:l.id}}));
-        }
+        });
+        
+        // Keyboard handler per item
+        el.addEventListener('keydown', (ev)=>{
+          if(ev.key === 'Enter' || ev.key === ' '){
+            ev.preventDefault();
+            ev.stopPropagation();
+            window.dispatchEvent(new CustomEvent('lesson-click',{detail:{id:l.id}}));
+          }
+        });
+        
+        fragment.appendChild(el);
       });
       
-      col.appendChild(el);
+      col.appendChild(fragment);
     });
   }
 
