@@ -22,7 +22,9 @@ test('OrarioDoc automated tests', async ({ page }) => {
     await page.waitForSelector('.status.success, .status.failed', { timeout: 60000 });
   } catch (err) {
     // Capture debug artifacts when waiting for status times out
-    await page.screenshot({ path: 'test-failure-debug.png', fullPage: true }).catch(()=>{});
+    await page.screenshot({ path: 'test-failure-debug.png', fullPage: true }).catch(() => {
+      // Screenshot is a diagnostic tool; failure to capture it should not fail the test
+    });
     console.error('Timed out waiting for test status. Page console logs:\n', logs.join('\n'));
     throw err;
   }
@@ -46,7 +48,9 @@ test('OrarioDoc automated tests', async ({ page }) => {
   });
 
   // Always persist a screenshot for the run
-  await page.screenshot({ path: 'test-results.png', fullPage: true }).catch(()=>{});
+  await page.screenshot({ path: 'test-results.png', fullPage: true }).catch(() => {
+    // Screenshot is a diagnostic tool; failure to capture it should not fail the test
+  });
 
   console.log('Test Results:', stats);
 

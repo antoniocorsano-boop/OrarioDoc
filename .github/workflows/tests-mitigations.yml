@@ -29,6 +29,8 @@ jobs:
         run: |
           python3 -m http.server 8080 &>> server.log &
           echo "Started static server"
+          sleep 2
+          curl -f http://127.0.0.1:8080/ || echo "Warning: Server may not be ready"
 
       - name: Run Playwright tests and save JSON report
         run: |
