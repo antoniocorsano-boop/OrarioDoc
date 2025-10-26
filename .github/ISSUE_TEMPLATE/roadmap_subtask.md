@@ -13,7 +13,7 @@ assignees: ''
 **Tempo stimato:** [ore]  
 **Dipendenze:** [Lista subtask da completare prima]
 
-Vedi: [ROADMAP.md](../../ROADMAP.md#subtask-section)
+Vedi: [ROADMAP.md](../../ROADMAP.md)
 
 ---
 

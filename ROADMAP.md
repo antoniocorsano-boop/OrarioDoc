@@ -28,6 +28,8 @@ Questo documento definisce il piano di sviluppo di OrarioDoc organizzato per pri
 
 ## 🎯 Task Organizzati per Priorità
 
+> **Nota:** I riferimenti issue mostrano "#TBD" (To Be Determined) in quanto le issue granulari verranno create successivamente per ogni subtask. Vedi [Subtask 11](#subtask-11-kanban-board-e-granular-issues) per il processo di creazione issue.
+
 ### 1️⃣ ALTA PRIORITÀ - Revisione e consolidamento UI/UX
 
 Questi task sono **critici** e devono essere completati **per primi** in quanto impattano tutti gli altri sviluppi.
