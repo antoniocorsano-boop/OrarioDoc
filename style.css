@@ -6,6 +6,7 @@
  * Tutti i reset, variabili e base styles sono in theme.css.
  */
 
+/* Layout padding specifico dell'app (theme.css definisce gli stili base del body) */
 body {
   padding: var(--md-sys-spacing-lg);
 }
@@ -170,7 +171,7 @@ input[type="number"]:focus,
 input[type="time"]:focus {
   outline: none;
   border-color: var(--md-sys-color-primary);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--md-sys-color-primary) 12%, transparent);
+  box-shadow: 0 0 0 3px rgba(43, 124, 255, 0.12);
 }
 
 input[type="text"]:disabled,

@@ -185,7 +185,10 @@
   --md-sys-spacing-2xl: 24px;
   --md-sys-spacing-3xl: 32px;
   
-  /* === SCORCIATOIE UTILI === */
+  /* === SCORCIATOIE UTILI (per retrocompatibilità e uso interno) === */
+  /* Nota: Queste variabili sono mantenute per uso interno in theme.css
+     e per retrocompatibilità. Il codice applicativo dovrebbe preferire
+     le variabili Material 3 complete (es: --md-sys-color-surface) */
   --accent: var(--md-sys-color-primary);
   --bg: var(--md-sys-color-background);
   --card: var(--md-sys-color-surface);
