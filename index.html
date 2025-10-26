@@ -47,6 +47,102 @@
       </div>
     </form>
   </aside>
+  
+  <!-- Settings Modal -->
+  <aside id="settingsModal" class="settings-modal hidden" role="dialog" aria-modal="true" aria-labelledby="settingsTitle" aria-hidden="true">
+    <div class="settings-modal__content">
+      <header class="settings-modal__header">
+        <h3 id="settingsTitle">Impostazioni</h3>
+        <button type="button" id="closeSettingsBtn" class="btn btn--text" aria-label="Chiudi impostazioni">✕</button>
+      </header>
+      
+      <form id="settingsForm" class="settings-form" aria-label="Modulo impostazioni">
+        <!-- Tema -->
+        <section class="settings-section">
+          <h4 class="settings-section__title">Tema Applicazione</h4>
+          <label for="themeSelector" class="settings-label">
+            <span class="settings-label__text">Tema</span>
+            <select id="themeSelector" class="settings-input" aria-label="Seleziona tema applicazione">
+              <option value="auto">Automatico (Sistema)</option>
+              <option value="light">Chiaro</option>
+              <option value="dark">Scuro</option>
+              <option value="expressive">Expressive (Material 3)</option>
+            </select>
+          </label>
+          <p class="settings-help">Il tema verrà applicato immediatamente e salvato automaticamente.</p>
+        </section>
+        
+        <!-- Utente -->
+        <section class="settings-section">
+          <h4 class="settings-section__title">Dati Utente</h4>
+          <label for="userName" class="settings-label">
+            <span class="settings-label__text">Nome completo</span>
+            <input id="userName" type="text" class="settings-input" placeholder="Mario Rossi" aria-label="Nome completo utente"/>
+          </label>
+          <label for="userEmail" class="settings-label">
+            <span class="settings-label__text">Email (opzionale)</span>
+            <input id="userEmail" type="email" class="settings-input" placeholder="mario.rossi@esempio.it" aria-label="Indirizzo email utente"/>
+          </label>
+          <label for="userSubjects" class="settings-label">
+            <span class="settings-label__text">Materie insegnate</span>
+            <input id="userSubjects" type="text" class="settings-input" placeholder="Matematica, Fisica, Informatica" aria-label="Elenco materie insegnate separato da virgole"/>
+          </label>
+          <p class="settings-help">Inserisci le materie separate da virgole.</p>
+        </section>
+        
+        <!-- Scuola -->
+        <section class="settings-section">
+          <h4 class="settings-section__title">Dati Scuola</h4>
+          <label for="schoolName" class="settings-label">
+            <span class="settings-label__text">Nome istituto</span>
+            <input id="schoolName" type="text" class="settings-input" placeholder="Liceo Scientifico G. Galilei" aria-label="Nome dell'istituto scolastico"/>
+          </label>
+          <label for="schoolAddress" class="settings-label">
+            <span class="settings-label__text">Indirizzo (opzionale)</span>
+            <input id="schoolAddress" type="text" class="settings-input" placeholder="Via Roma 123, Milano" aria-label="Indirizzo della scuola"/>
+          </label>
+          
+          <div class="settings-row">
+            <label for="schoolStartTime" class="settings-label settings-label--half">
+              <span class="settings-label__text">Inizio lezioni</span>
+              <input id="schoolStartTime" type="time" class="settings-input" value="08:00" aria-label="Orario inizio lezioni"/>
+            </label>
+            <label for="schoolEndTime" class="settings-label settings-label--half">
+              <span class="settings-label__text">Fine lezioni</span>
+              <input id="schoolEndTime" type="time" class="settings-input" value="14:00" aria-label="Orario fine lezioni"/>
+            </label>
+          </div>
+          
+          <div class="settings-row">
+            <label for="schoolLessonDuration" class="settings-label settings-label--half">
+              <span class="settings-label__text">Durata lezione (min)</span>
+              <input id="schoolLessonDuration" type="number" class="settings-input" value="60" min="1" max="480" aria-label="Durata standard di una lezione in minuti"/>
+            </label>
+            <label for="schoolBreakDuration" class="settings-label settings-label--half">
+              <span class="settings-label__text">Durata intervallo (min)</span>
+              <input id="schoolBreakDuration" type="number" class="settings-input" value="10" min="0" max="120" aria-label="Durata intervallo tra lezioni in minuti"/>
+            </label>
+          </div>
+          
+          <label for="schoolDays" class="settings-label">
+            <span class="settings-label__text">Giorni scolastici</span>
+            <select id="schoolDays" class="settings-input" aria-label="Seleziona giorni di scuola">
+              <option value="mon-fri">Lunedì - Venerdì</option>
+              <option value="mon-sat">Lunedì - Sabato</option>
+            </select>
+          </label>
+        </section>
+        
+        <!-- Azioni -->
+        <div class="settings-actions">
+          <button type="button" id="saveSettingsBtn" class="btn btn--filled" aria-label="Salva impostazioni">Salva</button>
+          <button type="button" id="cancelSettingsBtn" class="btn btn--outlined" aria-label="Annulla modifiche">Annulla</button>
+          <button type="button" id="resetSettingsBtn" class="btn btn--text" aria-label="Ripristina impostazioni predefinite">Ripristina predefiniti</button>
+        </div>
+      </form>
+    </div>
+  </aside>
+  
   <!-- Live region per annunci screen reader -->
   <div id="announcements" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></div>
   <footer class="footer" role="contentinfo">OrarioDoc — PWA MVP</footer>
@@ -56,6 +152,7 @@
   <script src="/src/storage/indexeddb.js"></script>
   <script src="/src/storage.js"></script>
   <script src="/src/settings.js"></script>
+  <script src="/src/screens/settings-screen.js"></script>
   <script src="/src/schedule-grid.js"></script>
   <script src="/src/main.js"></script>
   <script>
