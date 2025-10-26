@@ -73,10 +73,99 @@
     return data;
   }
   async function save(data){ await Storage.write(data); }
+  
+  // Helper: Convert time to minutes for easier comparison
+  function timeToMinutes(timeStr){
+    const [hours, minutes] = timeStr.split(':').map(Number);
+    return hours * 60 + minutes;
+  }
+  
+  // Validation functions
+  function validateLesson(name, day, start, duration){
+    const errors = [];
+    
+    if(!name || name.trim().length === 0){
+      errors.push('Il nome della lezione è obbligatorio');
+    }
+    
+    if(isNaN(day) || day < 0 || day > 6){
+      errors.push('Il giorno deve essere tra 0 (Domenica) e 6 (Sabato)');
+    }
+    
+    if(!start || !/^([0-1][0-9]|2[0-3]):([0-5][0-9])$/.test(start)){
+      errors.push('L\'ora deve essere nel formato HH:MM');
+    }
+    
+    if(isNaN(duration) || duration < 1 || duration > 480){
+      errors.push('La durata deve essere tra 1 e 480 minuti');
+    }
+    
+    return errors;
+  }
+  
+  // Conflict detection
+  function checkConflicts(lessons, newLesson, excludeId = null){
+    const conflicts = [];
+    
+    const newStart = timeToMinutes(newLesson.start);
+    const newEnd = newStart + newLesson.duration;
+    
+    lessons.forEach(lesson => {
+      if(lesson.id === excludeId) return; // Skip current lesson when editing
+      if(lesson.day !== newLesson.day) return; // Only check same day
+      
+      const existingStart = timeToMinutes(lesson.start);
+      const existingEnd = existingStart + lesson.duration;
+      
+      // Simplified overlap detection: intervals overlap if start < other's end AND end > other's start
+      if(newStart < existingEnd && newEnd > existingStart){
+        conflicts.push(lesson);
+      }
+    });
+    
+    return conflicts;
+  }
+
+  let editingLessonId = null;
 
   function openAdd(day){
+    editingLessonId = null;
+    document.getElementById('panelTitle').textContent = 'Nuova lezione';
+    document.getElementById('inputName').value = '';
+    document.getElementById('inputClass').value = '';
     document.getElementById('inputDay').value = typeof day === 'number' ? String(day) : '1';
+    document.getElementById('inputTime').value = '08:00';
+    document.getElementById('inputDuration').value = '60';
+    
+    // Show/hide delete button
+    const deleteBtn = document.getElementById('deleteBtn');
+    if(deleteBtn) deleteBtn.style.display = 'none';
+    
     showPanel();
+  }
+  
+  async function openEdit(lessonId){
+    editingLessonId = lessonId;
+    const data = await load();
+    const lesson = data.lessons.find(l => l.id === lessonId);
+    if(!lesson) {
+      announce('Lezione non trovata');
+      return;
+    }
+    
+    document.getElementById('panelTitle').textContent = 'Modifica lezione';
+    document.getElementById('inputName').value = lesson.name || '';
+    document.getElementById('inputClass').value = lesson.class || '';
+    document.getElementById('inputDay').value = String(lesson.day);
+    document.getElementById('inputTime').value = lesson.start || '08:00';
+    document.getElementById('inputDuration').value = String(lesson.duration || 60);
+    
+    // Show delete button
+    const deleteBtn = document.getElementById('deleteBtn');
+    if(deleteBtn) deleteBtn.style.display = '';
+    
+    showPanel();
+    announce(`Modifica lezione ${lesson.name}`);
   }
 
   async function init(){
@@ -91,6 +180,7 @@
     const settingsBtn = document.getElementById('settingsBtn');
     const saveBtn = document.getElementById('saveBtn');
     const cancelBtn = document.getElementById('cancelBtn');
+    const deleteBtn = document.getElementById('deleteBtn');
 
     if(addBtn) addBtn.addEventListener('click', ()=>openAdd());
     if(settingsBtn) settingsBtn.addEventListener('click', async ()=>{
@@ -110,24 +200,84 @@
       const day = parseInt(document.getElementById('inputDay').value,10);
       const start = document.getElementById('inputTime').value || '08:00';
       const duration = parseInt(document.getElementById('inputDuration').value,10) || 60;
-      if(!name){ 
-        alert('Inserisci il nome della lezione');
+      
+      // Validate input
+      const errors = validateLesson(name, day, start, duration);
+      if(errors.length > 0){
+        Toast.showToast(errors[0], 'error');
         document.getElementById('inputName').focus();
         return;
       }
 
       const data = await load();
       data.lessons = data.lessons || [];
-      data.lessons.push({ id: uid(), name, class: document.getElementById('inputClass').value, day, start, duration });
-      await save(data);
-      ScheduleGrid.renderLessons(gridEl, data.lessons);
-      hidePanel();
-      announce(`Lezione ${name} aggiunta con successo`);
+      
+      const newLesson = {
+        name, 
+        class: document.getElementById('inputClass').value, 
+        day, 
+        start, 
+        duration
+      };
+      
+      // Check for conflicts
+      const conflicts = checkConflicts(data.lessons, newLesson, editingLessonId);
+      if(conflicts.length > 0){
+        const conflictNames = conflicts.map(l => l.name).join(', ');
+        Toast.showToast(`Conflitto orario con: ${conflictNames}`, 'warning', 5000);
+        return;
+      }
+      
+      if(editingLessonId){
+        // Update existing lesson
+        const index = data.lessons.findIndex(l => l.id === editingLessonId);
+        if(index !== -1){
+          data.lessons[index] = { 
+            ...data.lessons[index],
+            id: editingLessonId,
+            ...newLesson
+          };
+          await save(data);
+          ScheduleGrid.renderLessons(gridEl, data.lessons);
+          hidePanel();
+          Toast.showToast(`Lezione ${name} modificata con successo`, 'success');
+          announce(`Lezione ${name} modificata con successo`);
+          editingLessonId = null;
+        }
+      } else {
+        // Add new lesson
+        data.lessons.push({ id: uid(), ...newLesson });
+        await save(data);
+        ScheduleGrid.renderLessons(gridEl, data.lessons);
+        hidePanel();
+        Toast.showToast(`Lezione ${name} aggiunta con successo`, 'success');
+        announce(`Lezione ${name} aggiunta con successo`);
+      }
       
       // Reset form
       document.getElementById('inputName').value = '';
       document.getElementById('inputClass').value = '';
     });
+    
+    if(deleteBtn) {
+      deleteBtn.addEventListener('click', async ()=>{
+        if(!editingLessonId) return;
+        
+        if(confirm('Sei sicuro di voler eliminare questa lezione?')){
+          const data = await load();
+          const lesson = data.lessons.find(l => l.id === editingLessonId);
+          const lessonName = lesson ? lesson.name : 'Lezione';
+          
+          data.lessons = data.lessons.filter(l => l.id !== editingLessonId);
+          await save(data);
+          ScheduleGrid.renderLessons(gridEl, data.lessons);
+          hidePanel();
+          Toast.showToast(`${lessonName} eliminata con successo`, 'success');
+          announce(`${lessonName} eliminata con successo`);
+          editingLessonId = null;
+        }
+      });
+    }
     
     // Escape key chiude il panel
     document.addEventListener('keydown', (e)=>{
@@ -147,9 +297,9 @@
       announce(`Aggiungi lezione per ${days[e.detail.day]}`);
     });
     
-    // lesson click (placeholder)
-    window.addEventListener('lesson-click', (e)=> {
-      alert('Apri modifica lezione id: '+e.detail.id);
+    // lesson click opens edit panel
+    window.addEventListener('lesson-click', async (e)=> {
+      await openEdit(e.detail.id);
     });
   }
 
