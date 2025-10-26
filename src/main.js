@@ -74,9 +74,46 @@
   }
   async function save(data){ await Storage.write(data); }
 
+  let editingLessonId = null;
+
   function openAdd(day){
+    editingLessonId = null;
+    document.getElementById('panelTitle').textContent = 'Nuova lezione';
+    document.getElementById('inputName').value = '';
+    document.getElementById('inputClass').value = '';
     document.getElementById('inputDay').value = typeof day === 'number' ? String(day) : '1';
+    document.getElementById('inputTime').value = '08:00';
+    document.getElementById('inputDuration').value = '60';
+    
+    // Show/hide delete button
+    const deleteBtn = document.getElementById('deleteBtn');
+    if(deleteBtn) deleteBtn.style.display = 'none';
+    
     showPanel();
+  }
+  
+  async function openEdit(lessonId){
+    editingLessonId = lessonId;
+    const data = await load();
+    const lesson = data.lessons.find(l => l.id === lessonId);
+    if(!lesson) {
+      announce('Lezione non trovata');
+      return;
+    }
+    
+    document.getElementById('panelTitle').textContent = 'Modifica lezione';
+    document.getElementById('inputName').value = lesson.name || '';
+    document.getElementById('inputClass').value = lesson.class || '';
+    document.getElementById('inputDay').value = String(lesson.day);
+    document.getElementById('inputTime').value = lesson.start || '08:00';
+    document.getElementById('inputDuration').value = String(lesson.duration || 60);
+    
+    // Show delete button
+    const deleteBtn = document.getElementById('deleteBtn');
+    if(deleteBtn) deleteBtn.style.display = '';
+    
+    showPanel();
+    announce(`Modifica lezione ${lesson.name}`);
   }
 
   async function init(){
@@ -91,6 +128,7 @@
     const settingsBtn = document.getElementById('settingsBtn');
     const saveBtn = document.getElementById('saveBtn');
     const cancelBtn = document.getElementById('cancelBtn');
+    const deleteBtn = document.getElementById('deleteBtn');
 
     if(addBtn) addBtn.addEventListener('click', ()=>openAdd());
     if(settingsBtn) settingsBtn.addEventListener('click', async ()=>{
@@ -110,6 +148,7 @@
       const day = parseInt(document.getElementById('inputDay').value,10);
       const start = document.getElementById('inputTime').value || '08:00';
       const duration = parseInt(document.getElementById('inputDuration').value,10) || 60;
+      
       if(!name){ 
         alert('Inserisci il nome della lezione');
         document.getElementById('inputName').focus();
@@ -118,16 +157,58 @@
 
       const data = await load();
       data.lessons = data.lessons || [];
-      data.lessons.push({ id: uid(), name, class: document.getElementById('inputClass').value, day, start, duration });
-      await save(data);
-      ScheduleGrid.renderLessons(gridEl, data.lessons);
-      hidePanel();
-      announce(`Lezione ${name} aggiunta con successo`);
+      
+      if(editingLessonId){
+        // Update existing lesson
+        const index = data.lessons.findIndex(l => l.id === editingLessonId);
+        if(index !== -1){
+          data.lessons[index] = { 
+            ...data.lessons[index],
+            id: editingLessonId, 
+            name, 
+            class: document.getElementById('inputClass').value, 
+            day, 
+            start, 
+            duration 
+          };
+          await save(data);
+          ScheduleGrid.renderLessons(gridEl, data.lessons);
+          hidePanel();
+          announce(`Lezione ${name} modificata con successo`);
+          editingLessonId = null;
+        }
+      } else {
+        // Add new lesson
+        data.lessons.push({ id: uid(), name, class: document.getElementById('inputClass').value, day, start, duration });
+        await save(data);
+        ScheduleGrid.renderLessons(gridEl, data.lessons);
+        hidePanel();
+        announce(`Lezione ${name} aggiunta con successo`);
+      }
       
       // Reset form
       document.getElementById('inputName').value = '';
       document.getElementById('inputClass').value = '';
     });
+    
+    if(deleteBtn) {
+      deleteBtn.addEventListener('click', async ()=>{
+        if(!editingLessonId) return;
+        
+        if(confirm('Sei sicuro di voler eliminare questa lezione?')){
+          const data = await load();
+          const lesson = data.lessons.find(l => l.id === editingLessonId);
+          const lessonName = lesson ? lesson.name : 'Lezione';
+          
+          data.lessons = data.lessons.filter(l => l.id !== editingLessonId);
+          await save(data);
+          ScheduleGrid.renderLessons(gridEl, data.lessons);
+          hidePanel();
+          announce(`${lessonName} eliminata con successo`);
+          editingLessonId = null;
+        }
+      });
+    }
     
     // Escape key chiude il panel
     document.addEventListener('keydown', (e)=>{
@@ -147,9 +228,9 @@
       announce(`Aggiungi lezione per ${days[e.detail.day]}`);
     });
     
-    // lesson click (placeholder)
-    window.addEventListener('lesson-click', (e)=> {
-      alert('Apri modifica lezione id: '+e.detail.id);
+    // lesson click opens edit panel
+    window.addEventListener('lesson-click', async (e)=> {
+      await openEdit(e.detail.id);
     });
   }
 

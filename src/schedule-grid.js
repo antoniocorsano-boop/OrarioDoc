@@ -65,11 +65,20 @@
       if(!col) return;
       const el = document.createElement('div');
       el.className = 'item';
-      el.textContent = `${l.name} (${l.start})`;
+      
+      // Format display text with more details
+      const displayText = l.class ? `${l.name} (${l.class})` : l.name;
+      const durationText = l.duration ? ` • ${l.duration}min` : '';
+      
+      el.innerHTML = `
+        <div class="item-name">${displayText}</div>
+        <div class="item-time">${l.start}${durationText}</div>
+      `;
+      
       el.dataset.id = l.id;
       el.setAttribute('role', 'button');
       el.setAttribute('tabindex', '0');
-      el.setAttribute('aria-label', `Lezione: ${l.name} alle ${l.start}, clicca per modificare`);
+      el.setAttribute('aria-label', `Lezione: ${l.name}${l.class ? ' classe ' + l.class : ''} alle ${l.start}${l.duration ? ', durata ' + l.duration + ' minuti' : ''}, clicca per modificare`);
       
       // Click handler
       el.addEventListener('click', (ev)=>{

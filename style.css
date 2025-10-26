@@ -167,7 +167,19 @@ body {
   transition: transform 0.1s ease, box-shadow 0.2s ease;
   position: relative;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: var(--md-sys-spacing-xs);
+}
+
+/* Item text elements */
+.item-name {
+  font-weight: var(--md-sys-typescale-font-weight-medium);
+  font-size: var(--md-sys-typescale-body-medium-size);
+}
+
+.item-time {
+  font-size: var(--md-sys-typescale-body-small-size);
+  opacity: 0.9;
 }
 
 /* Rendi gli item accessibili da tastiera */
