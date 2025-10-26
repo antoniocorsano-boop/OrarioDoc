@@ -47,7 +47,7 @@
   
   /* Spacing - usa variabili spacing */
   padding: var(--md-sys-spacing-sm) var(--md-sys-spacing-2xl);
-  min-height: 40px;
+  min-height: 48px; /* Material Design 3 minimum touch target */
   
   /* Typography - usa variabili typescale */
   font-family: var(--md-sys-typescale-font-family);
@@ -278,15 +278,16 @@
 /* Button con solo icona */
 .btn--icon {
   padding: var(--md-sys-spacing-sm);
-  min-width: 40px;
+  min-width: 48px; /* Material Design 3 minimum touch target */
+  min-height: 48px;
   aspect-ratio: 1;
   border-radius: var(--md-sys-shape-corner-full);
 }
 
 .btn--icon-small {
   padding: var(--md-sys-spacing-xs);
-  min-width: 32px;
-  min-height: 32px;
+  min-width: 40px; /* Small variant can be 40px */
+  min-height: 40px;
 }
 
 /* Icona dentro button */
