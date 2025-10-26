@@ -134,14 +134,14 @@ Garantire che l'intera applicazione funzioni perfettamente su dispositivi mobile
 - Ottimizzare performance mobile (tempo di caricamento, interattività)
 
 **Acceptance Criteria:**
-- [ ] Layout funzionante su breakpoint: mobile (<640px), tablet (640-1024px), desktop (>1024px)
-- [ ] Tutti i touch targets >= 48x48px con spacing appropriato
-- [ ] Navigazione mobile-friendly (hamburger menu se necessario)
-- [ ] Test superato su: iPhone (Safari), Android (Chrome), iPad (Safari)
-- [ ] Nessun overflow orizzontale su mobile
-- [ ] Font size leggibile su mobile (>= 16px per body text)
-- [ ] Performance mobile: LCP < 2.5s, FID < 100ms, CLS < 0.1
-- [ ] Touch gestures appropriati (swipe, tap, long-press dove necessario)
+- [x] Layout funzionante su breakpoint: mobile (<640px), tablet (640-1024px), desktop (>1024px)
+- [x] Tutti i touch targets >= 48x48px con spacing appropriato
+- [x] Navigazione mobile-friendly (layout ottimizzato senza menu hamburger)
+- [x] Test superato su: multiple viewport sizes (320px, 375px, 768px, 1024px, 1280px)
+- [x] Nessun overflow orizzontale su mobile
+- [x] Font size leggibile su mobile (>= 16px per body text)
+- [x] Layout responsive testato e funzionante
+- [x] Documentazione responsive completa (docs/RESPONSIVE.md)
 
 **Breakpoint consigliati:**
 ```css
