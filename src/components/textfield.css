@@ -200,7 +200,7 @@
 }
 
 .text-field__trailing-icon--clickable:hover {
-  background-color: rgba(0, 0, 0, 0.08);
+  background-color: var(--md-sys-state-layer-on-surface);
 }
 
 /* === STATI === */
