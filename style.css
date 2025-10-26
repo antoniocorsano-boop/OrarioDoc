@@ -1,22 +1,13 @@
 /* 
  * style.css - Stili applicazione OrarioDoc
- * Usa variabili CSS da theme.css (NO hardcode)
+ * Usa SOLO variabili CSS da theme.css centralizzato
  * 
- * Migrazione: Sostituiti tutti i colori, font, radius hardcoded
- * con le variabili CSS definite in theme.css
+ * Questo file contiene solo gli stili specifici dell'applicazione.
+ * Tutti i reset, variabili e base styles sono in theme.css.
  */
 
-/* Reset e base già gestiti da theme.css */
-
-* {
-  box-sizing: border-box;
-}
-
+/* Layout padding specifico dell'app (theme.css definisce gli stili base del body) */
 body {
-  font-family: var(--md-sys-typescale-font-family);
-  background: var(--bg);
-  margin: 0;
-  color: var(--text);
   padding: var(--md-sys-spacing-lg);
 }
 
@@ -26,7 +17,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: var(--md-sys-spacing-md) var(--md-sys-spacing-lg);
-  background: var(--card);
+  background: var(--md-sys-color-surface);
   box-shadow: var(--md-sys-elevation-level1);
   border-radius: var(--md-sys-shape-corner-medium);
   margin-bottom: var(--md-sys-spacing-lg);
@@ -54,7 +45,7 @@ body {
 .title {
   font-weight: var(--md-sys-typescale-font-weight-medium);
   font-size: var(--md-sys-typescale-title-large-size);
-  color: var(--text);
+  color: var(--md-sys-color-on-surface);
 }
 
 .actions {
@@ -72,7 +63,7 @@ body {
 }
 
 .panel {
-  background: var(--card);
+  background: var(--md-sys-color-surface);
   padding: var(--md-sys-spacing-lg);
   border-radius: var(--md-sys-shape-corner-medium);
   box-shadow: var(--md-sys-elevation-level1);
@@ -109,12 +100,12 @@ body {
 .cell-header {
   font-size: var(--md-sys-typescale-label-small-size);
   font-weight: var(--md-sys-typescale-font-weight-medium);
-  color: var(--text-muted);
+  color: var(--md-sys-color-on-surface-variant);
   margin-bottom: var(--md-sys-spacing-xs);
 }
 
 .item {
-  background: var(--accent);
+  background: var(--md-sys-color-primary);
   color: var(--md-sys-color-on-primary);
   padding: var(--md-sys-spacing-sm);
   border-radius: var(--md-sys-shape-corner-small);
@@ -137,7 +128,7 @@ aside.panel {
   width: 320px;
   max-width: calc(100% - var(--md-sys-spacing-3xl));
   z-index: 10;
-  background: var(--card);
+  background: var(--md-sys-color-surface);
   padding: var(--md-sys-spacing-lg);
   border-radius: var(--md-sys-shape-corner-medium);
   box-shadow: var(--md-sys-elevation-level3);
@@ -148,7 +139,7 @@ aside.panel h3 {
   margin-bottom: var(--md-sys-spacing-lg);
   font-size: var(--md-sys-typescale-title-large-size);
   font-weight: var(--md-sys-typescale-font-weight-medium);
-  color: var(--text);
+  color: var(--md-sys-color-on-surface);
 }
 
 /* === FORM ELEMENTS === */
@@ -157,7 +148,7 @@ label {
   margin-bottom: var(--md-sys-spacing-md);
   font-size: var(--md-sys-typescale-body-medium-size);
   font-weight: var(--md-sys-typescale-font-weight-medium);
-  color: var(--text);
+  color: var(--md-sys-color-on-surface);
 }
 
 input[type="text"],
@@ -167,9 +158,9 @@ input[type="time"] {
   padding: var(--md-sys-spacing-sm) var(--md-sys-spacing-md);
   margin-top: var(--md-sys-spacing-xs);
   border-radius: var(--md-sys-shape-corner-small);
-  border: 1px solid var(--border);
+  border: 1px solid var(--md-sys-color-outline-variant);
   background: var(--md-sys-color-surface);
-  color: var(--text);
+  color: var(--md-sys-color-on-surface);
   font-family: var(--md-sys-typescale-font-family);
   font-size: var(--md-sys-typescale-body-large-size);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -179,8 +170,8 @@ input[type="text"]:focus,
 input[type="number"]:focus,
 input[type="time"]:focus {
   outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(43, 124, 255, 0.12);
+  border-color: var(--md-sys-color-primary);
+  box-shadow: var(--md-sys-state-focus-ring);
 }
 
 input[type="text"]:disabled,
@@ -201,7 +192,7 @@ input[type="time"]:disabled {
 .footer {
   text-align: center;
   padding: var(--md-sys-spacing-lg);
-  color: var(--text-muted);
+  color: var(--md-sys-color-on-surface-variant);
   font-size: var(--md-sys-typescale-body-small-size);
   margin-top: var(--md-sys-spacing-2xl);
 }

@@ -8,9 +8,42 @@ Quickstart:
 
 Contenuto e prossimi step: scaffold, storage, settings, export/import, accessibility tests.
 
-## Temi e Gestione dello Stile
+## Architettura dello Stile - Sistema Centralizzato
 
-> **📝 Nota:** Il sistema di temi è già tecnicamente implementato in `app.css` e `app.js` (CSS variables, logica di switching, persistenza). L'integrazione nell'interfaccia utente sarà completata in PR successive. Questa sezione descrive il sistema COMPLETO per guidare lo sviluppo dell'interfaccia.
+OrarioDoc utilizza un **sistema di gestione degli stili completamente centralizzato** basato su **Material Design 3** e CSS Variables (Custom Properties), garantendo consistenza visiva, accessibilità e manutenibilità.
+
+### 📁 Struttura dei File CSS
+
+Il progetto utilizza una **singola fonte di verità** per tutti gli stili:
+
+1. **`theme.css`** (principale) - Sistema di tema centralizzato Material 3
+   - Tutte le variabili CSS (colori, tipografia, spacing, elevazioni, forme)
+   - Definizioni dei temi: light, dark, expressive
+   - Stili base globali (reset, body, utility classes)
+   - Font: Roboto Flex (Google Fonts - font variabile)
+
+2. **`style.css`** - Stili specifici dell'applicazione
+   - Layout e componenti dell'app (topbar, schedule-grid, forms, footer)
+   - Usa SOLO variabili da theme.css, nessun valore hardcoded
+
+3. **`src/components/*.css`** - Componenti Material Design 3 riutilizzabili
+   - `button.css` - Button (Filled, Tonal, Outlined, Text, Elevated)
+   - `card.css` - Card (Elevated, Filled, Outlined)
+   - `navigation.css` - Top App Bar, Bottom Navigation, Navigation Drawer
+   - `textfield.css` - Text Field (Filled, Outlined)
+   - `dialog.css` - Dialog/Modal (Basic, Full Screen)
+   - `fab.css` - Floating Action Button (Standard, Small, Large, Extended)
+   - `chip.css` - Chip (Assist, Filter, Input, Suggestion)
+   - `list.css` - List (One-line, Two-line, Three-line)
+   - Usano SOLO variabili da theme.css
+
+**Importante:** Tutti i file CSS fanno riferimento esclusivamente alle variabili definite in `theme.css`. Non esistono valori hardcoded o duplicazioni.
+
+### 📦 Componenti Material Design 3
+
+OrarioDoc include un set completo di componenti MD3 centralizzati e pronti all'uso. Per la documentazione completa con esempi e best practices, consulta **[docs/COMPONENTS.md](docs/COMPONENTS.md)**.
+
+### 🎨 Sistema di Temi
 
 OrarioDoc implementa un **sistema di gestione dei temi centralizzato** basato su CSS Variables (Custom Properties), garantendo consistenza visiva, accessibilità e personalizzazione completa dell'interfaccia.
 
@@ -90,25 +123,52 @@ Tutti i temi di OrarioDoc garantiranno:
 ### Per Sviluppatori
 
 **⚠️ IMPORTANTE:** Quando sviluppi componenti per OrarioDoc:
-- **Usa SEMPRE CSS Variables** (mai colori hardcoded)
+- **Usa SEMPRE CSS Variables da `theme.css`** (mai colori o valori hardcoded)
+- Tutti gli stili devono fare riferimento a `theme.css` come unica fonte di verità
 - Testa i componenti su **tutti i temi** (Light, Dark, Expressive)
 - Verifica il **contrasto dei colori** con strumenti di accessibilità
 - Consulta [docs/THEMES.md](docs/THEMES.md) per le linee guida complete
 
-Esempio corretto:
+**Ordine di inclusione CSS nei file HTML:**
+```html
+<link rel="stylesheet" href="/theme.css"/>
+<link rel="stylesheet" href="/src/components/button.css"/>
+<link rel="stylesheet" href="/src/components/card.css"/>
+<link rel="stylesheet" href="/style.css"/>
+```
+
+Esempio corretto di utilizzo delle variabili:
 ```css
-/* ✅ Corretto */
+/* ✅ Corretto - usa variabili Material 3 */
 .button {
   background: var(--md-sys-color-primary);
   color: var(--md-sys-color-on-primary);
+  padding: var(--md-sys-spacing-sm) var(--md-sys-spacing-lg);
+  border-radius: var(--md-sys-shape-corner-full);
+  font-family: var(--md-sys-typescale-font-family);
 }
 
-/* ❌ Sbagliato */
+/* ❌ Sbagliato - valori hardcoded */
 .button {
   background: #2b7cff;
   color: #ffffff;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  font-family: 'Roboto Flex', sans-serif;
 }
 ```
+
+### 🔧 Variabili CSS Disponibili
+
+Tutte definite in `theme.css`:
+- **Colori:** `--md-sys-color-primary`, `--md-sys-color-surface`, `--md-sys-color-on-surface`, ecc.
+- **Tipografia:** `--md-sys-typescale-*` (font-family, size, weight, line-height)
+- **Spacing:** `--md-sys-spacing-xs`, `--md-sys-spacing-sm`, `--md-sys-spacing-md`, `--md-sys-spacing-lg`, ecc.
+- **Elevazioni:** `--md-sys-elevation-level0` fino a `level5`
+- **Forme:** `--md-sys-shape-corner-small`, `--md-sys-shape-corner-medium`, `--md-sys-shape-corner-full`, ecc.
+- **Stati:** `--md-sys-state-hover-opacity`, `--md-sys-state-disabled-opacity`, ecc.
+
+Per l'elenco completo, consulta il file `theme.css`.
 
 ## Migrazione dalla versione React/Node
 - Questo branch è pensato come alternativa quando l'ambiente Node non è disponibile. Non rimuove il lavoro React/Node principale; mantenere la storia/branch originali è consigliato.

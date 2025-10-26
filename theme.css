@@ -176,6 +176,9 @@
   --md-sys-state-disabled-opacity: 0.38;
   --md-sys-state-disabled-content-opacity: 0.38;
   
+  /* Focus ring - uses primary color with focus opacity */
+  --md-sys-state-focus-ring: 0 0 0 3px rgba(43, 124, 255, 0.12);
+  
   /* === SPAZIATURA === */
   --md-sys-spacing-xs: 4px;
   --md-sys-spacing-sm: 8px;
@@ -185,7 +188,10 @@
   --md-sys-spacing-2xl: 24px;
   --md-sys-spacing-3xl: 32px;
   
-  /* === SCORCIATOIE UTILI === */
+  /* === SCORCIATOIE UTILI (per retrocompatibilità e uso interno) === */
+  /* Nota: Queste variabili sono mantenute per uso interno in theme.css
+     e per retrocompatibilità. Il codice applicativo dovrebbe preferire
+     le variabili Material 3 complete (es: --md-sys-color-surface) */
   --accent: var(--md-sys-color-primary);
   --bg: var(--md-sys-color-background);
   --card: var(--md-sys-color-surface);
@@ -285,6 +291,9 @@
   --card: var(--md-sys-color-surface);
   --text: var(--md-sys-color-on-surface);
   --text-muted: #9aa7bf;
+  
+  /* Focus ring - dark theme uses lighter primary color */
+  --md-sys-state-focus-ring: 0 0 0 3px rgba(173, 199, 255, 0.12);
 }
 
 /* ============================================================================
@@ -316,8 +325,8 @@
   --md-sys-color-error-container: #ffdad6;
   --md-sys-color-on-error-container: #410002;
   
-  /* Background con gradiente */
-  --md-sys-color-background: linear-gradient(180deg, #ffffff 0%, #f7f2ff 100%);
+  /* Background - solid color, no gradient */
+  --md-sys-color-background: #f7f2ff;
   --md-sys-color-on-background: #1c1b1f;
   
   /* Surface */
@@ -336,6 +345,9 @@
   --card: var(--md-sys-color-surface);
   --text: var(--md-sys-color-on-surface);
   --text-muted: #5b3d6b;
+  
+  /* Focus ring - expressive theme uses primary color */
+  --md-sys-state-focus-ring: 0 0 0 3px rgba(103, 80, 164, 0.12);
 }
 
 /* ============================================================================
@@ -351,8 +363,8 @@ body {
   font-size: var(--md-sys-typescale-body-large-size);
   font-weight: var(--md-sys-typescale-body-large-weight);
   line-height: var(--md-sys-typescale-body-large-line-height);
-  color: var(--text);
-  background: var(--bg);
+  color: var(--md-sys-color-on-surface);
+  background: var(--md-sys-color-background);
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;

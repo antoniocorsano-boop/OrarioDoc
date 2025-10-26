@@ -1,0 +1,427 @@
+/**
+ * list.css - Componente List secondo Material 3
+ * 
+ * Stili per list con diverse varianti:
+ * - One-line list (lista a una riga)
+ * - Two-line list (lista a due righe)
+ * - Three-line list (lista a tre righe)
+ * 
+ * Usa SOLO variabili CSS da theme.css, nessun valore hardcoded.
+ */
+
+/* === BASE LIST === */
+.list {
+  /* Layout */
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0;
+  padding: var(--md-sys-spacing-sm) 0;
+  
+  /* Typography */
+  font-family: var(--md-sys-typescale-font-family);
+  
+  /* Visual */
+  background-color: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+}
+
+/* === LIST ITEM === */
+.list-item {
+  /* Layout */
+  display: flex;
+  align-items: center;
+  gap: var(--md-sys-spacing-md);
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  
+  /* Spacing */
+  padding: var(--md-sys-spacing-sm) var(--md-sys-spacing-lg);
+  min-height: 56px;
+  
+  /* Reset per button/a */
+  border: none;
+  background: transparent;
+  text-align: left;
+  text-decoration: none;
+  color: inherit;
+  
+  /* Interactive */
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* State layer */
+.list-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--md-sys-color-on-surface);
+  opacity: 0;
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.list-item:hover::before {
+  opacity: var(--md-sys-state-hover-opacity);
+}
+
+.list-item:active::before {
+  opacity: var(--md-sys-state-pressed-opacity);
+}
+
+.list-item:focus-visible {
+  outline: 3px solid var(--md-sys-color-primary);
+  outline-offset: -3px;
+}
+
+/* Item selezionato */
+.list-item--selected {
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+.list-item--selected::before {
+  background-color: var(--md-sys-color-on-secondary-container);
+}
+
+/* === LIST ITEM LEADING === */
+.list-item__leading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Leading icon */
+.list-item__leading-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.list-item--selected .list-item__leading-icon {
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+/* Leading image/avatar */
+.list-item__leading-image {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--md-sys-shape-corner-full);
+  object-fit: cover;
+}
+
+/* Leading monogram */
+.list-item__leading-monogram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  font-size: var(--md-sys-typescale-title-medium-size);
+  font-weight: var(--md-sys-typescale-title-medium-weight);
+}
+
+/* Leading video thumbnail */
+.list-item__leading-video {
+  width: 100px;
+  height: 56px;
+  border-radius: var(--md-sys-shape-corner-small);
+  object-fit: cover;
+}
+
+/* === LIST ITEM CONTENT === */
+.list-item__content {
+  flex: 1;
+  min-width: 0; /* Per ellipsis */
+  display: flex;
+  flex-direction: column;
+  gap: var(--md-sys-spacing-xs);
+}
+
+/* Headline (titolo principale) */
+.list-item__headline {
+  font-size: var(--md-sys-typescale-body-large-size);
+  font-weight: var(--md-sys-typescale-body-large-weight);
+  line-height: var(--md-sys-typescale-body-large-line-height);
+  color: var(--md-sys-color-on-surface);
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.list-item--selected .list-item__headline {
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+/* Supporting text (testo secondario) */
+.list-item__supporting-text {
+  font-size: var(--md-sys-typescale-body-medium-size);
+  font-weight: var(--md-sys-typescale-body-medium-weight);
+  line-height: var(--md-sys-typescale-body-medium-line-height);
+  color: var(--md-sys-color-on-surface-variant);
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.list-item--selected .list-item__supporting-text {
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+/* Two-line list item */
+.list-item--two-line {
+  min-height: 72px;
+  align-items: flex-start;
+  padding-top: var(--md-sys-spacing-md);
+  padding-bottom: var(--md-sys-spacing-md);
+}
+
+.list-item--two-line .list-item__supporting-text {
+  -webkit-line-clamp: 1;
+}
+
+/* Three-line list item */
+.list-item--three-line {
+  min-height: 88px;
+  align-items: flex-start;
+  padding-top: var(--md-sys-spacing-md);
+  padding-bottom: var(--md-sys-spacing-md);
+}
+
+.list-item--three-line .list-item__supporting-text {
+  -webkit-line-clamp: 2;
+  white-space: normal;
+}
+
+/* === LIST ITEM TRAILING === */
+.list-item__trailing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Trailing icon */
+.list-item__trailing-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.list-item--selected .list-item__trailing-icon {
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+/* Trailing text (es. timestamp, badge) */
+.list-item__trailing-text {
+  font-size: var(--md-sys-typescale-label-small-size);
+  font-weight: var(--md-sys-typescale-label-small-weight);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.list-item--selected .list-item__trailing-text {
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+/* === LIST DIVIDER === */
+.list-divider {
+  height: 1px;
+  background-color: var(--md-sys-color-outline-variant);
+  margin: 0;
+  border: none;
+}
+
+/* Divider con inset (rientrato) */
+.list-divider--inset {
+  margin-left: calc(var(--md-sys-spacing-lg) + 24px + var(--md-sys-spacing-md));
+}
+
+/* === LIST SUBHEADER === */
+.list-subheader {
+  /* Spacing */
+  padding: var(--md-sys-spacing-md) var(--md-sys-spacing-lg) var(--md-sys-spacing-xs);
+  
+  /* Typography */
+  font-size: var(--md-sys-typescale-title-small-size);
+  font-weight: var(--md-sys-typescale-title-small-weight);
+  line-height: var(--md-sys-typescale-title-small-line-height);
+  color: var(--md-sys-color-on-surface-variant);
+  margin: 0;
+}
+
+/* === STATO DISABLED === */
+.list-item:disabled,
+.list-item--disabled {
+  opacity: var(--md-sys-state-disabled-opacity);
+  pointer-events: none;
+}
+
+/* === LIST VARIANTS === */
+
+/* Dense list (compatta) */
+.list--dense .list-item {
+  min-height: 48px;
+  padding-top: var(--md-sys-spacing-xs);
+  padding-bottom: var(--md-sys-spacing-xs);
+}
+
+.list--dense .list-item--two-line {
+  min-height: 64px;
+}
+
+.list--dense .list-item--three-line {
+  min-height: 76px;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 600px) {
+  .list-item {
+    padding-left: var(--md-sys-spacing-md);
+    padding-right: var(--md-sys-spacing-md);
+  }
+  
+  .list-subheader {
+    padding-left: var(--md-sys-spacing-md);
+  }
+  
+  .list-divider--inset {
+    margin-left: calc(var(--md-sys-spacing-md) + 24px + var(--md-sys-spacing-md));
+  }
+}
+
+/* === ESEMPI DI USO === */
+
+/*
+<!-- Lista One-line -->
+<div class="list">
+  <button class="list-item">
+    <div class="list-item__leading">
+      <svg class="list-item__leading-icon" width="24" height="24">...</svg>
+    </div>
+    <div class="list-item__content">
+      <span class="list-item__headline">Matematica</span>
+    </div>
+    <div class="list-item__trailing">
+      <svg class="list-item__trailing-icon" width="24" height="24">...</svg>
+    </div>
+  </button>
+  <button class="list-item list-item--selected">
+    <div class="list-item__leading">
+      <svg class="list-item__leading-icon" width="24" height="24">...</svg>
+    </div>
+    <div class="list-item__content">
+      <span class="list-item__headline">Italiano</span>
+    </div>
+  </button>
+</div>
+
+<!-- Lista Two-line -->
+<div class="list">
+  <button class="list-item list-item--two-line">
+    <div class="list-item__leading">
+      <img src="avatar.jpg" alt="" class="list-item__leading-image" />
+    </div>
+    <div class="list-item__content">
+      <h3 class="list-item__headline">Mario Rossi</h3>
+      <p class="list-item__supporting-text">Docente di Matematica</p>
+    </div>
+    <div class="list-item__trailing">
+      <span class="list-item__trailing-text">10:30</span>
+    </div>
+  </button>
+</div>
+
+<!-- Lista Three-line -->
+<div class="list">
+  <button class="list-item list-item--three-line">
+    <div class="list-item__leading">
+      <div class="list-item__leading-monogram">MR</div>
+    </div>
+    <div class="list-item__content">
+      <h3 class="list-item__headline">Lezione di Storia</h3>
+      <p class="list-item__supporting-text">
+        Argomento: La Rivoluzione Francese. Preparare materiali per discussione in classe.
+      </p>
+    </div>
+    <div class="list-item__trailing">
+      <svg class="list-item__trailing-icon" width="24" height="24">...</svg>
+    </div>
+  </button>
+</div>
+
+<!-- Lista con subheader e divider -->
+<div class="list">
+  <h2 class="list-subheader">Oggi</h2>
+  <button class="list-item list-item--two-line">
+    <div class="list-item__leading">
+      <svg class="list-item__leading-icon" width="24" height="24">...</svg>
+    </div>
+    <div class="list-item__content">
+      <h3 class="list-item__headline">Matematica - 3A</h3>
+      <p class="list-item__supporting-text">08:00 - 09:00 • Aula 12</p>
+    </div>
+  </button>
+  <hr class="list-divider list-divider--inset" />
+  <button class="list-item list-item--two-line">
+    <div class="list-item__leading">
+      <svg class="list-item__leading-icon" width="24" height="24">...</svg>
+    </div>
+    <div class="list-item__content">
+      <h3 class="list-item__headline">Italiano - 2B</h3>
+      <p class="list-item__supporting-text">10:00 - 11:00 • Aula 5</p>
+    </div>
+  </button>
+  
+  <h2 class="list-subheader">Domani</h2>
+  <button class="list-item list-item--two-line">
+    <div class="list-item__leading">
+      <svg class="list-item__leading-icon" width="24" height="24">...</svg>
+    </div>
+    <div class="list-item__content">
+      <h3 class="list-item__headline">Storia - 4C</h3>
+      <p class="list-item__supporting-text">14:00 - 15:00 • Aula 8</p>
+    </div>
+  </button>
+</div>
+
+<!-- Lista Dense -->
+<div class="list list--dense">
+  <button class="list-item">
+    <div class="list-item__content">
+      <span class="list-item__headline">Elemento compatto 1</span>
+    </div>
+  </button>
+  <button class="list-item">
+    <div class="list-item__content">
+      <span class="list-item__headline">Elemento compatto 2</span>
+    </div>
+  </button>
+</div>
+
+<!-- Lista con video thumbnail -->
+<div class="list">
+  <button class="list-item list-item--two-line">
+    <div class="list-item__leading">
+      <img src="video-thumb.jpg" alt="" class="list-item__leading-video" />
+    </div>
+    <div class="list-item__content">
+      <h3 class="list-item__headline">Video lezione: Geometria</h3>
+      <p class="list-item__supporting-text">Durata: 12:34</p>
+    </div>
+  </button>
+</div>
+*/
