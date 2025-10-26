@@ -176,6 +176,9 @@
   --md-sys-state-disabled-opacity: 0.38;
   --md-sys-state-disabled-content-opacity: 0.38;
   
+  /* Focus ring - uses primary color with focus opacity */
+  --md-sys-state-focus-ring: 0 0 0 3px rgba(43, 124, 255, 0.12);
+  
   /* === SPAZIATURA === */
   --md-sys-spacing-xs: 4px;
   --md-sys-spacing-sm: 8px;
@@ -288,6 +291,9 @@
   --card: var(--md-sys-color-surface);
   --text: var(--md-sys-color-on-surface);
   --text-muted: #9aa7bf;
+  
+  /* Focus ring - dark theme uses lighter primary color */
+  --md-sys-state-focus-ring: 0 0 0 3px rgba(173, 199, 255, 0.12);
 }
 
 /* ============================================================================
@@ -339,6 +345,9 @@
   --card: var(--md-sys-color-surface);
   --text: var(--md-sys-color-on-surface);
   --text-muted: #5b3d6b;
+  
+  /* Focus ring - expressive theme uses primary color */
+  --md-sys-state-focus-ring: 0 0 0 3px rgba(103, 80, 164, 0.12);
 }
 
 /* ============================================================================
