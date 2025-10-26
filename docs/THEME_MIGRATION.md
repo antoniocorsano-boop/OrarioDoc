@@ -538,8 +538,11 @@ input:disabled {
 
 5. **Non dimenticare transizioni**
    ```css
-   /* ✅ Corretto - smooth transitions */
-   transition: all 0.2s ease;
+   /* ✅ Corretto - smooth transitions su proprietà specifiche */
+   transition: background-color 0.2s ease, box-shadow 0.2s ease;
+   
+   /* ❌ Sbagliato - transition: all può causare problemi performance */
+   /* transition: all 0.2s ease; */
    ```
 
 ## Risorse e Riferimenti
