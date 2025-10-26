@@ -68,10 +68,11 @@ jobs:
         with:
           name: test-results
           path: |
-            test-results.json
             test-results.png
             test-failure-debug.png
-            server.log
+            test-runner.html
+            page-console.log
+            test-results.json
           retention-days: 30
 
       - name: Test Summary
@@ -81,4 +82,4 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "Test runner executed. View the test results artifacts." >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Artifacts: test-results.json, screenshots and server.log" >> $GITHUB_STEP_SUMMARY
+          echo "Artifacts: test-results.json, test-results.png, test-failure-debug.png, test-runner.html, and page-console.log" >> $GITHUB_STEP_SUMMARY
