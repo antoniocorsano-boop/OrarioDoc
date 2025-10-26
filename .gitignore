@@ -171,8 +171,7 @@ playwright-tests/
 playwright.config.js
 test-results.png
 
-# Node modules (if temporarily created for CI testing)
-node_modules/
+# Package lock (for CI/CD temporary installations)
 package-lock.json
 
 # Temporary files
