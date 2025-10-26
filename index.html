@@ -13,34 +13,42 @@
   <meta name="theme-color" content="#2b7cff"/>
 </head>
 <body>
-  <header class="topbar">
+  <!-- Skip link per accessibilità -->
+  <a href="#main-content" class="skip-link">Salta al contenuto principale</a>
+  
+  <header class="topbar" role="banner">
     <div class="brand">
-      <div class="logo">OD</div>
-      <span class="title">OrarioDoc</span>
+      <div class="logo" aria-hidden="true">OD</div>
+      <h1 class="title">OrarioDoc</h1>
     </div>
-    <div class="actions">
-      <button id="settingsBtn" class="btn btn--text" aria-label="Impostazioni">Impostazioni</button>
-      <button id="addBtn" class="btn btn--filled" aria-label="Aggiungi lezione">Aggiungi</button>
-    </div>
+    <nav class="actions" aria-label="Azioni principali">
+      <button id="settingsBtn" class="btn btn--text" aria-label="Apri impostazioni">Impostazioni</button>
+      <button id="addBtn" class="btn btn--filled" aria-label="Aggiungi nuova lezione">Aggiungi</button>
+    </nav>
   </header>
-  <main class="app">
+  <main id="main-content" class="app" role="main">
     <div class="panel">
-      <div id="scheduleGrid" class="schedule-grid"></div>
+      <h2 class="visually-hidden">Orario Settimanale</h2>
+      <div id="scheduleGrid" class="schedule-grid" role="grid" aria-label="Griglia orario settimanale"></div>
     </div>
   </main>
-  <aside id="panel" class="panel hidden" aria-hidden="true">
-    <h3>Nuova lezione</h3>
-    <label>Nome <input id="inputName" type="text"/></label>
-    <label>Classe <input id="inputClass" type="text"/></label>
-    <label>Giorno <input id="inputDay" type="number" min="0" max="6" value="1"/></label>
-    <label>Ora <input id="inputTime" type="time" value="08:00"/></label>
-    <label>Durata (min) <input id="inputDuration" type="number" value="60"/></label>
-    <div class="form-actions">
-      <button id="saveBtn" class="btn btn--filled">Salva</button>
-      <button id="cancelBtn" class="btn btn--outlined">Annulla</button>
-    </div>
+  <aside id="panel" class="panel hidden" role="dialog" aria-modal="true" aria-labelledby="panelTitle" aria-hidden="true">
+    <h3 id="panelTitle">Nuova lezione</h3>
+    <form id="lessonForm" aria-label="Modulo nuova lezione">
+      <label for="inputName">Nome <input id="inputName" type="text" required aria-required="true"/></label>
+      <label for="inputClass">Classe <input id="inputClass" type="text"/></label>
+      <label for="inputDay">Giorno <input id="inputDay" type="number" min="0" max="6" value="1" aria-label="Giorno della settimana (0=Domenica, 6=Sabato)"/></label>
+      <label for="inputTime">Ora <input id="inputTime" type="time" value="08:00"/></label>
+      <label for="inputDuration">Durata (min) <input id="inputDuration" type="number" value="60" min="1" max="480"/></label>
+      <div class="form-actions">
+        <button type="button" id="saveBtn" class="btn btn--filled">Salva</button>
+        <button type="button" id="cancelBtn" class="btn btn--outlined">Annulla</button>
+      </div>
+    </form>
   </aside>
-  <footer class="footer">OrarioDoc — PWA MVP</footer>
+  <!-- Live region per annunci screen reader -->
+  <div id="announcements" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></div>
+  <footer class="footer" role="contentinfo">OrarioDoc — PWA MVP</footer>
   <!-- Gestione tema centralizzata -->
   <script src="/src/utils/theme.js"></script>
   <script src="/src/storage/indexeddb.js"></script>

@@ -6,9 +6,46 @@
  * Tutti i reset, variabili e base styles sono in theme.css.
  */
 
+/* === ACCESSIBILITÀ === */
+
+/* Skip link - visibile solo al focus */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  padding: var(--md-sys-spacing-sm) var(--md-sys-spacing-lg);
+  text-decoration: none;
+  z-index: 100;
+  border-radius: 0 0 var(--md-sys-shape-corner-small) 0;
+  font-weight: var(--md-sys-typescale-font-weight-medium);
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 3px solid var(--md-sys-color-on-primary);
+  outline-offset: -3px;
+}
+
+/* Classe per nascondere visivamente ma mantenere accessibile agli screen reader */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
 /* Layout padding specifico dell'app (theme.css definisce gli stili base del body) */
 body {
   padding: var(--md-sys-spacing-lg);
+  position: relative;
 }
 
 /* === TOPBAR === */
@@ -46,6 +83,7 @@ body {
   font-weight: var(--md-sys-typescale-font-weight-medium);
   font-size: var(--md-sys-typescale-title-large-size);
   color: var(--md-sys-color-on-surface);
+  margin: 0; /* Reset h1 default margin */
 }
 
 .actions {
@@ -89,12 +127,25 @@ body {
   min-height: 48px;
   border: 1px dashed var(--md-sys-color-outline-variant);
   transition: background-color 0.2s ease, border-color 0.2s ease;
+  position: relative;
+}
+
+/* Rendi le celle accessibili da tastiera */
+.cell[tabindex] {
+  cursor: pointer;
 }
 
 .cell:hover {
   background: var(--md-sys-color-surface-container);
   border-color: var(--md-sys-color-outline);
-  cursor: pointer;
+}
+
+/* Focus visibile con contrasto >= 3:1 */
+.cell:focus {
+  outline: 3px solid var(--md-sys-color-primary);
+  outline-offset: -3px;
+  background: var(--md-sys-color-surface-container);
+  border-color: var(--md-sys-color-primary);
 }
 
 .cell-header {
@@ -113,11 +164,24 @@ body {
   margin-bottom: var(--md-sys-spacing-sm);
   cursor: pointer;
   transition: transform 0.1s ease, box-shadow 0.2s ease;
+  position: relative;
+}
+
+/* Rendi gli item accessibili da tastiera */
+.item[tabindex] {
+  cursor: pointer;
 }
 
 .item:hover {
   transform: translateY(-1px);
   box-shadow: var(--md-sys-elevation-level2);
+}
+
+/* Focus visibile su lesson items */
+.item:focus {
+  outline: 3px solid var(--md-sys-color-on-primary);
+  outline-offset: 2px;
+  box-shadow: var(--md-sys-elevation-level3);
 }
 
 /* === ASIDE PANEL (form laterale) === */
@@ -127,11 +191,30 @@ aside.panel {
   top: 80px;
   width: 320px;
   max-width: calc(100% - var(--md-sys-spacing-3xl));
-  z-index: 10;
+  z-index: 100; /* Aumentato per essere sopra altri elementi */
   background: var(--md-sys-color-surface);
   padding: var(--md-sys-spacing-lg);
   border-radius: var(--md-sys-shape-corner-medium);
   box-shadow: var(--md-sys-elevation-level3);
+}
+
+/* Overlay backdrop quando il panel è aperto */
+aside.panel::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: -1;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+aside.panel.hidden::before {
+  opacity: 0;
+  pointer-events: none;
 }
 
 aside.panel h3 {
@@ -169,7 +252,8 @@ input[type="time"] {
 input[type="text"]:focus,
 input[type="number"]:focus,
 input[type="time"]:focus {
-  outline: none;
+  outline: 3px solid var(--md-sys-color-primary);
+  outline-offset: -3px;
   border-color: var(--md-sys-color-primary);
   box-shadow: var(--md-sys-state-focus-ring);
 }
