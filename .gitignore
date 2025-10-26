@@ -168,3 +168,8 @@ coverage/
 *.temp
 .tmp/
 .temp/
+
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/
