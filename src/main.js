@@ -74,6 +74,12 @@
   }
   async function save(data){ await Storage.write(data); }
   
+  // Helper: Convert time to minutes for easier comparison
+  function timeToMinutes(timeStr){
+    const [hours, minutes] = timeStr.split(':').map(Number);
+    return hours * 60 + minutes;
+  }
+  
   // Validation functions
   function validateLesson(name, day, start, duration){
     const errors = [];
@@ -101,12 +107,6 @@
   function checkConflicts(lessons, newLesson, excludeId = null){
     const conflicts = [];
     
-    // Convert time to minutes for easier comparison
-    function timeToMinutes(timeStr){
-      const [hours, minutes] = timeStr.split(':').map(Number);
-      return hours * 60 + minutes;
-    }
-    
     const newStart = timeToMinutes(newLesson.start);
     const newEnd = newStart + newLesson.duration;
     
@@ -117,10 +117,8 @@
       const existingStart = timeToMinutes(lesson.start);
       const existingEnd = existingStart + lesson.duration;
       
-      // Check for overlap
-      if((newStart >= existingStart && newStart < existingEnd) ||
-         (newEnd > existingStart && newEnd <= existingEnd) ||
-         (newStart <= existingStart && newEnd >= existingEnd)){
+      // Simplified overlap detection: intervals overlap if start < other's end AND end > other's start
+      if(newStart < existingEnd && newEnd > existingStart){
         conflicts.push(lesson);
       }
     });
@@ -206,7 +204,7 @@
       // Validate input
       const errors = validateLesson(name, day, start, duration);
       if(errors.length > 0){
-        Toast.show(errors[0], 'error');
+        Toast.showToast(errors[0], 'error');
         document.getElementById('inputName').focus();
         return;
       }
@@ -226,7 +224,7 @@
       const conflicts = checkConflicts(data.lessons, newLesson, editingLessonId);
       if(conflicts.length > 0){
         const conflictNames = conflicts.map(l => l.name).join(', ');
-        Toast.show(`Conflitto orario con: ${conflictNames}`, 'warning', 5000);
+        Toast.showToast(`Conflitto orario con: ${conflictNames}`, 'warning', 5000);
         return;
       }
       
@@ -242,7 +240,7 @@
           await save(data);
           ScheduleGrid.renderLessons(gridEl, data.lessons);
           hidePanel();
-          Toast.show(`Lezione ${name} modificata con successo`, 'success');
+          Toast.showToast(`Lezione ${name} modificata con successo`, 'success');
           announce(`Lezione ${name} modificata con successo`);
           editingLessonId = null;
         }
@@ -252,7 +250,7 @@
         await save(data);
         ScheduleGrid.renderLessons(gridEl, data.lessons);
         hidePanel();
-        Toast.show(`Lezione ${name} aggiunta con successo`, 'success');
+        Toast.showToast(`Lezione ${name} aggiunta con successo`, 'success');
         announce(`Lezione ${name} aggiunta con successo`);
       }
       
@@ -274,7 +272,7 @@
           await save(data);
           ScheduleGrid.renderLessons(gridEl, data.lessons);
           hidePanel();
-          Toast.show(`${lessonName} eliminata con successo`, 'success');
+          Toast.showToast(`${lessonName} eliminata con successo`, 'success');
           announce(`${lessonName} eliminata con successo`);
           editingLessonId = null;
         }

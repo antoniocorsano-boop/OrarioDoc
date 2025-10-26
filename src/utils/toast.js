@@ -14,7 +14,7 @@
     }
   }
   
-  function show(message, type = 'info', duration = 3000){
+  function showToast(message, type = 'info', duration = 3000){
     init();
     
     const toast = document.createElement('div');
@@ -53,5 +53,5 @@
     return (s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
   }
   
-  window.Toast = { show };
+  window.Toast = { showToast };
 })();

@@ -70,10 +70,17 @@
       const displayText = l.class ? `${l.name} (${l.class})` : l.name;
       const durationText = l.duration ? ` • ${l.duration}min` : '';
       
-      el.innerHTML = `
-        <div class="item-name">${displayText}</div>
-        <div class="item-time">${l.start}${durationText}</div>
-      `;
+      // Create elements safely using textContent to prevent XSS
+      const nameDiv = document.createElement('div');
+      nameDiv.className = 'item-name';
+      nameDiv.textContent = displayText;
+      
+      const timeDiv = document.createElement('div');
+      timeDiv.className = 'item-time';
+      timeDiv.textContent = `${l.start}${durationText}`;
+      
+      el.appendChild(nameDiv);
+      el.appendChild(timeDiv);
       
       el.dataset.id = l.id;
       el.setAttribute('role', 'button');
