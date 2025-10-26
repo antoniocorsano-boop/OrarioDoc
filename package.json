@@ -1,0 +1,22 @@
+{
+  "name": "orariodoc",
+  "version": "1.0.0",
+  "description": "OrarioDoc - PWA per gestione orario scolastico",
+  "main": "index.html",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug"
+  },
+  "keywords": [
+    "pwa",
+    "education",
+    "schedule",
+    "teacher"
+  ],
+  "author": "antoniocorsano-boop",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.40.0"
+  }
+}

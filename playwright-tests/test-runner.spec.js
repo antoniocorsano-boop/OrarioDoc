@@ -1,7 +1,14 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('fs');
+const path = require('path');
 
 test('OrarioDoc automated tests', async ({ page }) => {
+  // Create test-results directory if it doesn't exist
+  const resultsDir = path.join(process.cwd(), 'test-results');
+  if (!fs.existsSync(resultsDir)) {
+    fs.mkdirSync(resultsDir, { recursive: true });
+  }
+
   // Collect console and page errors
   const logs = [];
   page.on('console', msg => {
@@ -19,25 +26,32 @@ test('OrarioDoc automated tests', async ({ page }) => {
 
   // Helper function to write diagnostic artifacts
   const writeDiagnostics = async (stats) => {
-    await page.screenshot({ path: 'test-results.png', fullPage: true }).catch(() => {});
-    fs.writeFileSync('page-console.log', logs.join('\n'), 'utf8');
-    fs.writeFileSync('test-runner.html', await page.content(), 'utf8');
+    await page.screenshot({ path: path.join(resultsDir, 'test-runner-screenshot.png'), fullPage: true }).catch(() => {});
+    fs.writeFileSync(path.join(resultsDir, 'page-console.log'), logs.join('\n'), 'utf8');
+    fs.writeFileSync(path.join(resultsDir, 'test-runner-result.html'), await page.content(), 'utf8');
     if (stats) {
-      fs.writeFileSync('test-results.json', JSON.stringify(stats, null, 2), 'utf8');
+      fs.writeFileSync(path.join(resultsDir, 'test-results.json'), JSON.stringify(stats, null, 2), 'utf8');
     }
   };
 
   // Navigate to the browser-native test runner served by a static server (CI starts python -m http.server)
-  await page.goto('http://127.0.0.1:8080/tests/test-runner.html', { waitUntil: 'domcontentloaded' });
+  await page.goto('/tests/test-runner.html', { waitUntil: 'domcontentloaded' });
 
-  // Click run-tests button and wait for the status element to show success or failed
+  // Wait for the page to be ready
+  await page.waitForLoadState('domcontentloaded');
+
+  // Ensure the run-tests button exists before clicking
+  await page.waitForSelector('#run-tests', { timeout: 15000 });
+
+  // Click run-tests button
   await page.click('#run-tests');
 
   try {
+    // Wait for status element to show final state (success or failed)
     await page.waitForSelector('.status.success, .status.failed', { timeout: 120000 });
   } catch (err) {
     // Capture debug artifacts when waiting for status times out
-    await page.screenshot({ path: 'test-failure-debug.png', fullPage: true }).catch(() => {});
+    await page.screenshot({ path: path.join(resultsDir, 'test-failure-debug.png'), fullPage: true }).catch(() => {});
     await writeDiagnostics();
     throw err;
   }
@@ -53,7 +67,11 @@ test('OrarioDoc automated tests', async ({ page }) => {
       } catch (e) { return 0; }
     };
     // Also attempt to collect failure details from DOM if available
-    const failedItems = Array.from(document.querySelectorAll('.test.failed, .failed-item')).map(el => el.innerText || el.textContent || '');
+    const failedItems = Array.from(document.querySelectorAll('.test.fail')).map(el => {
+      const nameEl = el.querySelector('.test-name');
+      const errorEl = el.querySelector('.test-error');
+      return `${nameEl ? nameEl.textContent : 'Unknown'}: ${errorEl ? errorEl.textContent : 'No error details'}`;
+    });
     return {
       total: get('stat-total'),
       passed: get('stat-passed'),

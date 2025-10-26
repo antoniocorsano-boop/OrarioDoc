@@ -179,3 +179,8 @@ package-lock.json
 *.temp
 .tmp/
 .temp/
+
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/
