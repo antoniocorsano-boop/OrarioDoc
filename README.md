@@ -6,15 +6,7 @@ Quickstart:
 1. python3 -m http.server 8080
 2. apri http://127.0.0.1:8080
 
-## 🗺️ Roadmap di Sviluppo
-
-Per una panoramica completa dei task pianificati e del loro stato di avanzamento, consulta **[ROADMAP.md](ROADMAP.md)**.
-
-La roadmap organizza lo sviluppo in 4 livelli di priorità con 11 subtask dettagliati:
-- **Alta priorità:** Consolidamento UI/UX e accessibilità
-- **Media priorità:** Funzionalità core e miglioramenti
-- **Media-bassa priorità:** Ottimizzazione e qualità
-- **Bassa priorità:** Documentazione e collaborazione
+Contenuto e prossimi step: scaffold, storage, settings, export/import, accessibility tests.
 
 ## Architettura dello Stile - Sistema Centralizzato
 

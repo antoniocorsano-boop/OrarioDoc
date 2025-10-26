@@ -18,19 +18,6 @@ Questo progetto e tutti i partecipanti sono governati da un Codice di Condotta. 
 
 ## Come posso contribuire?
 
-### Consulta la Roadmap
-
-Prima di iniziare, consulta la **[ROADMAP.md](ROADMAP.md)** per vedere i task pianificati e il loro stato. La roadmap organizza lo sviluppo in 11 subtask con priorità definite. Puoi scegliere un task dalla roadmap o proporre nuove funzionalità.
-
-### Utilizza i Template Issue
-
-Per semplificare la creazione di issue, usa i template disponibili:
-- **Bug Report** - per segnalare problemi
-- **Feature Request** - per proporre nuove funzionalità
-- **Roadmap Subtask** - per task della roadmap
-- **Documentation** - per miglioramenti alla documentazione
-- **Question** - per domande generali
-
 ### Segnalazione di bug
 
 I bug vengono tracciati come issue GitHub. Prima di creare una nuova issue:
