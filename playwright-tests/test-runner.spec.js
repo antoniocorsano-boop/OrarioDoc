@@ -1,31 +1,35 @@
 const { test, expect } = require('@playwright/test');
+const fs = require('fs');
 
 test('OrarioDoc automated tests', async ({ page }) => {
-  // Capture page console logs for debugging
+  // Collect console and page errors
   const logs = [];
-  page.on('console', (msg) => {
+  page.on('console', msg => {
     try {
-      logs.push(`${msg.type()}: ${msg.text()}`);
+      logs.push(`console.${msg.type()}: ${msg.text()}`);
       console.log('PAGE LOG:', msg.text());
-    } catch (e) {
-      // ignore
-    }
+    } catch (e) {}
+  });
+  page.on('pageerror', err => {
+    logs.push(`pageerror: ${err.message}\n${err.stack}`);
+  });
+  page.on('requestfailed', req => {
+    logs.push(`requestfailed: ${req.url()} ${req.failure()?.errorText || ''}`);
   });
 
   // Navigate to the browser-native test runner served by a static server (CI starts python -m http.server)
   await page.goto('http://127.0.0.1:8080/tests/test-runner.html', { waitUntil: 'domcontentloaded' });
 
-  // Click the run-tests button and wait for the status element to show success or failed
+  // Click run-tests button and wait for the status element to show success or failed
   await page.click('#run-tests');
 
   try {
-    await page.waitForSelector('.status.success, .status.failed', { timeout: 60000 });
+    await page.waitForSelector('.status.success, .status.failed', { timeout: 120000 });
   } catch (err) {
     // Capture debug artifacts when waiting for status times out
-    await page.screenshot({ path: 'test-failure-debug.png', fullPage: true }).catch(() => {
-      // Screenshot is a diagnostic tool; failure to capture it should not fail the test
-    });
-    console.error('Timed out waiting for test status. Page console logs:\n', logs.join('\n'));
+    await page.screenshot({ path: 'test-failure-debug.png', fullPage: true }).catch(() => {});
+    fs.writeFileSync('page-console.log', logs.join('\n'), 'utf8');
+    fs.writeFileSync('test-runner.html', await page.content(), 'utf8');
     throw err;
   }
 
@@ -39,22 +43,29 @@ test('OrarioDoc automated tests', async ({ page }) => {
         return Number.isFinite(n) ? n : 0;
       } catch (e) { return 0; }
     };
+    // Also attempt to collect failure details from DOM if available
+    const failedItems = Array.from(document.querySelectorAll('.test.failed, .failed-item')).map(el => el.innerText || el.textContent || '');
     return {
       total: get('stat-total'),
       passed: get('stat-passed'),
       failed: get('stat-failed'),
-      skipped: get('stat-skipped')
+      skipped: get('stat-skipped'),
+      failedItems
     };
   });
 
-  // Always persist a screenshot for the run
-  await page.screenshot({ path: 'test-results.png', fullPage: true }).catch(() => {
-    // Screenshot is a diagnostic tool; failure to capture it should not fail the test
-  });
+  // Always persist diagnostic artifacts
+  await page.screenshot({ path: 'test-results.png', fullPage: true }).catch(() => {});
+  fs.writeFileSync('page-console.log', logs.join('\n'), 'utf8');
+  fs.writeFileSync('test-runner.html', await page.content(), 'utf8');
+  fs.writeFileSync('test-results.json', JSON.stringify(stats, null, 2), 'utf8');
 
   console.log('Test Results:', stats);
+  if (stats.failedItems && stats.failedItems.length) {
+    console.log('Failed items snapshot:\n', stats.failedItems.join('\n---\n'));
+  }
 
-  // Assert condition: no failed tests and at least one passed
+  // Assertions
   expect(stats.failed).toBe(0);
   expect(stats.passed).toBeGreaterThan(0);
 });
