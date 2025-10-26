@@ -182,33 +182,43 @@ describe('Theme Manager', () => {
   
   describe('Event dispatching', () => {
     test('should dispatch theme-changed event', async () => {
+      let handler;
       const eventPromise = new Promise((resolve) => {
-        const handler = (e) => {
+        handler = (e) => {
           window.removeEventListener('theme-changed', handler);
           resolve(e);
         };
         window.addEventListener('theme-changed', handler);
       });
-      
-      ThemeManager.setTheme('dark');
-      
-      const event = await eventPromise;
-      expect(event.detail.theme).toBe('dark');
+      try {
+        ThemeManager.setTheme('dark');
+        const event = await eventPromise;
+        expect(event.detail.theme).toBe('dark');
+      } finally {
+        if (handler) {
+          window.removeEventListener('theme-changed', handler);
+        }
+      }
     });
     
     test('should dispatch colors-changed event', async () => {
+      let handler;
       const eventPromise = new Promise((resolve) => {
-        const handler = (e) => {
+        handler = (e) => {
           window.removeEventListener('colors-changed', handler);
           resolve(e);
         };
         window.addEventListener('colors-changed', handler);
       });
-      
-      ThemeManager.setCustomColors({ primary: '#ff0000' });
-      
-      const event = await eventPromise;
-      expect(event.detail.colors.primary).toBe('#ff0000');
+      try {
+        ThemeManager.setCustomColors({ primary: '#ff0000' });
+        const event = await eventPromise;
+        expect(event.detail.colors.primary).toBe('#ff0000');
+      } finally {
+        if (handler) {
+          window.removeEventListener('colors-changed', handler);
+        }
+      }
     });
   });
   
