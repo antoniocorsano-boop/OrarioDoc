@@ -316,8 +316,8 @@
   --md-sys-color-error-container: #ffdad6;
   --md-sys-color-on-error-container: #410002;
   
-  /* Background con gradiente */
-  --md-sys-color-background: linear-gradient(180deg, #ffffff 0%, #f7f2ff 100%);
+  /* Background - solid color, no gradient */
+  --md-sys-color-background: #f7f2ff;
   --md-sys-color-on-background: #1c1b1f;
   
   /* Surface */
@@ -351,8 +351,8 @@ body {
   font-size: var(--md-sys-typescale-body-large-size);
   font-weight: var(--md-sys-typescale-body-large-weight);
   line-height: var(--md-sys-typescale-body-large-line-height);
-  color: var(--text);
-  background: var(--bg);
+  color: var(--md-sys-color-on-surface);
+  background: var(--md-sys-color-background);
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
