@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OrarioDoc Test Runner</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+    
+    .subtitle {
+      color: #7f8c8d;
+      margin-bottom: 30px;
+    }
+    
+    .status {
+      padding: 15px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+    
+    .status.running {
+      background: #3498db;
+      color: white;
+    }
+    
+    .status.success {
+      background: #2ecc71;
+      color: white;
+    }
+    
+    .status.failed {
+      background: #e74c3c;
+      color: white;
+    }
+    
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+    
+    .stat-card {
+      padding: 20px;
+      border-radius: 4px;
+      text-align: center;
+    }
+    
+    .stat-card.total {
+      background: #ecf0f1;
+      color: #2c3e50;
+    }
+    
+    .stat-card.passed {
+      background: #d5f4e6;
+      color: #27ae60;
+    }
+    
+    .stat-card.failed {
+      background: #fadbd8;
+      color: #c0392b;
+    }
+    
+    .stat-card.skipped {
+      background: #fef5e7;
+      color: #f39c12;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .progress-bar {
+      height: 30px;
+      background: #ecf0f1;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 30px;
+      position: relative;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #2ecc71, #27ae60);
+      transition: width 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+    
+    .results {
+      margin-top: 30px;
+    }
+    
+    .suite {
+      margin-bottom: 20px;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .suite-header {
+      background: #34495e;
+      color: white;
+      padding: 15px;
+      font-weight: 600;
+      font-size: 16px;
+    }
+    
+    .test-result {
+      padding: 12px 15px;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .test-result:last-child {
+      border-bottom: none;
+    }
+    
+    .test-result.passed {
+      background: #f0fdf4;
+    }
+    
+    .test-result.failed {
+      background: #fef2f2;
+    }
+    
+    .test-result.skipped {
+      background: #fffbeb;
+    }
+    
+    .test-icon {
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    
+    .test-description {
+      flex-grow: 1;
+    }
+    
+    .test-error {
+      margin-top: 10px;
+      padding: 10px;
+      background: #fee;
+      border-left: 3px solid #e74c3c;
+      font-family: monospace;
+      font-size: 12px;
+      color: #c0392b;
+      white-space: pre-wrap;
+    }
+    
+    #console-output {
+      margin-top: 30px;
+      padding: 20px;
+      background: #2c3e50;
+      color: #ecf0f1;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      max-height: 400px;
+      overflow-y: auto;
+      line-height: 1.6;
+    }
+    
+    .console-line {
+      margin-bottom: 5px;
+    }
+    
+    .console-error {
+      color: #e74c3c;
+    }
+    
+    .console-success {
+      color: #2ecc71;
+    }
+    
+    .console-header {
+      color: #3498db;
+      font-weight: bold;
+    }
+    
+    button {
+      padding: 12px 24px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+    
+    button:hover {
+      background: #2980b9;
+    }
+    
+    button:disabled {
+      background: #bdc3c7;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧪 OrarioDoc Test Runner</h1>
+    <p class="subtitle">Browser-based automated testing suite</p>
+    
+    <button id="run-tests" onclick="runAllTests()">Run Tests</button>
+    
+    <div id="status" class="status running" style="display: none;">
+      Running tests...
+    </div>
+    
+    <div id="stats" class="stats" style="display: none;">
+      <div class="stat-card total">
+        <span class="stat-number" id="stat-total">0</span>
+        <span class="stat-label">Total</span>
+      </div>
+      <div class="stat-card passed">
+        <span class="stat-number" id="stat-passed">0</span>
+        <span class="stat-label">Passed</span>
+      </div>
+      <div class="stat-card failed">
+        <span class="stat-number" id="stat-failed">0</span>
+        <span class="stat-label">Failed</span>
+      </div>
+      <div class="stat-card skipped">
+        <span class="stat-number" id="stat-skipped">0</span>
+        <span class="stat-label">Skipped</span>
+      </div>
+    </div>
+    
+    <div id="progress" class="progress-bar" style="display: none;">
+      <div class="progress-fill" id="progress-fill" style="width: 0%;">
+        0%
+      </div>
+    </div>
+    
+    <div id="results" class="results"></div>
+    
+    <div id="console-output"></div>
+  </div>
+  
+  <!-- Load dependencies -->
+  <script src="../src/utils/theme.js"></script>
+  <script src="../src/utils/toast.js"></script>
+  
+  <!-- Load test framework -->
+  <script src="./test-framework.js"></script>
+  
+  <!-- Load test files -->
+  <script src="./storage.test.js"></script>
+  <script src="./theme.test.js"></script>
+  <script src="./toast.test.js"></script>
+  
+  <script>
+    // Capture console output
+    const consoleOutput = document.getElementById('console-output');
+    const originalLog = console.log;
+    const originalError = console.error;
+    
+    function addConsoleLine(message, type = 'log') {
+      const line = document.createElement('div');
+      line.className = `console-line console-${type}`;
+      line.textContent = message;
+      consoleOutput.appendChild(line);
+      consoleOutput.scrollTop = consoleOutput.scrollHeight;
+    }
+    
+    console.log = function(...args) {
+      originalLog.apply(console, args);
+      addConsoleLine(args.join(' '), 'log');
+    };
+    
+    console.error = function(...args) {
+      originalError.apply(console, args);
+      addConsoleLine(args.join(' '), 'error');
+    };
+    
+    // Run tests function
+    async function runAllTests() {
+      const button = document.getElementById('run-tests');
+      button.disabled = true;
+      button.textContent = 'Running...';
+      
+      // Clear previous results
+      document.getElementById('results').innerHTML = '';
+      consoleOutput.innerHTML = '';
+      
+      // Show status
+      const statusDiv = document.getElementById('status');
+      statusDiv.style.display = 'block';
+      statusDiv.className = 'status running';
+      statusDiv.textContent = 'Running tests...';
+      
+      document.getElementById('stats').style.display = 'grid';
+      document.getElementById('progress').style.display = 'block';
+      
+      try {
+        // Run tests
+        const stats = await TestRunner.run();
+        const { results } = TestRunner.getResults();
+        
+        // Update stats
+        document.getElementById('stat-total').textContent = stats.total;
+        document.getElementById('stat-passed').textContent = stats.passed;
+        document.getElementById('stat-failed').textContent = stats.failed;
+        document.getElementById('stat-skipped').textContent = stats.skipped;
+        
+        // Update progress bar
+        const passRate = stats.total > 0 ? (stats.passed / stats.total) * 100 : 0;
+        const progressFill = document.getElementById('progress-fill');
+        progressFill.style.width = passRate + '%';
+        progressFill.textContent = passRate.toFixed(1) + '%';
+        
+        // Update status
+        if (stats.failed === 0) {
+          statusDiv.className = 'status success';
+          statusDiv.textContent = '✓ All tests passed!';
+        } else {
+          statusDiv.className = 'status failed';
+          statusDiv.textContent = `✗ ${stats.failed} test(s) failed`;
+        }
+        
+        // Render results
+        renderResults(results);
+        
+      } catch (error) {
+        statusDiv.className = 'status failed';
+        statusDiv.textContent = '✗ Test execution failed: ' + error.message;
+        console.error(error);
+      }
+      
+      button.disabled = false;
+      button.textContent = 'Run Tests Again';
+    }
+    
+    function renderResults(results) {
+      const resultsDiv = document.getElementById('results');
+      
+      // Group by suite
+      const suites = {};
+      results.forEach(result => {
+        if (!suites[result.suite]) {
+          suites[result.suite] = [];
+        }
+        suites[result.suite].push(result);
+      });
+      
+      // Render each suite
+      Object.keys(suites).forEach(suiteName => {
+        const suiteDiv = document.createElement('div');
+        suiteDiv.className = 'suite';
+        
+        const header = document.createElement('div');
+        header.className = 'suite-header';
+        header.textContent = suiteName;
+        suiteDiv.appendChild(header);
+        
+        // Render tests
+        suites[suiteName].forEach(result => {
+          const testDiv = document.createElement('div');
+          testDiv.className = `test-result ${result.status}`;
+          
+          const icon = document.createElement('span');
+          icon.className = 'test-icon';
+          icon.textContent = result.status === 'passed' ? '✓' : 
+                           result.status === 'failed' ? '✗' : '⊘';
+          testDiv.appendChild(icon);
+          
+          const description = document.createElement('span');
+          description.className = 'test-description';
+          description.textContent = result.test;
+          testDiv.appendChild(description);
+          
+          // Add error if failed
+          if (result.status === 'failed' && result.error) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'test-error';
+            errorDiv.textContent = result.error;
+            testDiv.appendChild(errorDiv);
+          }
+          
+          suiteDiv.appendChild(testDiv);
+        });
+        
+        resultsDiv.appendChild(suiteDiv);
+      });
+    }
+    
+    // Auto-run tests on page load
+    window.addEventListener('load', () => {
+      console.log('Test runner loaded. Click "Run Tests" to start.');
+    });
+  </script>
+</body>
+</html>

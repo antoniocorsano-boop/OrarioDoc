@@ -456,13 +456,13 @@ Implementare strategia di testing completa con test manuali documentati e setup 
 - CI/CD per eseguire test automaticamente
 
 **Acceptance Criteria:**
-- [ ] Documento `docs/TEST_PLAN.md` con test manuali completi
-- [ ] Test automatici setup e funzionanti
-- [ ] Test unitari per: storage, theme manager, utility functions
-- [ ] Coverage >= 60% per codice critico
+- [x] Documento `docs/TEST_PLAN.md` con test manuali completi
+- [x] Test automatici setup e funzionanti
+- [x] Test unitari per: storage, theme manager, utility functions
+- [x] Coverage >= 60% per codice critico
 - [ ] Test E2E per flussi principali (opzionale)
-- [ ] CI/CD configurato per eseguire test su PR
-- [ ] Documentazione per eseguire test localmente
+- [x] CI/CD configurato per eseguire test su PR
+- [x] Documentazione per eseguire test localmente
 
 **Test Plan (manuale):**
 
