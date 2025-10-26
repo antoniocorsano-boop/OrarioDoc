@@ -1,7 +1,7 @@
 # Temi e Gestione dello Stile in OrarioDoc
 
 > **⚠️ Nota sullo stato dell'implementazione:**  
-> Questo documento descrive il sistema di gestione dei temi che è PROGETTATO e GIÀ IMPLEMENTATO tecnicamente in OrarioDoc. I file `app.css` e `app.js` contengono l'implementazione completa e funzionale del sistema di temi (CSS variables, logica di switching, persistenza). Tuttavia, l'integrazione nell'interfaccia utente principale (menu settings con selettori) sarà completata in PR successive. Questo documento serve come riferimento completo per sviluppatori e contributori.
+> Questo documento descrive il sistema di gestione dei temi implementato in OrarioDoc. Il sistema utilizza CSS variables (in `theme.css` e `style.css`) e una logica di gestione centralizzata (in `src/utils/theme.js`) per gestione tema e colori. Il sistema è completamente integrato nell'interfaccia utente attraverso il menu impostazioni. Questo documento serve come riferimento completo per sviluppatori e contributori.
 
 ## 📋 Indice
 
@@ -33,30 +33,23 @@ OrarioDoc implementa un sistema di gestione dei temi centralizzato basato su **C
 
 ### Componenti Completati
 
-- ✅ **CSS Variables**: Definite in `app.css` con tutti i temi (Light, Dark, Expressive)
-- ✅ **Logica JavaScript**: Implementata in `app.js` per gestione tema e colori
+- ✅ **CSS Variables**: Definite in `theme.css` e `style.css` con tutti i temi (Light, Dark, Expressive)
+- ✅ **Logica JavaScript**: Implementata in `src/utils/theme.js` per gestione tema
 - ✅ **Persistenza**: Sistema localStorage per salvare preferenze utente
 - ✅ **Accessibilità**: Contrasto colori conforme WCAG 2.1 AA
+- ✅ **Integrazione UI**: Menu impostazioni completo con selettore temi
 - ✅ **Documentazione**: Questo documento e aggiornamenti README.md
-
-### Componenti in Sviluppo
-
-- 🔄 **Integrazione UI**: Menu impostazioni con selettore temi (prossima PR)
-- 🔄 **Color Picker**: Interfaccia per personalizzazione colori (prossima PR)
-- 🔄 **Anteprima Live**: Collegamento UI con logica JavaScript (prossima PR)
 
 ### File Coinvolti
 
 | File | Stato | Descrizione |
 |------|-------|-------------|
-| `app.css` | ✅ Completo | Definizione temi e variabili CSS |
-| `app.js` | ✅ Completo | Logica gestione temi e colori |
-| `index.html` | 🔄 In sviluppo | Da aggiornare per utilizzare app.css/app.js |
-| `src/settings.js` | 🔄 In sviluppo | Da espandere con UI temi |
-
-**Nota:** L'attuale `index.html` utilizza `style.css` come file CSS principale e carica script modulari da `/src/`. Il sistema di temi completo è già implementato in `app.css` e `app.js`, ma richiede integrazione nell'interfaccia utente. In future PR, ci sono due possibili approcci:
-1. Migrare `index.html` per utilizzare `app.css` e `app.js` 
-2. Portare le funzionalità di `app.css` in `style.css` e integrare la logica in `/src/settings.js`
+| `theme.css` | ✅ Completo | Definizione temi e variabili CSS Material 3 |
+| `style.css` | ✅ Completo | Stili applicazione e componenti |
+| `src/utils/theme.js` | ✅ Completo | ThemeManager per gestione temi |
+| `src/settings.js` | ✅ Completo | Gestione impostazioni applicazione |
+| `src/screens/settings-screen.js` | ✅ Completo | UI completa per impostazioni e temi |
+| `index.html` | ✅ Completo | Integra tutti i componenti del sistema tema |
 
 La scelta dell'approccio dipenderà dalle esigenze architetturali del progetto e verrà discussa nelle PR future.
 
@@ -138,7 +131,7 @@ Tema ispirato a Material Design 3 con palette di colori vivaci e dinamici.
 
 ## Struttura della Palette
 
-Il sistema di temi di OrarioDoc è organizzato gerarchicamente utilizzando variabili CSS. Tutte le variabili sono definite in `app.css`.
+Il sistema di temi di OrarioDoc è organizzato gerarchicamente utilizzando variabili CSS. Tutte le variabili sono definite in `theme.css`.
 
 ### Variabili Base (Root)
 
@@ -296,7 +289,7 @@ button.secondary {
 
 ### Come Modificare un Tema Esistente
 
-1. **Apri `app.css`**
+1. **Apri `theme.css`**
 2. **Individua il selettore del tema** (es: `:root[data-theme="light"]`)
 3. **Modifica le variabili necessarie**
 4. **Testa il risultato su tutti i componenti**
@@ -311,7 +304,7 @@ Esempio:
 
 ### Come Aggiungere un Nuovo Tema
 
-1. **Aggiungi un nuovo blocco in `app.css`:**
+1. **Aggiungi un nuovo blocco in `theme.css`:**
    ```css
    :root[data-theme="mio-tema"] {
      --md-sys-color-primary: #e91e63;
@@ -326,7 +319,7 @@ Esempio:
 
 2. **Aggiorna la UI in `index.html` o il file pertinente** per includere il nuovo tema nel menu Impostazioni
 
-3. **Aggiorna `app.js`** se necessario per gestire la logica del nuovo tema
+3. **Aggiorna `src/utils/theme.js`** se necessario per gestire la logica del nuovo tema
 
 4. **Testa l'accessibilità** con strumenti come axe DevTools
 
@@ -381,12 +374,13 @@ Gli utenti possono ripristinare i colori predefiniti del tema corrente cliccando
 
 ### Implementazione Tecnica
 
-I colori personalizzati sono gestiti da `app.js`:
+I colori personalizzati sono gestiti da `src/utils/theme.js`:
 
 ```javascript
-function applyColors(colors) {
-  const root = document.documentElement;
-  if (colors && colors.primary) {
+function applyCustomColors(colors) {
+  if (!colors) return;
+  
+  if (colors.primary) {
     root.style.setProperty('--md-sys-color-primary', colors.primary);
   }
   if (colors && colors.secondary) {
@@ -680,8 +674,10 @@ Una funzionalità di export/import completa potrebbe essere aggiunta in futuro.
 
 ### File Correlati
 
-- `/app.css` - Definizione di tutti i temi e variabili CSS
-- `/app.js` - Logica JavaScript per gestire temi e colori
+- `/theme.css` - Definizione di tutti i temi e variabili CSS Material 3
+- `/src/utils/theme.js` - ThemeManager per gestione temi e colori
+- `/src/settings.js` - Gestione impostazioni applicazione
+- `/src/screens/settings-screen.js` - UI completa per impostazioni
 - `/docs/STYLE_GUIDE.md` - Guida di stile generale
 - `/README.md` - Documentazione principale del progetto
 

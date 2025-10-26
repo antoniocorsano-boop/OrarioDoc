@@ -1,41 +1,40 @@
 # Test IndexedDB Storage
 
-Test page to verify IndexedDB implementation for OrarioDoc.
+> **Note:** The dedicated test page `test-indexeddb.html` has been removed as part of code cleanup. 
+> The IndexedDB implementation is now tested through the main application and can be verified 
+> using browser developer tools.
 
-## Usage
+## Testing IndexedDB in Production App
 
 1. Start a local web server:
    ```bash
    python3 -m http.server 8080
    ```
 
-2. Open the test page in your browser:
+2. Open the app in your browser:
    ```
-   http://localhost:8080/test-indexeddb.html
+   http://localhost:8080/
    ```
 
-## Tests Available
+3. Open browser Developer Tools (F12) and navigate to:
+   - **Application** tab > **IndexedDB** > **OrarioDocDB**
+   - Or **Storage** tab > **IndexedDB** (in Firefox)
 
-- **Test Scrittura (1000 record)**: Tests writing 1000 lesson records to IndexedDB
-- **Test Lettura**: Tests reading data from IndexedDB
-- **Test Migrazione da localStorage**: Tests automatic migration from localStorage to IndexedDB
-- **Pulisci Dati**: Clears all data from both IndexedDB and localStorage
-- **Pulisci Log**: Clears the test log display
+## Manual Testing
 
-## UI Responsiveness Indicator
+You can test the IndexedDB functionality through the main app:
 
-The green circle in the top-right corner indicates UI responsiveness:
-- **Green (pulsing)**: UI is responsive
-- **Red (static)**: UI is frozen/blocked
+1. **Add lessons** using the "Aggiungi" button
+2. **Verify storage** in DevTools IndexedDB section
+3. **Refresh page** to verify persistence
+4. **Check migration** from localStorage (if applicable)
 
-This helps verify that the asynchronous operations don't block the user interface.
+## Expected Behavior
 
-## Expected Results
-
-- Writing 1000 records should complete in <100ms without blocking UI
-- Reading 1000 records should complete in <50ms
-- Migration from localStorage should work seamlessly
-- UI indicator should remain green throughout all operations
+- Adding lessons should persist immediately to IndexedDB
+- Reading data should be fast (<50ms for typical datasets)
+- Migration from localStorage happens automatically on first app load
+- UI remains responsive during all storage operations
 
 ## Technical Details
 

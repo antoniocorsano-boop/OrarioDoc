@@ -23,7 +23,6 @@ Questo documento descrive la migrazione completa di OrarioDoc verso un sistema d
 /src/utils/theme.js            # Utility JavaScript per gestione tema
 /src/components/button.css     # Componente Button con varianti Material 3
 /src/components/card.css       # Componente Card con varianti Material 3
-/demo-components.html          # Demo interattiva di tutti i componenti
 ```
 
 ### File Modificati
@@ -551,7 +550,6 @@ input:disabled {
 
 - `docs/THEMES.md` - Documentazione completa sistema temi
 - `docs/STYLE_GUIDE.md` - Guida stile generale
-- `demo-components.html` - Demo interattiva componenti
 
 ### Material Design 3
 
