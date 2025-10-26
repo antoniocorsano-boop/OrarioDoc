@@ -19,7 +19,7 @@
   z-index: 300;
   
   /* Visual */
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: var(--md-sys-color-scrim);
   
   /* Animation */
   opacity: 0;

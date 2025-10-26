@@ -179,6 +179,12 @@
   /* Focus ring - uses primary color with focus opacity */
   --md-sys-state-focus-ring: 0 0 0 3px rgba(43, 124, 255, 0.12);
   
+  /* Scrim (backdrop overlay) - Material 3 standard for modal backdrops */
+  --md-sys-color-scrim: rgba(0, 0, 0, 0.4);
+  
+  /* State layers - per hover/focus su superfici chiare */
+  --md-sys-state-layer-on-surface: rgba(0, 0, 0, 0.08);
+  
   /* === SPAZIATURA === */
   --md-sys-spacing-xs: 4px;
   --md-sys-spacing-sm: 8px;
@@ -294,6 +300,12 @@
   
   /* Focus ring - dark theme uses lighter primary color */
   --md-sys-state-focus-ring: 0 0 0 3px rgba(173, 199, 255, 0.12);
+  
+  /* Scrim (backdrop overlay) - same for dark theme */
+  --md-sys-color-scrim: rgba(0, 0, 0, 0.4);
+  
+  /* State layers - lighter for dark surfaces */
+  --md-sys-state-layer-on-surface: rgba(255, 255, 255, 0.08);
 }
 
 /* ============================================================================
@@ -348,6 +360,12 @@
   
   /* Focus ring - expressive theme uses primary color */
   --md-sys-state-focus-ring: 0 0 0 3px rgba(103, 80, 164, 0.12);
+  
+  /* Scrim (backdrop overlay) - same across themes */
+  --md-sys-color-scrim: rgba(0, 0, 0, 0.4);
+  
+  /* State layers - for light expressive theme */
+  --md-sys-state-layer-on-surface: rgba(0, 0, 0, 0.08);
 }
 
 /* ============================================================================
