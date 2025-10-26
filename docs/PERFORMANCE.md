@@ -517,5 +517,4 @@ performance.getEntriesByType('paint').forEach(p => {
 ---
 
 **Ultima modifica:** Ottobre 2025  
-**Autore:** GitHub Copilot  
 **Status:** ✅ Implementato e Testato
