@@ -73,6 +73,60 @@
     return data;
   }
   async function save(data){ await Storage.write(data); }
+  
+  // Validation functions
+  function validateLesson(name, day, start, duration){
+    const errors = [];
+    
+    if(!name || name.trim().length === 0){
+      errors.push('Il nome della lezione è obbligatorio');
+    }
+    
+    if(isNaN(day) || day < 0 || day > 6){
+      errors.push('Il giorno deve essere tra 0 (Domenica) e 6 (Sabato)');
+    }
+    
+    if(!start || !/^([0-1][0-9]|2[0-3]):([0-5][0-9])$/.test(start)){
+      errors.push('L\'ora deve essere nel formato HH:MM');
+    }
+    
+    if(isNaN(duration) || duration < 1 || duration > 480){
+      errors.push('La durata deve essere tra 1 e 480 minuti');
+    }
+    
+    return errors;
+  }
+  
+  // Conflict detection
+  function checkConflicts(lessons, newLesson, excludeId = null){
+    const conflicts = [];
+    
+    // Convert time to minutes for easier comparison
+    function timeToMinutes(timeStr){
+      const [hours, minutes] = timeStr.split(':').map(Number);
+      return hours * 60 + minutes;
+    }
+    
+    const newStart = timeToMinutes(newLesson.start);
+    const newEnd = newStart + newLesson.duration;
+    
+    lessons.forEach(lesson => {
+      if(lesson.id === excludeId) return; // Skip current lesson when editing
+      if(lesson.day !== newLesson.day) return; // Only check same day
+      
+      const existingStart = timeToMinutes(lesson.start);
+      const existingEnd = existingStart + lesson.duration;
+      
+      // Check for overlap
+      if((newStart >= existingStart && newStart < existingEnd) ||
+         (newEnd > existingStart && newEnd <= existingEnd) ||
+         (newStart <= existingStart && newEnd >= existingEnd)){
+        conflicts.push(lesson);
+      }
+    });
+    
+    return conflicts;
+  }
 
   let editingLessonId = null;
 
@@ -149,8 +203,10 @@
       const start = document.getElementById('inputTime').value || '08:00';
       const duration = parseInt(document.getElementById('inputDuration').value,10) || 60;
       
-      if(!name){ 
-        alert('Inserisci il nome della lezione');
+      // Validate input
+      const errors = validateLesson(name, day, start, duration);
+      if(errors.length > 0){
+        Toast.show(errors[0], 'error');
         document.getElementById('inputName').focus();
         return;
       }
@@ -158,31 +214,45 @@
       const data = await load();
       data.lessons = data.lessons || [];
       
+      const newLesson = {
+        name, 
+        class: document.getElementById('inputClass').value, 
+        day, 
+        start, 
+        duration
+      };
+      
+      // Check for conflicts
+      const conflicts = checkConflicts(data.lessons, newLesson, editingLessonId);
+      if(conflicts.length > 0){
+        const conflictNames = conflicts.map(l => l.name).join(', ');
+        Toast.show(`Conflitto orario con: ${conflictNames}`, 'warning', 5000);
+        return;
+      }
+      
       if(editingLessonId){
         // Update existing lesson
         const index = data.lessons.findIndex(l => l.id === editingLessonId);
         if(index !== -1){
           data.lessons[index] = { 
             ...data.lessons[index],
-            id: editingLessonId, 
-            name, 
-            class: document.getElementById('inputClass').value, 
-            day, 
-            start, 
-            duration 
+            id: editingLessonId,
+            ...newLesson
           };
           await save(data);
           ScheduleGrid.renderLessons(gridEl, data.lessons);
           hidePanel();
+          Toast.show(`Lezione ${name} modificata con successo`, 'success');
           announce(`Lezione ${name} modificata con successo`);
           editingLessonId = null;
         }
       } else {
         // Add new lesson
-        data.lessons.push({ id: uid(), name, class: document.getElementById('inputClass').value, day, start, duration });
+        data.lessons.push({ id: uid(), ...newLesson });
         await save(data);
         ScheduleGrid.renderLessons(gridEl, data.lessons);
         hidePanel();
+        Toast.show(`Lezione ${name} aggiunta con successo`, 'success');
         announce(`Lezione ${name} aggiunta con successo`);
       }
       
@@ -204,6 +274,7 @@
           await save(data);
           ScheduleGrid.renderLessons(gridEl, data.lessons);
           hidePanel();
+          Toast.show(`${lessonName} eliminata con successo`, 'success');
           announce(`${lessonName} eliminata con successo`);
           editingLessonId = null;
         }
