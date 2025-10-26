@@ -163,6 +163,19 @@ coverage/
 *.lcov
 .nyc_output/
 
+# Test verification (optional dev tool)
+verify-tests.js
+package.json
+package-lock.json
+
+# Playwright test artifacts
+test-results/
+playwright-report/
+playwright/.cache/
+playwright-tests/
+playwright.config.js
+test-results.png
+
 # Temporary files
 *.tmp
 *.temp
