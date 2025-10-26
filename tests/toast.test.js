@@ -170,7 +170,7 @@ describe('Toast Notifications', () => {
       const toast = document.querySelector('.toast');
       expect(toast).toBeDefined();
       
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 150));
       const toastStillExists = document.querySelector('.toast');
       expect(toastStillExists).toBeNull();
     });
