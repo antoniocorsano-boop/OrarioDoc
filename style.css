@@ -611,7 +611,7 @@ input[type="time"]:disabled {
 .settings-input:focus {
   outline: none;
   border-color: var(--md-sys-color-primary);
-  box-shadow: 0 0 0 2px rgba(103, 80, 164, 0.2);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--md-sys-color-primary) 20%, transparent);
 }
 
 .settings-input:disabled {

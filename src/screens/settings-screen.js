@@ -168,7 +168,7 @@
         user: {
           name: getValueIfExists('userName'),
           email: getValueIfExists('userEmail'),
-          subjects: getValueIfExists('userSubjects')
+          subjects: (getValueIfExists('userSubjects') || '')
             .split(',')
             .map(s => s.trim())
             .filter(s => s.length > 0)
@@ -176,13 +176,13 @@
         school: {
           name: getValueIfExists('schoolName'),
           address: getValueIfExists('schoolAddress'),
-          startTime: getValueIfExists('schoolStartTime'),
-          endTime: getValueIfExists('schoolEndTime'),
-          lessonDuration: parseInt(getValueIfExists('schoolLessonDuration'), 10),
-          breakDuration: parseInt(getValueIfExists('schoolBreakDuration'), 10),
-          schoolDays: getValueIfExists('schoolDays')
+          startTime: getValueIfExists('schoolStartTime') || '08:00',
+          endTime: getValueIfExists('schoolEndTime') || '14:00',
+          lessonDuration: parseInt(getValueIfExists('schoolLessonDuration'), 10) || 60,
+          breakDuration: parseInt(getValueIfExists('schoolBreakDuration'), 10) || 10,
+          schoolDays: getValueIfExists('schoolDays') || 'mon-fri'
         },
-        theme: getValueIfExists('themeSelector')
+        theme: getValueIfExists('themeSelector') || 'expressive'
       };
       
       // Salva in IndexedDB
@@ -234,14 +234,16 @@
     }
     
     // Valida durata lezione
-    const lessonDuration = parseInt(getValueIfExists('schoolLessonDuration'), 10);
-    if (lessonDuration && (lessonDuration < 1 || lessonDuration > 480)) {
+    const lessonDurationStr = getValueIfExists('schoolLessonDuration');
+    const lessonDuration = parseInt(lessonDurationStr, 10);
+    if (lessonDurationStr && (isNaN(lessonDuration) || lessonDuration < 1 || lessonDuration > 480)) {
       errors.push('La durata della lezione deve essere tra 1 e 480 minuti');
     }
     
     // Valida durata intervallo
-    const breakDuration = parseInt(getValueIfExists('schoolBreakDuration'), 10);
-    if (breakDuration && (breakDuration < 0 || breakDuration > 120)) {
+    const breakDurationStr = getValueIfExists('schoolBreakDuration');
+    const breakDuration = parseInt(breakDurationStr, 10);
+    if (breakDurationStr && (isNaN(breakDuration) || breakDuration < 0 || breakDuration > 120)) {
       errors.push('La durata dell\'intervallo deve essere tra 0 e 120 minuti');
     }
     
