@@ -163,18 +163,17 @@ coverage/
 *.lcov
 .nyc_output/
 
-# Test verification (optional dev tool)
-verify-tests.js
-package.json
-package-lock.json
-
-# Playwright test artifacts
+# Playwright test artifacts (CI/CD only)
 test-results/
 playwright-report/
 playwright/.cache/
 playwright-tests/
 playwright.config.js
 test-results.png
+
+# Node modules (if temporarily created for CI testing)
+node_modules/
+package-lock.json
 
 # Temporary files
 *.tmp
