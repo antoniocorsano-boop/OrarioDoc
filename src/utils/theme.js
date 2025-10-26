@@ -38,14 +38,14 @@ const ThemeManager = (function() {
   
   /**
    * Ottiene il tema corrente salvato o default
-   * @returns {string} Tema salvato o 'auto'
+   * @returns {string} Tema salvato o 'expressive'
    */
   function getSavedTheme() {
     try {
-      return localStorage.getItem(STORAGE_KEYS.THEME) || THEMES.AUTO;
+      return localStorage.getItem(STORAGE_KEYS.THEME) || THEMES.EXPRESSIVE;
     } catch (e) {
       console.warn('Impossibile leggere tema da localStorage:', e);
-      return THEMES.AUTO;
+      return THEMES.EXPRESSIVE;
     }
   }
   

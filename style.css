@@ -124,7 +124,7 @@ body {
   background: var(--md-sys-color-surface-container-low);
   border-radius: var(--md-sys-shape-corner-small);
   padding: var(--md-sys-spacing-sm);
-  min-height: 48px;
+  min-height: 80px; /* Touch-friendly height */
   border: 1px dashed var(--md-sys-color-outline-variant);
   transition: background-color 0.2s ease, border-color 0.2s ease;
   position: relative;
@@ -159,12 +159,15 @@ body {
   background: var(--md-sys-color-primary);
   color: var(--md-sys-color-on-primary);
   padding: var(--md-sys-spacing-sm);
+  min-height: 48px; /* Touch-friendly height */
   border-radius: var(--md-sys-shape-corner-small);
   font-size: var(--md-sys-typescale-body-small-size);
   margin-bottom: var(--md-sys-spacing-sm);
   cursor: pointer;
   transition: transform 0.1s ease, box-shadow 0.2s ease;
   position: relative;
+  display: flex;
+  align-items: center;
 }
 
 /* Rendi gli item accessibili da tastiera */
@@ -240,6 +243,7 @@ input[type="time"] {
   width: 100%;
   padding: var(--md-sys-spacing-sm) var(--md-sys-spacing-md);
   margin-top: var(--md-sys-spacing-xs);
+  min-height: 48px; /* Touch-friendly height */
   border-radius: var(--md-sys-shape-corner-small);
   border: 1px solid var(--md-sys-color-outline-variant);
   background: var(--md-sys-color-surface);
@@ -282,7 +286,70 @@ input[type="time"]:disabled {
 }
 
 /* === RESPONSIVE === */
-@media (max-width: 600px) {
+
+/* Mobile: < 640px (default - mobile-first) */
+/* Già applicati gli stili base sopra */
+
+/* Tablet: 640px - 1023px */
+@media (min-width: 640px) {
+  body {
+    padding: var(--md-sys-spacing-lg);
+  }
+  
+  .schedule-grid {
+    grid-template-columns: repeat(7, 1fr);
+    gap: var(--md-sys-spacing-sm);
+  }
+  
+  aside.panel {
+    width: 360px;
+    right: var(--md-sys-spacing-lg);
+    top: 80px;
+  }
+  
+  .topbar {
+    flex-direction: row;
+    gap: 0;
+  }
+  
+  .actions {
+    justify-content: flex-end;
+  }
+  
+  .actions .btn {
+    flex: 0 0 auto;
+  }
+}
+
+/* Desktop: >= 1024px */
+@media (min-width: 1024px) {
+  body {
+    padding: var(--md-sys-spacing-2xl);
+  }
+  
+  .title {
+    font-size: var(--md-sys-typescale-headline-small-size);
+  }
+  
+  .schedule-grid {
+    gap: var(--md-sys-spacing-md);
+  }
+  
+  aside.panel {
+    width: 400px;
+  }
+}
+
+/* Large desktop: >= 1280px */
+@media (min-width: 1280px) {
+  body {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+}
+
+/* Mobile-specific: < 640px */
+@media (max-width: 639px) {
   body {
     padding: var(--md-sys-spacing-sm);
   }
@@ -293,15 +360,19 @@ input[type="time"]:disabled {
   }
   
   aside.panel {
-    width: 92%;
-    right: 4%;
-    top: 70px;
+    width: calc(100% - var(--md-sys-spacing-lg));
+    right: var(--md-sys-spacing-xs);
+    left: var(--md-sys-spacing-xs);
+    top: var(--md-sys-spacing-md);
+    max-height: calc(100vh - var(--md-sys-spacing-2xl));
+    overflow-y: auto;
   }
   
   .topbar {
     flex-direction: column;
     gap: var(--md-sys-spacing-sm);
     align-items: stretch;
+    padding: var(--md-sys-spacing-sm) var(--md-sys-spacing-md);
   }
   
   .actions {
@@ -310,16 +381,28 @@ input[type="time"]:disabled {
   
   .actions .btn {
     flex: 1;
-  }
-}
-
-@media (min-width: 700px) {
-  body {
-    padding: var(--md-sys-spacing-2xl);
+    min-width: 0; /* Allow buttons to shrink if needed */
   }
   
-  .title {
-    font-size: var(--md-sys-typescale-headline-small-size);
+  /* Ensure inputs are touch-friendly on mobile */
+  input[type="text"],
+  input[type="number"],
+  input[type="time"] {
+    min-height: 48px;
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+  
+  label {
+    font-size: var(--md-sys-typescale-body-large-size);
+  }
+  
+  .cell {
+    min-height: 80px; /* Larger touch targets on mobile */
+  }
+  
+  .item {
+    min-height: 48px; /* Touch-friendly lesson items */
+    padding: var(--md-sys-spacing-md);
   }
 }
 
