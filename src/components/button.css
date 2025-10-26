@@ -1,0 +1,342 @@
+/**
+ * button.css - Componente Button secondo Material 3
+ * 
+ * Stili per button con diverse varianti:
+ * - Filled (pieno, primario)
+ * - Tonal (tonale, secondario) 
+ * - Outlined (con bordo)
+ * - Text (solo testo)
+ * - Elevated (con ombra)
+ * 
+ * Usa SOLO variabili CSS da theme.css, nessun valore hardcoded.
+ * 
+ * PRIMA (vecchio approccio con hardcoded):
+ * button {
+ *   background: #2f6fe0;
+ *   color: #fff;
+ *   border: 0;
+ *   padding: 8px 12px;
+ *   border-radius: 10px;
+ *   font-weight: 600;
+ * }
+ * 
+ * DOPO (con CSS variables):
+ * .btn {
+ *   background: var(--md-sys-color-primary);
+ *   color: var(--md-sys-color-on-primary);
+ *   border: 0;
+ *   padding: var(--md-sys-spacing-sm) var(--md-sys-spacing-md);
+ *   border-radius: var(--md-sys-shape-corner-full);
+ *   font-weight: var(--md-sys-typescale-label-large-weight);
+ * }
+ */
+
+/* === BASE BUTTON === */
+.btn {
+  /* Reset browser defaults */
+  appearance: none;
+  border: none;
+  margin: 0;
+  
+  /* Layout */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--md-sys-spacing-sm);
+  position: relative;
+  
+  /* Spacing - usa variabili spacing */
+  padding: var(--md-sys-spacing-sm) var(--md-sys-spacing-2xl);
+  min-height: 40px;
+  
+  /* Typography - usa variabili typescale */
+  font-family: var(--md-sys-typescale-font-family);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  line-height: var(--md-sys-typescale-label-large-line-height);
+  text-decoration: none;
+  white-space: nowrap;
+  
+  /* Shape - usa variabili shape */
+  border-radius: var(--md-sys-shape-corner-full);
+  
+  /* Interattività */
+  cursor: pointer;
+  user-select: none;
+  
+  /* Transizioni smooth */
+  transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Accessibilità */
+  overflow: hidden;
+}
+
+/* Rimuovi outline default, aggiungeremo il nostro */
+.btn:focus {
+  outline: none;
+}
+
+/* === VARIANTE: FILLED (default, primario) === */
+.btn--filled,
+.btn.primary {
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  box-shadow: none;
+}
+
+.btn--filled:hover,
+.btn.primary:hover {
+  box-shadow: var(--md-sys-elevation-level1);
+}
+
+.btn--filled::before,
+.btn.primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--md-sys-color-on-primary);
+  opacity: 0;
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.btn--filled:hover::before,
+.btn.primary:hover::before {
+  opacity: var(--md-sys-state-hover-opacity);
+}
+
+.btn--filled:active::before,
+.btn.primary:active::before {
+  opacity: var(--md-sys-state-pressed-opacity);
+}
+
+/* === VARIANTE: TONAL (secondario, tonale) === */
+.btn--tonal,
+.btn.secondary {
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+  box-shadow: none;
+}
+
+.btn--tonal::before,
+.btn.secondary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--md-sys-color-on-secondary-container);
+  opacity: 0;
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.btn--tonal:hover::before,
+.btn.secondary:hover::before {
+  opacity: var(--md-sys-state-hover-opacity);
+}
+
+.btn--tonal:active::before,
+.btn.secondary:active::before {
+  opacity: var(--md-sys-state-pressed-opacity);
+}
+
+/* === VARIANTE: OUTLINED (con bordo) === */
+.btn--outlined {
+  background-color: transparent;
+  color: var(--md-sys-color-primary);
+  border: 1px solid var(--md-sys-color-outline);
+  box-shadow: none;
+}
+
+.btn--outlined::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--md-sys-color-primary);
+  opacity: 0;
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.btn--outlined:hover::before {
+  opacity: var(--md-sys-state-hover-opacity);
+}
+
+.btn--outlined:active::before {
+  opacity: var(--md-sys-state-pressed-opacity);
+}
+
+/* === VARIANTE: TEXT (solo testo, no background) === */
+.btn--text {
+  background-color: transparent;
+  color: var(--md-sys-color-primary);
+  box-shadow: none;
+  padding: var(--md-sys-spacing-sm) var(--md-sys-spacing-md);
+}
+
+.btn--text::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--md-sys-color-primary);
+  opacity: 0;
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.btn--text:hover::before {
+  opacity: var(--md-sys-state-hover-opacity);
+}
+
+.btn--text:active::before {
+  opacity: var(--md-sys-state-pressed-opacity);
+}
+
+/* === VARIANTE: ELEVATED (con ombra) === */
+.btn--elevated {
+  background-color: var(--md-sys-color-surface-container-low);
+  color: var(--md-sys-color-primary);
+  box-shadow: var(--md-sys-elevation-level1);
+}
+
+.btn--elevated:hover {
+  box-shadow: var(--md-sys-elevation-level2);
+}
+
+.btn--elevated::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--md-sys-color-primary);
+  opacity: 0;
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.btn--elevated:hover::before {
+  opacity: var(--md-sys-state-hover-opacity);
+}
+
+.btn--elevated:active::before {
+  opacity: var(--md-sys-state-pressed-opacity);
+}
+
+/* === STATI === */
+
+/* Focus (accessibilità con tastiera) */
+.btn:focus-visible {
+  outline: 3px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+/* Active/Pressed */
+.btn:active {
+  transform: scale(0.96);
+}
+
+/* Disabled */
+.btn:disabled,
+.btn[disabled],
+.btn--disabled {
+  opacity: var(--md-sys-state-disabled-opacity);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* === DIMENSIONI === */
+
+.btn--small {
+  min-height: 32px;
+  padding: var(--md-sys-spacing-xs) var(--md-sys-spacing-lg);
+  font-size: var(--md-sys-typescale-label-medium-size);
+}
+
+.btn--large {
+  min-height: 48px;
+  padding: var(--md-sys-spacing-md) var(--md-sys-spacing-3xl);
+  font-size: var(--md-sys-typescale-label-large-size);
+}
+
+/* === ICONE === */
+
+/* Button con solo icona */
+.btn--icon {
+  padding: var(--md-sys-spacing-sm);
+  min-width: 40px;
+  aspect-ratio: 1;
+  border-radius: var(--md-sys-shape-corner-full);
+}
+
+.btn--icon-small {
+  padding: var(--md-sys-spacing-xs);
+  min-width: 32px;
+  min-height: 32px;
+}
+
+/* Icona dentro button */
+.btn__icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* === ESEMPI DI USO === */
+
+/*
+<!-- Button filled (primario) -->
+<button class="btn btn--filled">
+  Salva
+</button>
+
+<!-- Button con classe legacy 'primary' (compatibilità) -->
+<button class="btn primary">
+  Aggiungi
+</button>
+
+<!-- Button tonal -->
+<button class="btn btn--tonal">
+  Annulla
+</button>
+
+<!-- Button outlined -->
+<button class="btn btn--outlined">
+  Modifica
+</button>
+
+<!-- Button text -->
+<button class="btn btn--text">
+  Scopri di più
+</button>
+
+<!-- Button con icona -->
+<button class="btn btn--filled">
+  <svg class="btn__icon" aria-hidden="true">...</svg>
+  Salva
+</button>
+
+<!-- Button solo icona -->
+<button class="btn btn--icon btn--filled" aria-label="Chiudi">
+  <svg class="btn__icon" aria-hidden="true">...</svg>
+</button>
+
+<!-- Button disabled -->
+<button class="btn btn--filled" disabled>
+  Salvato
+</button>
+*/
