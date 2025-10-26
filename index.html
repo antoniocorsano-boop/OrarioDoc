@@ -4,13 +4,26 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>OrarioDoc — MVP</title>
+  
+  <!-- Resource hints per performance ottimizzate -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  
+  <!-- Preload critical assets -->
+  <link rel="preload" href="/theme.css" as="style">
+  <link rel="preload" href="/style.css" as="style">
+  <link rel="preload" href="/src/main.js" as="script">
+  
   <link rel="manifest" href="/manifest.json"/>
+  
   <!-- Sistema di tema centralizzato Material 3 -->
   <link rel="stylesheet" href="/theme.css"/>
   <link rel="stylesheet" href="/src/components/button.css"/>
   <link rel="stylesheet" href="/src/components/card.css"/>
   <link rel="stylesheet" href="/style.css"/>
+  
   <meta name="theme-color" content="#6750a4"/>
+  <meta name="description" content="OrarioDoc - Gestione orario scolastico per insegnanti"/>
 </head>
 <body>
   <!-- Skip link per accessibilità -->
@@ -146,23 +159,32 @@
   <!-- Live region per annunci screen reader -->
   <div id="announcements" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></div>
   <footer class="footer" role="contentinfo">OrarioDoc — PWA MVP</footer>
-  <!-- Gestione tema centralizzata -->
+  
+  <!-- Critical scripts caricati subito -->
   <script src="/src/utils/theme.js"></script>
   <script src="/src/utils/toast.js"></script>
-  <script src="/src/storage/indexeddb.js"></script>
-  <script src="/src/storage.js"></script>
-  <script src="/src/settings.js"></script>
-  <script src="/src/screens/settings-screen.js"></script>
-  <script src="/src/schedule-grid.js"></script>
-  <script src="/src/main.js"></script>
+  
+  <!-- Non-critical scripts con defer per performance -->
+  <script defer src="/src/storage/indexeddb.js"></script>
+  <script defer src="/src/storage.js"></script>
+  <script defer src="/src/settings.js"></script>
+  <script defer src="/src/screens/settings-screen.js"></script>
+  <script defer src="/src/schedule-grid.js"></script>
+  <script defer src="/src/main.js"></script>
+  
   <script>
-    // Inizializza theme manager
+    // Inizializza theme manager immediatamente
     if (window.ThemeManager) {
       ThemeManager.init();
     }
-    // Service worker
-    if('serviceWorker' in navigator){
-      navigator.serviceWorker.register('/service-worker.js').catch(console.error);
+    
+    // Service worker registration con strategia ottimizzata
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(reg => console.log('SW registrato', reg.scope))
+          .catch(err => console.error('SW errore', err));
+      });
     }
   </script>
 </body>
