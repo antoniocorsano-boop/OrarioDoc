@@ -155,43 +155,36 @@ describe('Toast Notifications', () => {
   });
   
   describe('Toast lifecycle', () => {
-    test('should add visible class after creation', (done) => {
+    test('should add visible class after creation', async () => {
       Toast.showToast('Test');
       
       const toast = document.querySelector('.toast');
       
-      setTimeout(() => {
-        expect(toast.classList.contains('toast--visible')).toBeTruthy();
-        done();
-      }, 50);
+      await new Promise(resolve => setTimeout(resolve, 50));
+      expect(toast.classList.contains('toast--visible')).toBeTruthy();
     });
     
-    test('should auto-dismiss after duration', (done) => {
+    test('should auto-dismiss after duration', async () => {
       Toast.showToast('Test', 'info', 100);
       
       const toast = document.querySelector('.toast');
       expect(toast).toBeDefined();
       
-      setTimeout(() => {
-        const toastStillExists = document.querySelector('.toast');
-        expect(toastStillExists).toBeNull();
-        done();
-      }, 500);
+      await new Promise(resolve => setTimeout(resolve, 500));
+      const toastStillExists = document.querySelector('.toast');
+      expect(toastStillExists).toBeNull();
     });
     
-    test('should support custom duration', (done) => {
+    test('should support custom duration', async () => {
       Toast.showToast('Test', 'info', 200);
       
-      setTimeout(() => {
-        const toast = document.querySelector('.toast');
-        expect(toast).toBeDefined(); // Still exists at 100ms
-      }, 100);
+      await new Promise(resolve => setTimeout(resolve, 100));
+      const toast1 = document.querySelector('.toast');
+      expect(toast1).toBeDefined(); // Still exists at 100ms
       
-      setTimeout(() => {
-        const toast = document.querySelector('.toast');
-        expect(toast).toBeNull(); // Gone after 500ms
-        done();
-      }, 600);
+      await new Promise(resolve => setTimeout(resolve, 500));
+      const toast2 = document.querySelector('.toast');
+      expect(toast2).toBeNull(); // Gone after 600ms total
     });
   });
   
