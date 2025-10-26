@@ -26,12 +26,22 @@ Il progetto utilizza una **singola fonte di verità** per tutti gli stili:
    - Layout e componenti dell'app (topbar, schedule-grid, forms, footer)
    - Usa SOLO variabili da theme.css, nessun valore hardcoded
 
-3. **`src/components/*.css`** - Componenti riutilizzabili
-   - `button.css` - Componente Button Material 3
-   - `card.css` - Componente Card Material 3
+3. **`src/components/*.css`** - Componenti Material Design 3 riutilizzabili
+   - `button.css` - Button (Filled, Tonal, Outlined, Text, Elevated)
+   - `card.css` - Card (Elevated, Filled, Outlined)
+   - `navigation.css` - Top App Bar, Bottom Navigation, Navigation Drawer
+   - `textfield.css` - Text Field (Filled, Outlined)
+   - `dialog.css` - Dialog/Modal (Basic, Full Screen)
+   - `fab.css` - Floating Action Button (Standard, Small, Large, Extended)
+   - `chip.css` - Chip (Assist, Filter, Input, Suggestion)
+   - `list.css` - List (One-line, Two-line, Three-line)
    - Usano SOLO variabili da theme.css
 
 **Importante:** Tutti i file CSS fanno riferimento esclusivamente alle variabili definite in `theme.css`. Non esistono valori hardcoded o duplicazioni.
+
+### 📦 Componenti Material Design 3
+
+OrarioDoc include un set completo di componenti MD3 centralizzati e pronti all'uso. Per la documentazione completa con esempi e best practices, consulta **[docs/COMPONENTS.md](docs/COMPONENTS.md)**.
 
 ### 🎨 Sistema di Temi
 

@@ -1,0 +1,334 @@
+/**
+ * textfield.css - Componente Text Field secondo Material 3
+ * 
+ * Stili per text field con diverse varianti:
+ * - Filled (riempito, predefinito)
+ * - Outlined (con bordo)
+ * 
+ * Usa SOLO variabili CSS da theme.css, nessun valore hardcoded.
+ */
+
+/* === BASE TEXT FIELD === */
+.text-field {
+  /* Layout */
+  display: inline-flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  
+  /* Typography */
+  font-family: var(--md-sys-typescale-font-family);
+}
+
+/* === FILLED TEXT FIELD (default) === */
+.text-field--filled {
+  /* Container */
+}
+
+.text-field--filled .text-field__container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  background-color: var(--md-sys-color-surface-container-highest);
+  border-radius: var(--md-sys-shape-corner-extra-small) var(--md-sys-shape-corner-extra-small) 0 0;
+  border-bottom: 1px solid var(--md-sys-color-on-surface-variant);
+  transition: border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.text-field--filled .text-field__container:hover {
+  background-color: var(--md-sys-color-surface-container-high);
+}
+
+/* Focus state - active indicator line */
+.text-field--filled .text-field__container::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--md-sys-color-primary);
+  transform: scaleX(0);
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.text-field--filled.text-field--focused .text-field__container::after {
+  transform: scaleX(1);
+}
+
+/* === OUTLINED TEXT FIELD === */
+.text-field--outlined {
+  /* Container */
+}
+
+.text-field--outlined .text-field__container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  background-color: transparent;
+  border: 1px solid var(--md-sys-color-outline);
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  transition: border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.text-field--outlined .text-field__container:hover {
+  border-color: var(--md-sys-color-on-surface);
+}
+
+.text-field--outlined.text-field--focused .text-field__container {
+  border-color: var(--md-sys-color-primary);
+  border-width: 2px;
+}
+
+/* === INPUT ELEMENT === */
+.text-field__input {
+  /* Reset */
+  appearance: none;
+  border: none;
+  background: transparent;
+  outline: none;
+  margin: 0;
+  
+  /* Layout */
+  flex: 1;
+  width: 100%;
+  
+  /* Spacing */
+  padding: var(--md-sys-spacing-lg) var(--md-sys-spacing-md) var(--md-sys-spacing-sm);
+  
+  /* Typography */
+  font-family: var(--md-sys-typescale-font-family);
+  font-size: var(--md-sys-typescale-body-large-size);
+  font-weight: var(--md-sys-typescale-body-large-weight);
+  line-height: var(--md-sys-typescale-body-large-line-height);
+  color: var(--md-sys-color-on-surface);
+}
+
+.text-field__input::placeholder {
+  color: transparent;
+}
+
+/* Outlined variant input padding */
+.text-field--outlined .text-field__input {
+  padding: var(--md-sys-spacing-md);
+}
+
+/* === LABEL === */
+.text-field__label {
+  /* Position */
+  position: absolute;
+  left: var(--md-sys-spacing-md);
+  top: var(--md-sys-spacing-lg);
+  
+  /* Typography */
+  font-size: var(--md-sys-typescale-body-large-size);
+  font-weight: var(--md-sys-typescale-body-large-weight);
+  color: var(--md-sys-color-on-surface-variant);
+  
+  /* Animation */
+  transform-origin: left top;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              font-size 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Label animata (campo popolato o in focus) */
+.text-field--populated .text-field__label,
+.text-field--focused .text-field__label {
+  transform: translateY(-50%) scale(0.75);
+  font-size: var(--md-sys-typescale-body-small-size);
+}
+
+.text-field--focused .text-field__label {
+  color: var(--md-sys-color-primary);
+}
+
+/* Outlined variant label */
+.text-field--outlined .text-field__label {
+  background-color: var(--md-sys-color-surface);
+  padding: 0 var(--md-sys-spacing-xs);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.text-field--outlined.text-field--populated .text-field__label,
+.text-field--outlined.text-field--focused .text-field__label {
+  top: 0;
+  transform: translateY(-50%) scale(0.75);
+}
+
+/* === SUPPORTING TEXT (helper/error text) === */
+.text-field__supporting-text {
+  display: block;
+  padding: var(--md-sys-spacing-xs) var(--md-sys-spacing-md) 0;
+  font-size: var(--md-sys-typescale-body-small-size);
+  font-weight: var(--md-sys-typescale-body-small-weight);
+  line-height: var(--md-sys-typescale-body-small-line-height);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* === LEADING/TRAILING ICONS === */
+.text-field__leading-icon,
+.text-field__trailing-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.text-field__leading-icon {
+  margin-left: var(--md-sys-spacing-md);
+  margin-right: var(--md-sys-spacing-sm);
+}
+
+.text-field__trailing-icon {
+  margin-right: var(--md-sys-spacing-md);
+  margin-left: var(--md-sys-spacing-sm);
+}
+
+/* Icone interattive (es. clear button) */
+.text-field__trailing-icon--clickable {
+  cursor: pointer;
+  border-radius: var(--md-sys-shape-corner-full);
+  padding: var(--md-sys-spacing-xs);
+  transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.text-field__trailing-icon--clickable:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+/* === STATI === */
+
+/* Errore */
+.text-field--error .text-field__container {
+  border-color: var(--md-sys-color-error);
+}
+
+.text-field--error.text-field--filled .text-field__container::after {
+  background-color: var(--md-sys-color-error);
+}
+
+.text-field--error .text-field__label,
+.text-field--error.text-field--focused .text-field__label {
+  color: var(--md-sys-color-error);
+}
+
+.text-field--error .text-field__supporting-text {
+  color: var(--md-sys-color-error);
+}
+
+/* Disabled */
+.text-field--disabled {
+  pointer-events: none;
+}
+
+.text-field--disabled .text-field__container {
+  opacity: var(--md-sys-state-disabled-opacity);
+}
+
+.text-field--disabled .text-field__input {
+  color: var(--md-sys-color-on-surface);
+  opacity: var(--md-sys-state-disabled-content-opacity);
+}
+
+.text-field--disabled .text-field__label {
+  color: var(--md-sys-color-on-surface);
+  opacity: var(--md-sys-state-disabled-content-opacity);
+}
+
+/* === VARIANTI DI DIMENSIONE === */
+
+/* Compact */
+.text-field--compact .text-field__input {
+  padding-top: var(--md-sys-spacing-md);
+  padding-bottom: var(--md-sys-spacing-xs);
+}
+
+.text-field--compact .text-field__label {
+  top: var(--md-sys-spacing-md);
+}
+
+/* === ESEMPI DI USO === */
+
+/*
+<!-- Filled Text Field (default) -->
+<div class="text-field text-field--filled text-field--populated">
+  <div class="text-field__container">
+    <input 
+      type="text" 
+      class="text-field__input" 
+      id="name"
+      value="Mario Rossi"
+    />
+    <label for="name" class="text-field__label">Nome completo</label>
+  </div>
+  <span class="text-field__supporting-text">Inserisci il tuo nome e cognome</span>
+</div>
+
+<!-- Outlined Text Field -->
+<div class="text-field text-field--outlined">
+  <div class="text-field__container">
+    <input 
+      type="email" 
+      class="text-field__input" 
+      id="email"
+      placeholder=" "
+    />
+    <label for="email" class="text-field__label">Email</label>
+  </div>
+</div>
+
+<!-- Text Field con icone -->
+<div class="text-field text-field--filled">
+  <div class="text-field__container">
+    <span class="text-field__leading-icon">
+      <svg>...</svg>
+    </span>
+    <input 
+      type="search" 
+      class="text-field__input" 
+      id="search"
+    />
+    <label for="search" class="text-field__label">Cerca</label>
+    <button class="text-field__trailing-icon text-field__trailing-icon--clickable" aria-label="Cancella">
+      <svg>...</svg>
+    </button>
+  </div>
+</div>
+
+<!-- Text Field con errore -->
+<div class="text-field text-field--outlined text-field--error text-field--populated">
+  <div class="text-field__container">
+    <input 
+      type="email" 
+      class="text-field__input" 
+      id="email-error"
+      value="invalid-email"
+      aria-invalid="true"
+      aria-describedby="email-error-text"
+    />
+    <label for="email-error" class="text-field__label">Email</label>
+  </div>
+  <span class="text-field__supporting-text" id="email-error-text">Email non valida</span>
+</div>
+
+<!-- Text Field disabled -->
+<div class="text-field text-field--filled text-field--disabled">
+  <div class="text-field__container">
+    <input 
+      type="text" 
+      class="text-field__input" 
+      id="disabled"
+      value="Campo disabilitato"
+      disabled
+    />
+    <label for="disabled" class="text-field__label">Campo disabilitato</label>
+  </div>
+</div>
+*/
