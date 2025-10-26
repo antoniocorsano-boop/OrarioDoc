@@ -1,0 +1,225 @@
+/**
+ * card.css - Componente Card secondo Material 3
+ * 
+ * Stili per card con diverse varianti:
+ * - Elevated (con ombra)
+ * - Filled (con background)
+ * - Outlined (con bordo)
+ * 
+ * Usa SOLO variabili CSS da theme.css, nessun valore hardcoded.
+ * 
+ * PRIMA (vecchio approccio con hardcoded):
+ * .card {
+ *   background: #ffffff;
+ *   padding: 12px;
+ *   border-radius: 12px;
+ *   box-shadow: 0 1px 2px rgba(11,23,48,0.06);
+ * }
+ * 
+ * DOPO (con CSS variables):
+ * .card {
+ *   background: var(--md-sys-color-surface);
+ *   padding: var(--md-sys-spacing-md);
+ *   border-radius: var(--md-sys-shape-corner-medium);
+ *   box-shadow: var(--md-sys-elevation-level1);
+ * }
+ */
+
+/* === BASE CARD === */
+.card {
+  /* Layout */
+  display: block;
+  position: relative;
+  
+  /* Spacing - usa variabili spacing */
+  padding: var(--md-sys-spacing-lg);
+  
+  /* Colori - usa variabili colore */
+  background-color: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+  
+  /* Forma - usa variabili shape */
+  border-radius: var(--md-sys-shape-corner-medium);
+  
+  /* Elevazione default */
+  box-shadow: var(--md-sys-elevation-level1);
+  
+  /* Transizioni smooth */
+  transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Accessibilità */
+  overflow: hidden;
+}
+
+/* === VARIANTI === */
+
+/* Elevated card (default con più ombra) */
+.card--elevated {
+  box-shadow: var(--md-sys-elevation-level2);
+}
+
+.card--elevated:hover {
+  box-shadow: var(--md-sys-elevation-level3);
+}
+
+/* Filled card (con background container) */
+.card--filled {
+  background-color: var(--md-sys-color-surface-container-highest);
+  box-shadow: none;
+}
+
+/* Outlined card (con bordo, no ombra) */
+.card--outlined {
+  background-color: var(--md-sys-color-surface);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  box-shadow: none;
+}
+
+/* === STATI INTERATTIVI === */
+
+/* Stato hover per card cliccabili */
+.card--clickable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.card--clickable:hover {
+  box-shadow: var(--md-sys-elevation-level2);
+}
+
+.card--clickable:hover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--md-sys-color-on-surface);
+  opacity: var(--md-sys-state-hover-opacity);
+  pointer-events: none;
+}
+
+/* Stato focus (accessibilità) */
+.card--clickable:focus {
+  outline: 3px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+.card--clickable:focus-visible {
+  outline: 3px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+.card--clickable:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Stato pressed */
+.card--clickable:active {
+  transform: scale(0.98);
+}
+
+.card--clickable:active::before {
+  opacity: var(--md-sys-state-pressed-opacity);
+}
+
+/* Stato disabled */
+.card--disabled {
+  opacity: var(--md-sys-state-disabled-opacity);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* === ELEMENTI INTERNI === */
+
+/* Header della card */
+.card__header {
+  display: flex;
+  align-items: center;
+  gap: var(--md-sys-spacing-md);
+  margin-bottom: var(--md-sys-spacing-md);
+}
+
+.card__title {
+  font-size: var(--md-sys-typescale-title-medium-size);
+  font-weight: var(--md-sys-typescale-title-medium-weight);
+  line-height: var(--md-sys-typescale-title-medium-line-height);
+  color: var(--md-sys-color-on-surface);
+  margin: 0;
+}
+
+.card__subtitle {
+  font-size: var(--md-sys-typescale-body-medium-size);
+  font-weight: var(--md-sys-typescale-body-medium-weight);
+  line-height: var(--md-sys-typescale-body-medium-line-height);
+  color: var(--md-sys-color-on-surface-variant);
+  margin: 0;
+  margin-top: var(--md-sys-spacing-xs);
+}
+
+/* Content della card */
+.card__content {
+  font-size: var(--md-sys-typescale-body-medium-size);
+  line-height: var(--md-sys-typescale-body-medium-line-height);
+  color: var(--md-sys-color-on-surface);
+}
+
+/* Actions (pulsanti footer) */
+.card__actions {
+  display: flex;
+  gap: var(--md-sys-spacing-sm);
+  margin-top: var(--md-sys-spacing-lg);
+  padding-top: var(--md-sys-spacing-md);
+}
+
+/* Media della card (immagini) */
+.card__media {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: calc(var(--md-sys-spacing-lg) * -1);
+  margin-bottom: var(--md-sys-spacing-md);
+  border-radius: var(--md-sys-shape-corner-medium) var(--md-sys-shape-corner-medium) 0 0;
+}
+
+/* === VARIANTI DI DIMENSIONE === */
+
+.card--compact {
+  padding: var(--md-sys-spacing-md);
+}
+
+.card--spacious {
+  padding: var(--md-sys-spacing-2xl);
+}
+
+/* === ESEMPI DI USO === */
+
+/*
+<!-- Card base (elevated) -->
+<div class="card">
+  <h3 class="card__title">Titolo Card</h3>
+  <p class="card__content">Contenuto della card</p>
+</div>
+
+<!-- Card clickable con header -->
+<div class="card card--clickable" tabindex="0" role="button" aria-label="Apri dettagli">
+  <div class="card__header">
+    <h3 class="card__title">Lezione di Matematica</h3>
+  </div>
+  <p class="card__subtitle">Lunedì 08:00 - 09:00</p>
+  <div class="card__content">
+    Classe 3A - Aula 12
+  </div>
+</div>
+
+<!-- Card outlined con actions -->
+<div class="card card--outlined">
+  <h3 class="card__title">Conferma azione</h3>
+  <p class="card__content">Vuoi eliminare questa lezione?</p>
+  <div class="card__actions">
+    <button class="btn btn--text">Annulla</button>
+    <button class="btn btn--filled">Conferma</button>
+  </div>
+</div>
+*/

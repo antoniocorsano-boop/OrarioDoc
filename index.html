@@ -1,12 +1,16 @@
 <!doctype html>
-<html lang="it">
+<html lang="it" data-theme="light">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>OrarioDoc — MVP</title>
   <link rel="manifest" href="/manifest.json"/>
+  <!-- Sistema di tema centralizzato Material 3 -->
+  <link rel="stylesheet" href="/theme.css"/>
+  <link rel="stylesheet" href="/src/components/button.css"/>
+  <link rel="stylesheet" href="/src/components/card.css"/>
   <link rel="stylesheet" href="/style.css"/>
-  <meta name="theme-color" content="#2f6fe0"/>
+  <meta name="theme-color" content="#2b7cff"/>
 </head>
 <body>
   <header class="topbar">
@@ -15,8 +19,8 @@
       <span class="title">OrarioDoc</span>
     </div>
     <div class="actions">
-      <button id="settingsBtn" class="btn" aria-label="Impostazioni">Impostazioni</button>
-      <button id="addBtn" class="btn primary" aria-label="Aggiungi lezione">Aggiungi</button>
+      <button id="settingsBtn" class="btn btn--text" aria-label="Impostazioni">Impostazioni</button>
+      <button id="addBtn" class="btn btn--filled" aria-label="Aggiungi lezione">Aggiungi</button>
     </div>
   </header>
   <main class="app">
@@ -32,16 +36,27 @@
     <label>Ora <input id="inputTime" type="time" value="08:00"/></label>
     <label>Durata (min) <input id="inputDuration" type="number" value="60"/></label>
     <div class="form-actions">
-      <button id="saveBtn" class="btn primary">Salva</button>
-      <button id="cancelBtn" class="btn">Annulla</button>
+      <button id="saveBtn" class="btn btn--filled">Salva</button>
+      <button id="cancelBtn" class="btn btn--outlined">Annulla</button>
     </div>
   </aside>
   <footer class="footer">OrarioDoc — PWA MVP</footer>
+  <!-- Gestione tema centralizzata -->
+  <script src="/src/utils/theme.js"></script>
   <script src="/src/storage/indexeddb.js"></script>
   <script src="/src/storage.js"></script>
   <script src="/src/settings.js"></script>
   <script src="/src/schedule-grid.js"></script>
   <script src="/src/main.js"></script>
-  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/service-worker.js').catch(console.error);}</script>
+  <script>
+    // Inizializza theme manager
+    if (window.ThemeManager) {
+      ThemeManager.init();
+    }
+    // Service worker
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.register('/service-worker.js').catch(console.error);
+    }
+  </script>
 </body>
 </html>
