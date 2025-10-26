@@ -17,6 +17,16 @@ test('OrarioDoc automated tests', async ({ page }) => {
     logs.push(`requestfailed: ${req.url()} ${req.failure()?.errorText || ''}`);
   });
 
+  // Helper function to write diagnostic artifacts
+  const writeDiagnostics = async (stats) => {
+    await page.screenshot({ path: 'test-results.png', fullPage: true }).catch(() => {});
+    fs.writeFileSync('page-console.log', logs.join('\n'), 'utf8');
+    fs.writeFileSync('test-runner.html', await page.content(), 'utf8');
+    if (stats) {
+      fs.writeFileSync('test-results.json', JSON.stringify(stats, null, 2), 'utf8');
+    }
+  };
+
   // Navigate to the browser-native test runner served by a static server (CI starts python -m http.server)
   await page.goto('http://127.0.0.1:8080/tests/test-runner.html', { waitUntil: 'domcontentloaded' });
 
@@ -28,8 +38,7 @@ test('OrarioDoc automated tests', async ({ page }) => {
   } catch (err) {
     // Capture debug artifacts when waiting for status times out
     await page.screenshot({ path: 'test-failure-debug.png', fullPage: true }).catch(() => {});
-    fs.writeFileSync('page-console.log', logs.join('\n'), 'utf8');
-    fs.writeFileSync('test-runner.html', await page.content(), 'utf8');
+    await writeDiagnostics();
     throw err;
   }
 
@@ -55,10 +64,7 @@ test('OrarioDoc automated tests', async ({ page }) => {
   });
 
   // Always persist diagnostic artifacts
-  await page.screenshot({ path: 'test-results.png', fullPage: true }).catch(() => {});
-  fs.writeFileSync('page-console.log', logs.join('\n'), 'utf8');
-  fs.writeFileSync('test-runner.html', await page.content(), 'utf8');
-  fs.writeFileSync('test-results.json', JSON.stringify(stats, null, 2), 'utf8');
+  await writeDiagnostics(stats);
 
   console.log('Test Results:', stats);
   if (stats.failedItems && stats.failedItems.length) {
