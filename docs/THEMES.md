@@ -51,8 +51,6 @@ OrarioDoc implementa un sistema di gestione dei temi centralizzato basato su **C
 | `src/screens/settings-screen.js` | ✅ Completo | UI completa per impostazioni e temi |
 | `index.html` | ✅ Completo | Integra tutti i componenti del sistema tema |
 
-La scelta dell'approccio dipenderà dalle esigenze architetturali del progetto e verrà discussa nelle PR future.
-
 ## Temi Supportati
 
 ### 1. **Automatico (Sistema)**
@@ -383,10 +381,10 @@ function applyCustomColors(colors) {
   if (colors.primary) {
     root.style.setProperty('--md-sys-color-primary', colors.primary);
   }
-  if (colors && colors.secondary) {
+  if (colors.secondary) {
     root.style.setProperty('--md-sys-color-secondary', colors.secondary);
   }
-  const primary = colors && colors.primary ? 
+  const primary = colors.primary ? 
     colors.primary : 
     getComputedStyle(root).getPropertyValue('--md-sys-color-primary');
   root.style.setProperty('--accent', primary);
