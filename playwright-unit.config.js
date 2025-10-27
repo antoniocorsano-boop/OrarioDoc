@@ -13,7 +13,7 @@ module.exports = defineConfig({
   timeout: 120000,
   
   /* Run tests in files in parallel */
-  fullyParallel: false,
+  fullyParallel: true,
   
   /* Fail the build on CI if you accidentally left test.only in the source code */
   forbidOnly: !!process.env.CI,
