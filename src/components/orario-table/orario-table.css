@@ -1,0 +1,475 @@
+/**
+ * orario-table.css - Componente Tabella Orario secondo Material Design 3
+ * 
+ * Tabella per visualizzare l'orario scolastico settimanale con:
+ * - Layout griglia responsive
+ * - Slot orari interattivi
+ * - Card lezioni con colori per materia
+ * - Supporto drag & drop (futuro)
+ * 
+ * Usa SOLO variabili CSS da theme.css, nessun valore hardcoded.
+ * 
+ * PRINCIPIO BASE:
+ * Ogni valore (colore, spacing, font, border-radius, shadow) deve usare
+ * una variabile da theme.css per garantire consistenza tra i temi.
+ */
+
+/* === BASE TABLE CONTAINER === */
+.orario-table {
+  /* Layout */
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  
+  /* Spacing */
+  padding: var(--md-sys-spacing-md);
+  
+  /* Colori - usa variabili colore */
+  background-color: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+  
+  /* Forma */
+  border-radius: var(--md-sys-shape-corner-medium);
+  
+  /* Elevazione */
+  box-shadow: var(--md-sys-elevation-level1);
+  
+  /* Accessibilità */
+  position: relative;
+}
+
+/* === HEADER === */
+.orario-table__header {
+  /* Sticky header per scrolling */
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  
+  /* Colori */
+  background-color: var(--md-sys-color-surface-container);
+  
+  /* Elevazione per distinguere dall'area scrollabile */
+  box-shadow: var(--md-sys-elevation-level2);
+}
+
+.orario-table__row {
+  display: grid;
+  grid-template-columns: 80px repeat(6, 1fr);
+  gap: var(--md-sys-spacing-xs);
+  min-width: 700px; /* Previeni compressione eccessiva */
+}
+
+/* Riduzione colonne su mobile */
+@media (max-width: 900px) {
+  .orario-table__row {
+    grid-template-columns: 60px repeat(5, 1fr);
+  }
+  
+  /* Nascondi sabato su mobile */
+  .orario-table__header-cell--optional {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .orario-table__row {
+    grid-template-columns: 50px repeat(3, 1fr);
+    min-width: 100%;
+  }
+}
+
+/* === HEADER CELLS === */
+.orario-table__header-cell {
+  /* Layout */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  
+  /* Spacing */
+  padding: var(--md-sys-spacing-md);
+  
+  /* Typography */
+  font-family: var(--md-sys-typescale-font-family);
+  font-size: var(--md-sys-typescale-title-medium-size);
+  font-weight: var(--md-sys-typescale-title-medium-weight);
+  line-height: var(--md-sys-typescale-title-medium-line-height);
+  
+  /* Colori */
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.orario-table__header-cell--time {
+  /* Colonna delle ore: meno prominente */
+  font-size: var(--md-sys-typescale-label-medium-size);
+  font-weight: var(--md-sys-typescale-label-medium-weight);
+}
+
+/* Day labels - versione completa e abbreviata */
+.orario-table__day-label {
+  display: block;
+}
+
+.orario-table__day-label--short {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .orario-table__day-label {
+    display: none;
+  }
+  
+  .orario-table__day-label--short {
+    display: block;
+  }
+}
+
+/* === BODY === */
+.orario-table__body {
+  /* Layout */
+  display: flex;
+  flex-direction: column;
+  gap: var(--md-sys-spacing-xs);
+  
+  /* Spacing */
+  padding: var(--md-sys-spacing-sm) 0;
+}
+
+/* === TABLE CELLS === */
+.orario-table__cell {
+  /* Layout */
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  min-height: 80px;
+  
+  /* Spacing */
+  padding: var(--md-sys-spacing-xs);
+  
+  /* Colori */
+  background-color: var(--md-sys-color-surface-container-low);
+  
+  /* Forma */
+  border-radius: var(--md-sys-shape-corner-small);
+  
+  /* Bordo sottile */
+  border: 1px solid var(--md-sys-color-outline-variant);
+  
+  /* Transizioni */
+  transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.orario-table__cell--time {
+  /* Layout */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* Typography */
+  font-family: var(--md-sys-typescale-font-family);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  
+  /* Colori */
+  background-color: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.orario-table__time-label {
+  display: block;
+}
+
+/* === EMPTY SLOT === */
+.orario-table__slot[data-empty="true"] {
+  /* Layout */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  
+  /* Stato hover */
+  cursor: pointer;
+}
+
+.orario-table__slot[data-empty="true"]:hover {
+  background-color: var(--md-sys-color-surface-container-highest);
+}
+
+/* Add button per slot vuoti */
+.orario-table__add-btn {
+  /* Reset */
+  appearance: none;
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  
+  /* Layout */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  
+  /* Forma */
+  border-radius: var(--md-sys-shape-corner-full);
+  
+  /* Colori */
+  color: var(--md-sys-color-on-surface-variant);
+  
+  /* Interattività */
+  cursor: pointer;
+  transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.orario-table__add-btn:hover {
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+.orario-table__add-btn:focus {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+.orario-table__add-icon {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+/* === LESSON CARD === */
+.orario-table__lesson {
+  /* Layout */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  
+  /* Spacing */
+  padding: var(--md-sys-spacing-sm);
+  
+  /* Colori - default primary */
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  
+  /* Forma */
+  border-radius: var(--md-sys-shape-corner-small);
+  
+  /* Elevazione */
+  box-shadow: var(--md-sys-elevation-level1);
+  
+  /* Interattività */
+  cursor: pointer;
+  transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.orario-table__lesson:hover {
+  box-shadow: var(--md-sys-elevation-level2);
+  transform: translateY(-2px);
+}
+
+.orario-table__lesson:active {
+  transform: translateY(0);
+}
+
+/* Varianti colore per materie diverse */
+.orario-table__lesson[data-subject="matematica"] {
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+}
+
+.orario-table__lesson[data-subject="italiano"] {
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+.orario-table__lesson[data-subject="storia"],
+.orario-table__lesson[data-subject="geografia"] {
+  background-color: var(--md-sys-color-tertiary-container);
+  color: var(--md-sys-color-on-tertiary-container);
+}
+
+.orario-table__lesson[data-subject="inglese"],
+.orario-table__lesson[data-subject="lingue"] {
+  background-color: var(--md-sys-color-error-container);
+  color: var(--md-sys-color-on-error-container);
+}
+
+/* Lesson content */
+.orario-table__lesson-title {
+  /* Typography */
+  font-family: var(--md-sys-typescale-font-family);
+  font-size: var(--md-sys-typescale-title-small-size);
+  font-weight: var(--md-sys-typescale-title-small-weight);
+  line-height: var(--md-sys-typescale-title-small-line-height);
+  
+  /* Spacing */
+  margin: 0 0 var(--md-sys-spacing-xs) 0;
+  
+  /* Text overflow */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.orario-table__lesson-class {
+  /* Typography */
+  font-family: var(--md-sys-typescale-font-family);
+  font-size: var(--md-sys-typescale-body-small-size);
+  font-weight: var(--md-sys-typescale-body-small-weight);
+  line-height: var(--md-sys-typescale-body-small-line-height);
+  
+  /* Spacing */
+  margin: 0 0 var(--md-sys-spacing-xs) 0;
+  
+  /* Opacità */
+  opacity: 0.8;
+}
+
+.orario-table__lesson-duration {
+  /* Typography */
+  font-family: var(--md-sys-typescale-font-family);
+  font-size: var(--md-sys-typescale-label-small-size);
+  font-weight: var(--md-sys-typescale-label-small-weight);
+  line-height: var(--md-sys-typescale-label-small-line-height);
+  
+  /* Display */
+  display: inline-block;
+  
+  /* Spacing */
+  padding: var(--md-sys-spacing-xs) var(--md-sys-spacing-sm);
+  
+  /* Forma */
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  
+  /* Colori - sfondo più scuro */
+  background-color: rgba(0, 0, 0, 0.1);
+  
+  /* Opacità */
+  opacity: 0.9;
+}
+
+/* === FOOTER === */
+.orario-table__footer {
+  /* Spacing */
+  padding: var(--md-sys-spacing-md) 0 0 0;
+  margin-top: var(--md-sys-spacing-md);
+  
+  /* Bordo superiore */
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+}
+
+/* === RESPONSIVE === */
+
+/* Tablet */
+@media (max-width: 900px) {
+  .orario-table {
+    padding: var(--md-sys-spacing-sm);
+  }
+  
+  .orario-table__cell {
+    min-height: 70px;
+  }
+  
+  .orario-table__lesson {
+    padding: var(--md-sys-spacing-xs);
+  }
+  
+  .orario-table__lesson-title {
+    font-size: var(--md-sys-typescale-body-medium-size);
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .orario-table {
+    padding: var(--md-sys-spacing-xs);
+  }
+  
+  .orario-table__header-cell {
+    padding: var(--md-sys-spacing-sm);
+    font-size: var(--md-sys-typescale-label-large-size);
+  }
+  
+  .orario-table__cell {
+    min-height: 60px;
+    padding: 2px;
+  }
+  
+  .orario-table__lesson {
+    padding: var(--md-sys-spacing-xs);
+  }
+  
+  .orario-table__lesson-title {
+    font-size: var(--md-sys-typescale-body-small-size);
+  }
+  
+  .orario-table__lesson-class,
+  .orario-table__lesson-duration {
+    font-size: var(--md-sys-typescale-label-small-size);
+  }
+}
+
+/* === ACCESSIBILITY === */
+
+/* Screen reader only */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Focus visible per keyboard navigation */
+.orario-table__lesson:focus,
+.orario-table__add-btn:focus {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .orario-table__cell {
+    border-width: 2px;
+  }
+  
+  .orario-table__lesson {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .orario-table__cell,
+  .orario-table__lesson,
+  .orario-table__add-btn {
+    transition: none;
+  }
+}
+
+/* === DRAG & DROP (futuro) === */
+
+/* Placeholder per funzionalità drag & drop da implementare */
+.orario-table__lesson[draggable="true"] {
+  cursor: move;
+}
+
+.orario-table__lesson.dragging {
+  opacity: 0.5;
+}
+
+.orario-table__cell.drop-target {
+  background-color: var(--md-sys-color-primary-container);
+  border: 2px dashed var(--md-sys-color-primary);
+}
