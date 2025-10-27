@@ -301,7 +301,7 @@ Versione corrente: **1.0.0**
 
 ### Dove posso chiedere aiuto?
 
-- **Issues GitHub**: [github.com/antoniocorsano-boop/OrarioDoc/issues](https://github.com/antoniocorsano-boop/OrarioDoc/issues)
+- **Issues GitHub**: [Apri una issue](https://github.com/antoniocorsano-boop/OrarioDoc/issues)
 - **Documentazione**: Consulta file in `/docs`
 - **Template Question**: Usa template issue "Question"
 
