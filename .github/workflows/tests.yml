@@ -28,9 +28,16 @@ jobs:
       - name: Start HTTP server
         run: |
           cd ${{ github.workspace }}
-          python3 -m http.server 8080 &
-          sleep 2
-          echo "Server started on port 8080"
+          python3 -m http.server 8080 &> server.log &
+          # wait up to 30s for test-runner page
+          for i in {1..30}; do
+            if curl -sS http://localhost:8080/tests/test-runner.html -f >/dev/null 2>&1; then
+              echo "Server up"
+              break
+            fi
+            sleep 1
+          done
+          curl -sS http://localhost:8080/tests/test-runner.html -f >/dev/null 2>&1 || (echo "Server did not start" && tail -n +1 server.log && exit 1)
 
       - name: Setup Node.js for Playwright
         uses: actions/setup-node@v4
@@ -43,19 +50,45 @@ jobs:
           npm install -D @playwright/test
           npx playwright install --with-deps
 
-      - name: Ensure committed Playwright test is used and server healthy
+      - name: Create Playwright test
         run: |
+          cat > playwright.config.js << 'EOF'
+          module.exports = {
+            testDir: './playwright-tests',
+            timeout: 60000,
+            retries: process.env.CI ? 1 : 0,
+            use: {
+              baseURL: 'http://localhost:8080',
+              headless: true,
+              trace: 'on-first-retry',
+              screenshot: 'only-on-failure',
+              video: 'retain-on-failure'
+            },
+          };
+          EOF
+          
           mkdir -p playwright-tests
-          # Verify test-runner page is available (retry up to 10s)
-          for i in {1..10}; do
-            if curl -sSf http://127.0.0.1:8080/tests/test-runner.html >/dev/null; then
-              echo "test-runner.html available"
-              break
-            fi
-            echo "Waiting for test-runner.html... ($i)"
-            sleep 1
-          done
-          curl -sSf http://127.0.0.1:8080/tests/test-runner.html >/dev/null || (echo "test-runner.html not available" && exit 1)
+          # keep existing test file in repo; create only if not present
+          if [ ! -f playwright-tests/test-runner.spec.js ]; then
+            cat > playwright-tests/test-runner.spec.js << 'EOF'
+            const { test, expect } = require('@playwright/test');
+            // minimal placeholder; repo already has a richer test
+            test('OrarioDoc automated tests', async ({ page }) => {
+              await page.goto('/tests/test-runner.html');
+              await page.waitForLoadState('domcontentloaded');
+              await page.waitForSelector('#run-tests');
+              await page.click('#run-tests');
+              await page.waitForSelector('.status.success, .status.failed', { timeout: 120000 });
+              const stats = await page.evaluate(() => ({
+                total: parseInt(document.getElementById('stat-total')?.textContent || '0', 10),
+                passed: parseInt(document.getElementById('stat-passed')?.textContent || '0', 10),
+                failed: parseInt(document.getElementById('stat-failed')?.textContent || '0', 10),
+                skipped: parseInt(document.getElementById('stat-skipped')?.textContent || '0', 10)
+              }));
+              expect(stats.failed).toBe(0);
+            });
+            EOF
+          fi
 
       - name: Run Playwright tests
         run: |
