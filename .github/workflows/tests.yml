@@ -85,7 +85,7 @@ jobs:
                 failed: parseInt(document.getElementById('stat-failed')?.textContent || '0', 10),
                 skipped: parseInt(document.getElementById('stat-skipped')?.textContent || '0', 10)
               }));
-              expect(stats.failed).toBe(0);
+             expect(stats.failed).toBe(0);
           });
           EOF
           
