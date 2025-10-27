@@ -416,7 +416,15 @@
       
       document.body.removeChild(div);
     });
-
+  </script>
+  
+  <!-- Load unit tests for core OrarioDoc functionality -->
+  <script src="unit-tests.js"></script>
+  
+  <!-- Load integration tests for workflow testing -->
+  <script src="integration-tests.js"></script>
+  
+  <script>
     // Set up event listeners
     document.getElementById('run-tests').addEventListener('click', () => {
       runner.run();

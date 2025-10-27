@@ -1,0 +1,197 @@
+name: Test Suite
+
+on:
+  push:
+    branches: [ main, develop, 'feature/**' ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+      
+      - name: Start local server
+        run: |
+          python3 -m http.server 8080 &
+          sleep 2
+      
+      - name: Run Playwright tests
+        run: npm test
+        continue-on-error: true
+        id: playwright_tests
+      
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 7
+          if-no-files-found: ignore
+      
+      - name: Upload test results JSON
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-json
+          path: test-results.json
+          retention-days: 30
+          if-no-files-found: ignore
+      
+      - name: Comment test results on PR
+        uses: actions/github-script@v7
+        if: github.event_name == 'pull_request' && always()
+        with:
+          script: |
+            const fs = require('fs');
+            let comment = '## 🧪 Test Results\n\n';
+            
+            try {
+              if (fs.existsSync('test-results.json')) {
+                const results = JSON.parse(fs.readFileSync('test-results.json', 'utf8'));
+                const passed = results.passed || 0;
+                const failed = results.failed || 0;
+                const total = results.total || 0;
+                const skipped = results.skipped || 0;
+                
+                const passRate = total > 0 ? Math.round((passed / total) * 100) : 0;
+                const status = failed === 0 ? '✅ All tests passed!' : `❌ ${failed} test(s) failed`;
+                
+                comment += `**Status:** ${status}\n\n`;
+                comment += `| Metric | Value |\n`;
+                comment += `|--------|-------|\n`;
+                comment += `| Total Tests | ${total} |\n`;
+                comment += `| Passed | ✅ ${passed} |\n`;
+                comment += `| Failed | ❌ ${failed} |\n`;
+                comment += `| Skipped | ⊘ ${skipped} |\n`;
+                comment += `| Pass Rate | ${passRate}% |\n\n`;
+                
+                if (results.failedItems && results.failedItems.length > 0) {
+                  comment += '### ❌ Failed Tests\n\n';
+                  results.failedItems.forEach((item, i) => {
+                    comment += `${i + 1}. ${item}\n`;
+                  });
+                  comment += '\n';
+                }
+                
+                comment += '📊 [View full test report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\n';
+              } else {
+                comment += '⚠️ Test results file not found\n';
+              }
+            } catch (error) {
+              comment += `⚠️ Error reading test results: ${error.message}\n`;
+            }
+            
+            // Find existing comment
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            
+            const botComment = comments.find(comment => 
+              comment.user.type === 'Bot' && 
+              comment.body.includes('🧪 Test Results')
+            );
+            
+            // Create or update comment
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: comment
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: comment
+              });
+            }
+      
+      - name: Fail if tests failed
+        if: steps.playwright_tests.outcome == 'failure'
+        run: exit 1
+  
+  test-summary:
+    name: Test Summary
+    runs-on: ubuntu-latest
+    needs: test
+    if: always()
+    
+    steps:
+      - name: Download test results
+        uses: actions/download-artifact@v4
+        with:
+          name: test-results-json
+          path: .
+        continue-on-error: true
+      
+      - name: Generate test summary
+        run: |
+          echo "# 🧪 Test Execution Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f "test-results.json" ]; then
+            echo "## Test Results" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            
+            # Parse JSON and create summary
+            if command -v jq > /dev/null; then
+              TOTAL=$(jq -r '.total // 0' test-results.json)
+              PASSED=$(jq -r '.passed // 0' test-results.json)
+              FAILED=$(jq -r '.failed // 0' test-results.json)
+              SKIPPED=$(jq -r '.skipped // 0' test-results.json)
+              
+              echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
+              echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+              echo "| Total Tests | $TOTAL |" >> $GITHUB_STEP_SUMMARY
+              echo "| ✅ Passed | $PASSED |" >> $GITHUB_STEP_SUMMARY
+              echo "| ❌ Failed | $FAILED |" >> $GITHUB_STEP_SUMMARY
+              echo "| ⊘ Skipped | $SKIPPED |" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              
+              if [ "$FAILED" -gt 0 ]; then
+                echo "## ❌ Failed Tests" >> $GITHUB_STEP_SUMMARY
+                echo "" >> $GITHUB_STEP_SUMMARY
+                jq -r '.failedItems[]' test-results.json | while read -r line; do
+                  echo "- $line" >> $GITHUB_STEP_SUMMARY
+                done
+              else
+                echo "## ✅ All tests passed!" >> $GITHUB_STEP_SUMMARY
+              fi
+            else
+              cat test-results.json >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "⚠️ Test results not available" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "**Workflow:** ${{ github.workflow }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Run:** #${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
