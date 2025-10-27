@@ -6,7 +6,9 @@
   "scripts": {
     "test": "playwright test",
     "test:headed": "playwright test --headed",
-    "test:debug": "playwright test --debug"
+    "test:debug": "playwright test --debug",
+    "test:validate": "node scripts/validate-tests.js",
+    "test:report": "playwright show-report"
   },
   "keywords": [
     "pwa",
