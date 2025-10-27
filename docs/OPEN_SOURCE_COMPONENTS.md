@@ -1,103 +1,68 @@
-# Componenti Open Source
+# Componenti e Tecnologie Open Source
 
-Questo documento elenca le librerie e i componenti open source utilizzati in OrarioDoc, con le relative licenze e motivazioni.
+Questo documento elenca le librerie, componenti e tecnologie open source utilizzate in OrarioDoc, con le relative licenze e motivazioni.
 
-## 📦 Core Dependencies
+## 📦 Core Technologies
 
-### React Ecosystem
+### Vanilla JavaScript
+- **Versione**: ES6+ (ECMAScript 2015+)
+- **Licenza**: Standard ECMA
+- **Uso**: Linguaggio base dell'applicazione
+- **Motivazione**: Zero dipendenze, massima compatibilità, performance ottimali, funziona ovunque (incluso Termux)
+- **Link**: https://developer.mozilla.org/en-US/docs/Web/JavaScript
 
-#### React
-- **Versione**: ^18.2.0
-- **Licenza**: MIT
-- **Uso**: Framework UI principale
-- **Motivazione**: Standard de facto per applicazioni web moderne, ottimo ecosistema, performance eccellenti
-- **Link**: https://react.dev/
+### IndexedDB
+- **Versione**: Web API standard
+- **Licenza**: W3C Standard
+- **Uso**: Persistenza dati offline
+- **Motivazione**: Storage robusto per PWA, supporto transazioni, query avanzate
+- **Link**: https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API
 
-#### React DOM
-- **Versione**: ^18.2.0
-- **Licenza**: MIT
-- **Uso**: Rendering React nel DOM
-- **Motivazione**: Libreria essenziale per React
-- **Link**: https://react.dev/
+### Service Worker API
+- **Versione**: Web API standard
+- **Licenza**: W3C Standard
+- **Uso**: Funzionalità PWA, caching, offline
+- **Motivazione**: Standard per Progressive Web Apps, supporto offline completo
+- **Link**: https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API
 
-#### React Router
-- **Versione**: ^6.x
-- **Licenza**: MIT
-- **Uso**: Routing e navigazione
-- **Motivazione**: Soluzione standard per SPA routing in React
-- **Link**: https://reactrouter.com/
+### CSS Custom Properties (CSS Variables)
+- **Versione**: CSS standard
+- **Licenza**: W3C Standard
+- **Uso**: Sistema tematizzazione centralizzato
+- **Motivazione**: Nativo, performante, supporto completo browser moderni
+- **Link**: https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties
 
-### State Management
+## 🎨 Design System & Fonts
 
-#### Redux Toolkit (opzione 1)
-- **Versione**: ^1.9.x
-- **Licenza**: MIT
-- **Uso**: Gestione stato globale
-- **Motivazione**: Semplifica Redux, buone pratiche integrate, DevTools
-- **Link**: https://redux-toolkit.js.org/
-
-#### Zustand (opzione 2)
-- **Versione**: ^4.x
-- **Licenza**: MIT
-- **Uso**: State management alternativo leggero
-- **Motivazione**: API semplice, no boilerplate, TypeScript-friendly
-- **Link**: https://github.com/pmndrs/zustand
-
-### PWA
-
-#### Workbox
-- **Versione**: ^7.x
+### Material Design 3
+- **Versione**: 3.0
 - **Licenza**: Apache 2.0
-- **Uso**: Service Worker e caching strategies
-- **Motivazione**: Best practices PWA, strumenti Google
-- **Link**: https://developers.google.com/web/tools/workbox
+- **Uso**: Design system, linee guida UI/UX
+- **Motivazione**: Design moderno, accessibile, ben documentato
+- **Link**: https://m3.material.io/
 
-#### web-vitals
-- **Versione**: ^3.x
+### Roboto Flex
+- **Versione**: Variable Font
+- **Licenza**: Apache 2.0 (Google Fonts)
+- **Uso**: Font principale applicazione
+- **Motivazione**: Font variabile, ottimizzato per UI, supporto completo caratteri
+- **Link**: https://fonts.google.com/specimen/Roboto+Flex
+
+## 🧪 Testing & Development
+
+### Playwright
+- **Versione**: ^1.40.0
 - **Licenza**: Apache 2.0
-- **Uso**: Misurazione Core Web Vitals
-- **Motivazione**: Metriche performance standard Google
-- **Link**: https://github.com/GoogleChrome/web-vitals
+- **Uso**: Test E2E automatizzati
+- **Motivazione**: Cross-browser testing, API moderna, performance eccellenti
+- **Link**: https://playwright.dev/
 
-## 🎨 UI Components & Styling
-
-### Styling Solutions
-
-#### Styled Components (opzione 1)
-- **Versione**: ^6.x
-- **Licenza**: MIT
-- **Uso**: CSS-in-JS
-- **Motivazione**: Scoping automatico, props dinamiche, theming
-- **Link**: https://styled-components.com/
-
-#### CSS Modules (opzione 2)
-- **Versione**: Built-in
-- **Licenza**: N/A
-- **Uso**: CSS modulare
-- **Motivazione**: Zero-runtime, performance, semplice
-- **Link**: https://github.com/css-modules/css-modules
-
-#### Tailwind CSS (opzione 3)
-- **Versione**: ^3.x
-- **Licenza**: MIT
-- **Uso**: Utility-first CSS
-- **Motivazione**: Rapid development, consistency, ottimizzazione
-- **Link**: https://tailwindcss.com/
-
-### Component Libraries
-
-#### Headless UI
-- **Versione**: ^1.x
-- **Licenza**: MIT
-- **Uso**: Componenti UI accessibili headless
-- **Motivazione**: Accessibilità integrata, customizzazione completa
-- **Link**: https://headlessui.com/
-
-#### Radix UI
-- **Versione**: ^1.x
-- **Licenza**: MIT
-- **Uso**: Primitives UI accessibili
-- **Motivazione**: WCAG compliant, componibili, unstyled
+### @playwright/test
+- **Versione**: ^1.40.0
+- **Licenza**: Apache 2.0
+- **Uso**: Test runner e asserzioni
+- **Motivazione**: Integrato con Playwright, parallel testing, report dettagliati
+- **Link**: https://playwright.dev/docs/test-intro
 - **Link**: https://www.radix-ui.com/
 
 #### React Icons
@@ -132,157 +97,117 @@ Questo documento elenca le librerie e i componenti open source utilizzati in Ora
 - **Motivazione**: Modulare, immutabile, tree-shakeable
 - **Link**: https://date-fns.org/
 
-#### Lodash
-- **Versione**: ^4.x
-- **Licenza**: MIT
-- **Uso**: Utility functions
-- **Motivazione**: Collaudata, performance, ampia gamma di utilities
-- **Link**: https://lodash.com/
 
-#### clsx
-- **Versione**: ^2.x
-- **Licenza**: MIT
-- **Uso**: Conditional className
-- **Motivazione**: Leggera, performance, supporto conditional
-- **Link**: https://github.com/lukeed/clsx
+## 📊 Web Standards & APIs
 
-## 📝 Form Handling
+### Web Storage API
+- **Versione**: Web API standard
+- **Licenza**: W3C Standard
+- **Uso**: Persistenza preferenze (localStorage)
+- **Motivazione**: Semplice, supporto universale, sufficiente per preferenze
+- **Link**: https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API
 
-#### React Hook Form
-- **Versione**: ^7.x
-- **Licenza**: MIT
-- **Uso**: Gestione form
-- **Motivazione**: Performance, DX, validazione integrata
-- **Link**: https://react-hook-form.com/
+### Fetch API
+- **Versione**: Web API standard
+- **Licenza**: WHATWG Standard
+- **Uso**: HTTP requests (future integrazioni)
+- **Motivazione**: Standard moderno, Promise-based, no dipendenze
+- **Link**: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
 
-#### Zod
-- **Versione**: ^3.x
-- **Licenza**: MIT
-- **Uso**: Schema validation
-- **Motivazione**: TypeScript-first, composable, runtime safe
-- **Link**: https://github.com/colinhacks/zod
+### BroadcastChannel API
+- **Versione**: Web API standard
+- **Licenza**: HTML Living Standard
+- **Uso**: Sincronizzazione tra tab/finestre
+- **Motivazione**: Comunicazione cross-context nativa, no polling
+- **Link**: https://developer.mozilla.org/en-US/docs/Web/API/BroadcastChannel
 
-## 🧪 Testing
+## 🔒 Sicurezza & Privacy
 
-#### Jest
-- **Versione**: ^29.x
-- **Licenza**: MIT
-- **Uso**: Test framework
-- **Motivazione**: Standard React, snapshot testing, mocking
-- **Link**: https://jestjs.io/
+### Content Security Policy (CSP)
+- **Versione**: Standard Web
+- **Licenza**: W3C Standard
+- **Uso**: Protezione XSS e injection
+- **Motivazione**: Security best practice, protezione utente
+- **Link**: https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
 
-#### React Testing Library
-- **Versione**: ^14.x
-- **Licenza**: MIT
-- **Uso**: Testing componenti React
-- **Motivazione**: Best practices testing, focus accessibilità
-- **Link**: https://testing-library.com/react
+### SubResource Integrity (SRI)
+- **Versione**: Standard Web
+- **Licenza**: W3C Standard
+- **Uso**: Verifica integrità risorse esterne
+- **Motivazione**: Protezione da CDN compromessi
+- **Link**: https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity
 
-#### jest-axe
-- **Versione**: ^8.x
-- **Licenza**: MPL 2.0
-- **Uso**: Accessibility testing
-- **Motivazione**: Testing automatico a11y, integrazione Jest
-- **Link**: https://github.com/nickcolley/jest-axe
+## ♿ Accessibilità
 
-#### Cypress
-- **Versione**: ^13.x
-- **Licenza**: MIT
-- **Uso**: E2E testing
-- **Motivazione**: DX eccellente, debugging facile, CI/CD friendly
-- **Link**: https://www.cypress.io/
+### WAI-ARIA
+- **Versione**: ARIA 1.2
+- **Licenza**: W3C Standard
+- **Uso**: Semantic markup per accessibilità
+- **Motivazione**: Standard WCAG 2.1 AA, supporto screen reader
+- **Link**: https://www.w3.org/WAI/ARIA/
 
-## 🛠️ Development Tools
+### WCAG 2.1
+- **Versione**: 2.1 Level AA
+- **Licenza**: W3C Standard
+- **Uso**: Linee guida accessibilità
+- **Motivazione**: Standard industriale, requisito legale in molti paesi
+- **Link**: https://www.w3.org/WAI/WCAG21/quickref/
 
-#### Vite (opzione 1)
-- **Versione**: ^5.x
-- **Licenza**: MIT
-- **Uso**: Build tool
-- **Motivazione**: Fast HMR, build ottimizzate, plugin ecosystem
-- **Link**: https://vitejs.dev/
+## 🎯 Filosofia: Zero Dependencies
 
-#### Create React App (opzione 2)
-- **Versione**: ^5.x
-- **Licenza**: MIT
-- **Uso**: React boilerplate
-- **Motivazione**: Zero config, best practices integrate
-- **Link**: https://create-react-app.dev/
+OrarioDoc adotta una filosofia **zero-dependency** per:
 
-#### ESLint
-- **Versione**: ^8.x
-- **Licenza**: MIT
-- **Uso**: Linting JavaScript/TypeScript
-- **Motivazione**: Standard de facto, personalizzabile, plugin ecosystem
-- **Link**: https://eslint.org/
+1. **Massima Compatibilità**: Funziona ovunque, anche in ambienti limitati come Termux
+2. **Security**: Meno dipendenze = meno superficie di attacco
+3. **Performance**: Bundle size ridotto, caricamento veloce
+4. **Manutenibilità**: Nessun aggiornamento dipendenze o breaking changes esterni
+5. **Longevità**: Il codice rimane funzionante anche dopo anni senza manutenzione
+6. **Privacy**: Nessuna telemetria o tracking nascosto da librerie terze
 
-#### Prettier
-- **Versione**: ^3.x
-- **Licenza**: MIT
-- **Uso**: Code formatting
-- **Motivazione**: Opinionated, consistent, integrazione IDE
-- **Link**: https://prettier.io/
+### Eccezioni: Dev Dependencies
 
-#### Husky
-- **Versione**: ^8.x
-- **Licenza**: MIT
-- **Uso**: Git hooks
-- **Motivazione**: Pre-commit validation, quality gates
-- **Link**: https://typicode.github.io/husky/
+Le uniche dipendenze sono per **testing** (Playwright), che:
+- Non fanno parte del bundle produzione
+- Sono opzionali per utenti finali
+- Possono essere facilmente sostituite se necessario
 
-#### lint-staged
-- **Versione**: ^15.x
-- **Licenza**: MIT
-- **Uso**: Lint solo file staged
-- **Motivazione**: Performance, focus su modifiche
-- **Link**: https://github.com/okonet/lint-staged
+## 📚 Riferimenti e Risorse
 
-## 🤖 AI & Machine Learning
+### Standard Web
+- [MDN Web Docs](https://developer.mozilla.org/) - Documentazione completa Web APIs
+- [Can I Use](https://caniuse.com/) - Compatibilità browser
+- [Web.dev](https://web.dev/) - Best practices Google
 
-#### TensorFlow.js (opzionale)
-- **Versione**: ^4.x
-- **Licenza**: Apache 2.0
-- **Uso**: ML in browser
-- **Motivazione**: Privacy-first, no server needed
-- **Link**: https://www.tensorflow.org/js
+### Design & UX
+- [Material Design 3](https://m3.material.io/) - Design system
+- [Google Fonts](https://fonts.google.com/) - Web fonts
+- [WCAG Guidelines](https://www.w3.org/WAI/WCAG21/quickref/) - Accessibilità
 
-#### Brain.js (opzionale)
-- **Versione**: ^2.x
-- **Licenza**: MIT
-- **Uso**: Neural networks semplici
-- **Motivazione**: Easy to use, good for simple AI tasks
-- **Link**: https://brain.js.org/
+### Testing & Quality
+- [Playwright](https://playwright.dev/) - Testing framework
+- [WebPageTest](https://www.webpagetest.org/) - Performance testing
+- [Lighthouse](https://developers.google.com/web/tools/lighthouse) - Audit tool
 
-## 📊 Analytics & Monitoring
+## 📄 Licenze
 
-#### Plausible Analytics (self-hosted)
-- **Versione**: Latest
-- **Licenza**: AGPL v3
-- **Uso**: Privacy-friendly analytics
-- **Motivazione**: No cookies, GDPR compliant, open source
-- **Link**: https://plausible.io/
+Tutti gli standard Web (HTML, CSS, JavaScript, Web APIs) sono:
+- **Liberi** e aperti
+- **Royalty-free**
+- **Implementabili** da chiunque
+- **Mantenuti** da organismi internazionali (W3C, WHATWG, ECMA)
 
-#### Sentry (opzionale)
-- **Versione**: ^7.x
-- **Licenza**: FSL (Functional Source License)
-- **Uso**: Error tracking
-- **Motivazione**: Debugging, performance monitoring
-- **Link**: https://sentry.io/
+Material Design 3 e Roboto Flex sono rilasciati sotto **Apache License 2.0**, che permette:
+- ✅ Uso commerciale
+- ✅ Modifica
+- ✅ Distribuzione
+- ✅ Uso privato
+- ✅ Concessione brevetti
 
-## ♿ Accessibility
+Playwright è rilasciato sotto **Apache License 2.0** (dev dependency).
 
-#### react-aria
-- **Versione**: ^3.x
-- **Licenza**: Apache 2.0
-- **Uso**: Accessibility primitives
-- **Motivazione**: Adobe, WCAG compliant, comprehensive
-- **Link**: https://react-spectrum.adobe.com/react-aria/
+---
 
-#### focus-trap-react
-- **Versione**: ^10.x
-- **Licenza**: MIT
-- **Uso**: Focus management
-- **Motivazione**: Modal/dialog accessibility
-- **Link**: https://github.com/focus-trap/focus-trap-react
+**Nota**: OrarioDoc stesso è rilasciato sotto licenza **MIT**, una delle licenze open source più permissive.
 
 ## 📱 PWA Tools
 

@@ -4,19 +4,26 @@ Guida rapida per iniziare a sviluppare con OrarioDoc.
 
 ## 📋 Prerequisiti
 
-Prima di iniziare, assicurati di avere installato:
+OrarioDoc è una PWA vanilla JavaScript senza dipendenze di runtime. Per lo sviluppo base serve solo:
 
-- **Node.js** >= 18.x ([Download](https://nodejs.org/))
-- **npm** >= 9.x (incluso con Node.js) o **yarn** >= 1.22.x
+- **Python 3** (per server HTTP locale) - già installato su molti sistemi
 - **Git** ([Download](https://git-scm.com/))
 - Un editor di codice (consigliato: [VS Code](https://code.visualstudio.com/))
+
+### Prerequisiti opzionali per testing
+
+- **Node.js** >= 18.x ([Download](https://nodejs.org/)) - solo per eseguire test Playwright
+- **npm** >= 9.x (incluso con Node.js)
 
 ### Verifica installazione
 
 ```bash
-node --version  # v18.0.0 o superiore
-npm --version   # v9.0.0 o superiore
-git --version   # Qualsiasi versione recente
+python3 --version  # Python 3.x
+git --version      # Qualsiasi versione recente
+
+# Opzionale (solo per testing)
+node --version     # v18.0.0 o superiore
+npm --version      # v9.0.0 o superiore
 ```
 
 ## 🚀 Setup iniziale
@@ -34,70 +41,66 @@ git clone git@github.com:antoniocorsano-boop/OrarioDoc.git
 cd OrarioDoc
 ```
 
-### 2. Installazione dipendenze
+### 2. Installazione dipendenze (opzionale - solo per testing)
 
 ```bash
-# Usando npm
+# Installa Playwright per i test
 npm install
-
-# Oppure usando yarn
-yarn install
 ```
 
-Questo processo potrebbe richiedere qualche minuto alla prima installazione.
-
-### 3. Configurazione ambiente (opzionale)
-
-Se necessario, crea un file `.env.local` nella root del progetto:
-
-```bash
-# .env.local
-REACT_APP_API_URL=http://localhost:3000/api
-REACT_APP_ENV=development
-```
-
-**Nota**: Il file `.env.local` non viene committato (è in `.gitignore`).
+**Nota**: Le dipendenze npm sono **solo per testing** e non necessarie per eseguire l'applicazione.
 
 ## 🏃 Esecuzione in sviluppo
 
-### Avvio del server di sviluppo
+### Metodo 1: Python HTTP Server (Raccomandato)
 
 ```bash
-npm start
+# Avvia server sulla porta 8080
+python3 -m http.server 8080
+
+# Apri il browser su:
+# http://127.0.0.1:8080
+# oppure
+# http://localhost:8080
 ```
 
-Questo comando:
-- Avvia il server di sviluppo
-- Apre automaticamente il browser su `http://localhost:3000`
-- Abilita Hot Module Replacement (HMR) per reload automatico
+### Metodo 2: VS Code Live Server
+
+1. Installa l'estensione "[Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)" in VS Code
+2. Apri la cartella OrarioDoc in VS Code
+3. Click destro su `index.html` → "Open with Live Server"
+4. Il browser si aprirà automaticamente
+
+### Metodo 3: Node.js (se disponibile)
+
+```bash
+# Usando http-server
+npx http-server -p 8080
+
+# Oppure usando serve
+npx serve -p 8080
+```
 
 ### Comandi disponibili
 
 ```bash
 # Avvio sviluppo
-npm start
+python3 -m http.server 8080
 
-# Build per produzione
-npm run build
-
-# Esecuzione test
+# Test (opzionale - richiede npm)
 npm test
 
-# Esecuzione test con coverage
-npm test -- --coverage
+# Test in modalità headed (browser visibile)
+npm run test:headed
 
-# Linting codice
-npm run lint
+# Test con debug
+npm run test:debug
 
-# Fix automatico problemi di lint
-npm run lint:fix
-
-# Formattazione codice con Prettier
-npm run format
-
-# Analisi bundle
-npm run analyze
+# Validazione test
+npm run test:validate
 ```
+
+**Nota**: L'applicazione funziona perfettamente senza eseguire test. I test sono utili solo per sviluppatori che modificano il codice.
 
 ## 🛠️ Workflow di sviluppo
 
@@ -116,15 +119,11 @@ git checkout -b docs/argomento
 
 ### 2. Sviluppa la tua funzionalità
 
-```bash
-# Modifica i file necessari
-# Testa le modifiche in tempo reale con npm start
-
-# Verifica che tutto funzioni
-npm test
-npm run lint
-npm run build
-```
+1. Avvia il server di sviluppo: `python3 -m http.server 8080`
+2. Modifica i file necessari
+3. Ricarica il browser per vedere le modifiche
+4. Testa su diversi temi (Light, Dark, Expressive)
+5. Verifica accessibilità con Lighthouse
 
 ### 3. Commit delle modifiche
 
@@ -152,41 +151,44 @@ git push origin feature/nome-funzionalita
 
 ```
 OrarioDoc/
-├── public/               # File statici
-│   ├── index.html       # Template HTML
-│   ├── manifest.json    # PWA manifest
-│   └── icons/           # Icone PWA
+├── index.html           # Pagina principale
+├── manifest.json        # PWA manifest
+├── service-worker.js    # Service Worker per offline
+├── theme.css            # Sistema temi Material Design 3
+├── style.css            # Stili applicazione
 │
 ├── src/
-│   ├── components/      # Componenti React
-│   │   ├── common/      # Componenti riutilizzabili
-│   │   ├── layout/      # Layout components
-│   │   └── features/    # Feature-specific
+│   ├── components/      # Componenti CSS Material Design 3
+│   │   ├── button.css
+│   │   ├── card.css
+│   │   ├── dialog.css
+│   │   └── ...
 │   │
-│   ├── screens/         # Pagine/Schermate
-│   │   ├── Home/
-│   │   ├── Schedule/
-│   │   └── Settings/
+│   ├── screens/         # Schermate applicazione
+│   │   └── settings-screen.js
 │   │
-│   ├── store/           # State management
-│   ├── routes/          # Routing
-│   ├── utils/           # Utilities
-│   ├── ai/              # Moduli AI
-│   ├── assets/          # Risorse (img, css, fonts)
-│   ├── hooks/           # Custom hooks
+│   ├── storage/         # Gestione dati
+│   │   ├── indexeddb.js
+│   │   └── storage.js
 │   │
-│   ├── App.js           # Componente root
-│   ├── index.js         # Entry point
-│   └── serviceWorker.js # Service Worker PWA
+│   ├── utils/           # Utility functions
+│   │   ├── theme.js     # Theme manager
+│   │   └── toast.js     # Notifiche toast
+│   │
+│   ├── main.js          # Entry point applicazione
+│   ├── schedule-grid.js # Gestione griglia orario
+│   └── settings.js      # Settings manager
 │
+├── public/              # Asset statici
+├── icons/               # Icone PWA
 ├── docs/                # Documentazione
-├── .github/            # GitHub config
-└── tests/              # Test utilities
+├── tests/               # Test Playwright
+└── .github/             # Config GitHub
 ```
 
 ## 🧪 Testing
 
-### Eseguire i test
+### Eseguire i test (richiede npm)
 
 ```bash
 # Tutti i test
@@ -195,237 +197,144 @@ npm test
 # Test specifico
 npm test -- ScheduleCard.test.js
 
-# Watch mode (riesegue test al cambiamento)
-npm test -- --watch
+npm test
 
-# Coverage report
-npm test -- --coverage
+# Test unitari
+npm run test:unit
+
+# Test con browser visibile
+npm run test:headed
+
+# Test con debugging
+npm run test:debug
+
+# Report test
+npm run test:report
 ```
 
-### Scrivere un test
+### Testing manuale
 
-Crea un file `ComponentName.test.jsx` accanto al componente:
-
-```jsx
-// ScheduleCard.test.jsx
-import { render, screen } from '@testing-library/react';
-import ScheduleCard from './ScheduleCard';
-
-describe('ScheduleCard', () => {
-  it('should render lesson title', () => {
-    const lesson = { id: 1, title: 'Matematica' };
-    render(<ScheduleCard lesson={lesson} />);
-    expect(screen.getByText('Matematica')).toBeInTheDocument();
-  });
-});
-```
+1. **Accessibilità**: Usa Lighthouse in Chrome DevTools (target: score >= 95)
+2. **Responsive**: Testa su mobile (320px), tablet (768px), desktop (1280px)
+3. **Temi**: Verifica funzionamento su tutti i 4 temi
+4. **Tastiera**: Naviga l'app usando solo Tab, Enter, Escape
+5. **Offline**: Disabilita rete e verifica funzionamento PWA
 
 ## 🎨 Sviluppo UI
 
-### Componenti di base
+### Linee guida componenti
 
-Crea componenti nella cartella appropriata:
-
-```bash
-# Componente comune
-src/components/common/Button/
-  ├── Button.jsx
-  ├── Button.module.css
-  ├── Button.test.jsx
-  └── index.js
-
-# Screen/Page
-src/screens/Schedule/
-  ├── Schedule.jsx
-  ├── Schedule.module.css
-  ├── Schedule.test.jsx
-  └── index.js
-```
-
-### Esempio componente
-
-```jsx
-// src/components/common/Button/Button.jsx
-import React from 'react';
-import PropTypes from 'prop-types';
-import styles from './Button.module.css';
-
-function Button({ children, onClick, variant = 'primary', disabled = false }) {
-  return (
-    <button
-      className={`${styles.button} ${styles[variant]}`}
-      onClick={onClick}
-      disabled={disabled}
-      type="button"
-    >
-      {children}
-    </button>
-  );
-}
-
-Button.propTypes = {
-  children: PropTypes.node.isRequired,
-  onClick: PropTypes.func,
-  variant: PropTypes.oneOf(['primary', 'secondary', 'danger']),
-  disabled: PropTypes.bool,
-};
-
-export default Button;
-```
+**Usa sempre CSS Variables** da `theme.css`:
 
 ```css
-/* src/components/common/Button/Button.module.css */
+/* ✅ Corretto */
 .button {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: all 0.2s;
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  padding: var(--md-sys-spacing-md);
+  border-radius: var(--md-sys-shape-corner-full);
 }
 
-.button:hover {
-  transform: translateY(-1px);
-}
-
-.button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.primary {
-  background-color: var(--color-primary);
-  color: white;
-}
-
-.secondary {
-  background-color: var(--color-secondary);
-  color: white;
-}
-
-.danger {
-  background-color: var(--color-danger);
-  color: white;
+/* ❌ Sbagliato - valori hardcoded */
+.button {
+  background: #2b7cff;
+  padding: 16px;
+  border-radius: 20px;
 }
 ```
 
-## 🔧 Strumenti consigliati
+### Checklist componente
 
-### VS Code Extensions
+- [ ] Usa solo CSS Variables da theme.css
+- [ ] ARIA labels su elementi interattivi
+- [ ] Contrasto colori >= 4.5:1 (WCAG AA)
+- [ ] Navigazione tastiera funzionante
+- [ ] Focus indicators visibili
+- [ ] Testato su tutti i temi (Light, Dark, Expressive, Auto)
+- [ ] Responsive su mobile/tablet/desktop
 
-Installa queste estensioni per una migliore esperienza di sviluppo:
+## 🐛 Debug e troubleshooting
 
-- **ESLint** - Linting JavaScript/TypeScript
-- **Prettier** - Code formatter
-- **ES7+ React/Redux/React-Native snippets** - Snippets React
-- **Auto Rename Tag** - Rinomina automatica tag HTML
-- **Path Intellisense** - Autocompletamento path
-- **GitLens** - Git supercharged
-- **Jest** - Jest test runner
-- **axe Accessibility Linter** - Accessibility checking
+### App non si carica
 
-### Configurazione VS Code
+```bash
+# Verifica che il server sia in esecuzione
+ps aux | grep python
 
-Crea `.vscode/settings.json`:
+# Verifica la porta
+lsof -i :8080
 
-```json
-{
-  "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
-  },
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact"
-  ]
-}
+# Riavvia il server
+python3 -m http.server 8080
 ```
+
+### Service Worker issues
+
+```javascript
+// Apri Console del browser e esegui:
+navigator.serviceWorker.getRegistrations().then(registrations => {
+  registrations.forEach(reg => reg.unregister());
+});
+
+// Poi ricarica la pagina con Ctrl+Shift+R (hard reload)
+```
+
+### IndexedDB issues
+
+```javascript
+// Apri Console del browser e esegui:
+indexedDB.deleteDatabase('OrarioDoc');
+
+// Ricarica la pagina
+```
+
+### Tema non si applica
+
+1. Apri DevTools → Application → Local Storage
+2. Verifica chiave `orariodoc:theme`
+3. Cancella e ricarica: `localStorage.clear()`
 
 ## 📚 Risorse utili
 
-### Documentazione
+### Documentazione OrarioDoc
+- [README.md](../README.md) - Overview progetto
+- [ARCHITECTURE.md](ARCHITECTURE.md) - Architettura sistema
+- [THEMES.md](THEMES.md) - Sistema temi completo
+- [COMPONENTS.md](COMPONENTS.md) - Componenti MD3
+- [STYLE_GUIDE.md](STYLE_GUIDE.md) - Linee guida codice
+- [CONTRIBUTING.md](../CONTRIBUTING.md) - Guida contributori
 
-- [React Docs](https://react.dev/) - Documentazione ufficiale React
-- [MDN Web Docs](https://developer.mozilla.org/) - Reference web development
-- [WCAG Guidelines](https://www.w3.org/WAI/WCAG21/quickref/) - Accessibilità
-- [PWA Checklist](https://web.dev/pwa-checklist/) - PWA best practices
-
-### Guide interne
-
-- [ARCHITECTURE.md](./ARCHITECTURE.md) - Architettura del progetto
-- [STYLE_GUIDE.md](./STYLE_GUIDE.md) - Convenzioni di stile
-- [CONTRIBUTING.md](../CONTRIBUTING.md) - Come contribuire
-- [OPEN_SOURCE_COMPONENTS.md](./OPEN_SOURCE_COMPONENTS.md) - Librerie usate
-
-## ❓ Troubleshooting
-
-### Problema: `npm install` fallisce
-
-```bash
-# Pulisci cache npm
-npm cache clean --force
-
-# Rimuovi node_modules e package-lock.json
-rm -rf node_modules package-lock.json
-
-# Reinstalla
-npm install
-```
-
-### Problema: Porta 3000 già in uso
-
-```bash
-# Su macOS/Linux
-PORT=3001 npm start
-
-# Su Windows
-set PORT=3001 && npm start
-```
-
-### Problema: Hot reload non funziona
-
-1. Controlla che il file sia salvato
-2. Verifica che non ci siano errori di sintassi
-3. Prova a riavviare il server di sviluppo
-4. Cancella cache browser (Ctrl+Shift+R / Cmd+Shift+R)
-
-### Problema: Test falliscono
-
-```bash
-# Pulisci cache Jest
-npm test -- --clearCache
-
-# Riesegui i test
-npm test
-```
-
-## 🎯 Prossimi passi
-
-Dopo aver completato il setup:
-
-1. ✅ Leggi [ARCHITECTURE.md](./ARCHITECTURE.md) per capire l'architettura
-2. ✅ Leggi [STYLE_GUIDE.md](./STYLE_GUIDE.md) per le convenzioni di codice
-3. ✅ Esplora il codice esistente in `src/`
-4. ✅ Scegli una issue da [GitHub Issues](https://github.com/antoniocorsano-boop/OrarioDoc/issues)
-5. ✅ Leggi [CONTRIBUTING.md](../CONTRIBUTING.md) prima di aprire una PR
+### Riferimenti esterni
+- [Material Design 3](https://m3.material.io/) - Design system
+- [WCAG 2.1](https://www.w3.org/WAI/WCAG21/quickref/) - Accessibilità
+- [MDN Web Docs](https://developer.mozilla.org/) - Web APIs
+- [Playwright](https://playwright.dev/) - Testing framework
 
 ## 💡 Tips
 
-- **Usa gli snippet**: Installa l'estensione React snippets per velocizzare
-- **Componenti piccoli**: Mantieni i componenti piccoli e focalizzati
-- **Test as you go**: Scrivi test mentre sviluppi, non dopo
-- **Commit frequenti**: Fai commit piccoli e frequenti
-- **Chiedi aiuto**: Non esitare a chiedere nelle issue o discussions
+- **Hot reload**: Non c'è hot reload automatico. Ricarica manualmente il browser dopo ogni modifica
+- **DevTools**: Usa Chrome DevTools per debugging (F12)
+- **Mobile testing**: Usa Device Mode in DevTools per testare responsive
+- **Performance**: Usa Lighthouse per audit performance/accessibilità
+- **Offline**: Disabilita rete in DevTools per testare PWA offline
 
-## 📞 Supporto
+## ❓ Domande frequenti
 
-Hai bisogno di aiuto?
+**Q: Serve Node.js per eseguire l'app?**  
+A: No, serve solo Python per il server locale. Node.js serve solo per i test.
 
-- 📖 Consulta la [documentazione](./ARCHITECTURE.md)
-- 💬 Apri una [Discussion](https://github.com/antoniocorsano-boop/OrarioDoc/discussions)
-- 🐛 Segnala un [Issue](https://github.com/antoniocorsano-boop/OrarioDoc/issues)
+**Q: Come faccio il deploy?**  
+A: Copia tutti i file su un server web statico (GitHub Pages, Netlify, Vercel).
+
+**Q: Posso usare TypeScript?**  
+A: OrarioDoc usa vanilla JS per compatibilità massima. TypeScript richiederebbe build step.
+
+**Q: Dove sono salvati i dati?**  
+A: In IndexedDB nel browser. I dati rimangono sul dispositivo dell'utente.
+
+**Q: Come aggiorno i temi?**  
+A: Modifica `theme.css` e le variabili CSS. Leggi [THEMES.md](THEMES.md) per dettagli.
 
 ---
 
-**Buon coding! 🚀**
+**Pronto a iniziare?** Apri il terminale, avvia il server e inizia a sviluppare! 🚀
