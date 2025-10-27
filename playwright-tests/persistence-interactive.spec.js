@@ -25,7 +25,7 @@ test.describe('Data Persistence', () => {
     
     await page.fill('#inputName', 'Matematica');
     await page.fill('#inputClass', '3A');
-    await page.selectOption('#inputDay', '1');
+    await page.fill('#inputDay', '1');
     await page.fill('#inputTime', '08:00');
     await page.fill('#inputDuration', '60');
     
@@ -39,6 +39,10 @@ test.describe('Data Persistence', () => {
     // Reload page and verify data persists
     await page.reload();
     await page.waitForLoadState('domcontentloaded');
+    
+    // Wait for grid to be rendered
+    await page.waitForSelector('#scheduleGrid', { state: 'visible' });
+    await page.waitForTimeout(500); // Allow time for storage load and render
     
     const lessonAfterReload = await page.locator('.item:has-text("Matematica")').count();
     expect(lessonAfterReload).toBeGreaterThan(0);
@@ -67,7 +71,7 @@ test.describe('Data Persistence', () => {
       
       await page.fill('#inputName', lesson.name);
       await page.fill('#inputClass', lesson.class);
-      await page.selectOption('#inputDay', lesson.day);
+      await page.fill('#inputDay', lesson.day);
       await page.fill('#inputTime', lesson.time);
       await page.fill('#inputDuration', lesson.duration);
       
@@ -78,6 +82,7 @@ test.describe('Data Persistence', () => {
     // Reload and verify all lessons persist
     await page.reload();
     await page.waitForLoadState('domcontentloaded');
+    await page.waitForTimeout(500); // Allow time for storage load and render
     
     for (const lesson of lessons) {
       const count = await page.locator(`.item:has-text("${lesson.name}")`).count();
@@ -146,6 +151,7 @@ test.describe('Data Persistence', () => {
     // Reload and verify update persisted
     await page.reload();
     await page.waitForLoadState('domcontentloaded');
+    await page.waitForTimeout(500); // Allow time for storage load and render
     
     const updatedLesson = await page.locator('.item:has-text("Chimica Organica")').count();
     expect(updatedLesson).toBeGreaterThan(0);
@@ -188,6 +194,7 @@ test.describe('Data Persistence', () => {
     // Reload and verify deletion persisted
     await page.reload();
     await page.waitForLoadState('domcontentloaded');
+    await page.waitForTimeout(500); // Allow time for storage load and render
     
     const lessonAfterReload = await page.locator('.item:has-text("Geografia")').count();
     expect(lessonAfterReload).toBe(0);
@@ -388,7 +395,7 @@ test.describe('Form Validation', () => {
     await page.click('#addBtn');
     await page.waitForSelector('#panel:not(.hidden)');
     await page.fill('#inputName', 'Matematica');
-    await page.selectOption('#inputDay', '1');
+    await page.fill('#inputDay', '1');
     await page.fill('#inputTime', '08:00');
     await page.fill('#inputDuration', '60');
     await page.click('#saveBtn');
@@ -398,7 +405,7 @@ test.describe('Form Validation', () => {
     await page.click('#addBtn');
     await page.waitForSelector('#panel:not(.hidden)');
     await page.fill('#inputName', 'Fisica');
-    await page.selectOption('#inputDay', '1');
+    await page.fill('#inputDay', '1');
     await page.fill('#inputTime', '08:30'); // Overlaps with previous lesson
     await page.fill('#inputDuration', '60');
     await page.click('#saveBtn');
