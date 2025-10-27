@@ -527,7 +527,7 @@ describe('Storage', () => {
 - `docs/TEST_PLAN.md` - test manuali
 - `jest.config.js` o `vitest.config.js`
 - `src/__tests__/` - directory test
-- `.github/workflows/test.yml` - CI/CD
+- `.github/workflows/tests.yml` - CI/CD
 
 ---
 

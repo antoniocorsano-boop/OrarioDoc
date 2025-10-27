@@ -88,11 +88,12 @@ jobs:
               expect(stats.failed).toBe(0);
           });
           EOF
-          
+          fi
+
       - name: Run Playwright tests
         run: |
           # Run committed tests; produce JSON report too for artifacts
-          npx playwright test --reporter=json > test-results.json || true
+          npx playwright test --reporter=json > test-results.json
 
       - name: Upload test results artifacts
         if: always()
@@ -100,7 +101,8 @@ jobs:
         with:
           name: test-results
           path: |
-            test-results/**
+            test-results.json
+            playwright-report/
           retention-days: 30
 
       - name: Test Summary
@@ -110,4 +112,5 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "Test runner executed. View the test results artifacts." >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Artifacts: test-results.json, test-results.png, test-failure-debug.png, test-runner.html, and page-console.log" >> $GITHUB_STEP_SUMMARY
+          echo "Artifacts: test-results.json e playwright-report/ (include screenshot e trace su failure)" >> $GITHUB_STEP_SUMMARY
+
