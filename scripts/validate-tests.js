@@ -100,12 +100,12 @@ docFiles.forEach(file => {
 
 // Check CI/CD
 console.log('\n🔄 Checking CI/CD configuration...');
-const workflowPath = path.join(__dirname, '../.github/workflows/test.yml');
+const workflowPath = path.join(__dirname, '../.github/workflows/tests.yml');
 if (fs.existsSync(workflowPath)) {
   const content = fs.readFileSync(workflowPath, 'utf8');
   const hasPlaywright = content.includes('playwright');
   const hasNodeSetup = content.includes('setup-node');
-  const hasTestCommand = content.includes('npm test');
+  const hasTestCommand = content.includes('npx playwright test') || content.includes('npm test');
   
   console.log(`  ${hasPlaywright ? '✅' : '❌'} Playwright configured`);
   console.log(`  ${hasNodeSetup ? '✅' : '❌'} Node.js setup`);
@@ -115,7 +115,7 @@ if (fs.existsSync(workflowPath)) {
     allValid = false;
   }
 } else {
-  console.log(`  ❌ test.yml - NOT FOUND`);
+  console.log(`  ❌ tests.yml - NOT FOUND`);
   allValid = false;
 }
 

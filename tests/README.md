@@ -293,7 +293,7 @@ Tests run automatically on:
 - Pull requests
 - Manual workflow dispatch
 
-See `.github/workflows/test.yml` for CI configuration.
+See `.github/workflows/tests.yml` for CI configuration.
 
 ## 📊 Test Results
 

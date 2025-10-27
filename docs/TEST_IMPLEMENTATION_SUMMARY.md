@@ -58,7 +58,7 @@ This document summarizes the comprehensive test implementation completed for Ora
 
 | File | Size | Purpose |
 |------|------|---------|
-| `.github/workflows/test.yml` | 7.1 KB | CI/CD automation |
+| `.github/workflows/tests.yml` | 7.1 KB | CI/CD automation |
 | `scripts/validate-tests.js` | 4.2 KB | Test validation tool |
 | `package.json` | Updated | Added 5 test commands |
 
