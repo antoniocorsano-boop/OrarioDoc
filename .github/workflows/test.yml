@@ -112,3 +112,4 @@ EOF
           echo "Test runner executed. View the test results artifacts." >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "Artifacts: test-results.json, playwright-report/, e altri file utili se presenti." >> $GITHUB_STEP_SUMMARY
+          
