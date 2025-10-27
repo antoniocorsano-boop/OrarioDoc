@@ -47,6 +47,7 @@ Per istruzioni dettagliate, consulta **[docs/QUICKSTART.md](docs/QUICKSTART.md)*
 - **[ROADMAP.md](ROADMAP.md)** - Piano di sviluppo completo con 11 subtask
 - **[CHANGELOG.md](CHANGELOG.md)** - Storico versioni e modifiche
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** - Guida per contributori
+- **[FAQ.md](docs/FAQ.md)** - Domande frequenti
 - **[docs/](docs/)** - Documentazione tecnica dettagliata
   - [ARCHITECTURE.md](docs/ARCHITECTURE.md) - Architettura del sistema
   - [THEMES.md](docs/THEMES.md) - Sistema temi Material Design 3
@@ -55,6 +56,7 @@ Per istruzioni dettagliate, consulta **[docs/QUICKSTART.md](docs/QUICKSTART.md)*
   - [RESPONSIVE.md](docs/RESPONSIVE.md) - Design responsive
   - [PERFORMANCE.md](docs/PERFORMANCE.md) - Ottimizzazioni performance
   - [TEST_STRATEGY.md](docs/TEST_STRATEGY.md) - Strategia testing
+  - [QUICKSTART.md](docs/QUICKSTART.md) - Guida rapida sviluppatori
 
 ## 🗺️ Stato Sviluppo
 
@@ -281,9 +283,10 @@ Questo progetto è rilasciato sotto licenza [MIT](LICENSE).
 ## 📧 Supporto e Contatti
 
 Per domande, supporto o segnalazioni:
+- Consulta le [FAQ](docs/FAQ.md) - Domande frequenti
 - Apri una [Issue](https://github.com/antoniocorsano-boop/OrarioDoc/issues)
 - Consulta la [documentazione](docs/)
-- Leggi le [FAQ](docs/THEMES.md#faq) nella documentazione temi
+- Leggi le [linee guida](CONTRIBUTING.md) per contributi
 
 ---
 
