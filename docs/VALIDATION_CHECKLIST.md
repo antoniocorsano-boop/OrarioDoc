@@ -327,7 +327,7 @@ This document provides a comprehensive manual testing checklist for verifying th
        data.lessons.push({
          id: 'test-' + i,
          name: 'Lesson ' + i,
-         day: i % 7,
+         day: (i % 5) + 1,  // Days 1-5 (Mon-Fri)
          start: '08:00',
          duration: 60
        });

@@ -55,7 +55,11 @@ try {
   check('schedule-grid.js has renderLessons', scheduleGridContent.includes('renderLessons'));
   check('schedule-grid.js exports ScheduleGrid', scheduleGridContent.includes('window.ScheduleGrid'));
 } catch (e) {
-  check('schedule-grid.js readable', false, e.message);
+  if (e.code === 'ENOENT') {
+    check('schedule-grid.js exists', false, 'File not found');
+  } else {
+    check('schedule-grid.js readable', false, `Read error: ${e.message}`);
+  }
 }
 
 // Check storage.js exports
@@ -65,7 +69,11 @@ try {
   check('storage.js has write method', storageContent.includes('write'));
   check('storage.js exports Storage', storageContent.includes('Storage'));
 } catch (e) {
-  check('storage.js readable', false, e.message);
+  if (e.code === 'ENOENT') {
+    check('storage.js exists', false, 'File not found');
+  } else {
+    check('storage.js readable', false, `Read error: ${e.message}`);
+  }
 }
 
 // Check indexeddb.js exports
@@ -75,7 +83,11 @@ try {
   check('indexeddb.js has migrateFromLocalStorage', indexedDBContent.includes('migrateFromLocalStorage'));
   check('indexeddb.js exports IndexedDBStorage', indexedDBContent.includes('window.IndexedDBStorage'));
 } catch (e) {
-  check('indexeddb.js readable', false, e.message);
+  if (e.code === 'ENOENT') {
+    check('indexeddb.js exists', false, 'File not found');
+  } else {
+    check('indexeddb.js readable', false, `Read error: ${e.message}`);
+  }
 }
 
 // Check main.js has required functions
@@ -89,7 +101,11 @@ try {
   check('main.js has hidePanel', mainContent.includes('hidePanel'));
   check('main.js has trapFocus', mainContent.includes('trapFocus'));
 } catch (e) {
-  check('main.js readable', false, e.message);
+  if (e.code === 'ENOENT') {
+    check('main.js exists', false, 'File not found');
+  } else {
+    check('main.js readable', false, `Read error: ${e.message}`);
+  }
 }
 
 console.log('\n🎯 Test File Validation:\n');
@@ -108,7 +124,11 @@ try {
   const testCount = testMatches ? testMatches.length : 0;
   check(`Test file has multiple test cases (${testCount} found)`, testCount > 20);
 } catch (e) {
-  check('Test file readable', false, e.message);
+  if (e.code === 'ENOENT') {
+    check('Test file exists', false, 'File not found');
+  } else {
+    check('Test file readable', false, `Read error: ${e.message}`);
+  }
 }
 
 console.log('\n📚 Documentation Validation:\n');
@@ -120,7 +140,11 @@ try {
   check('SCHEDULE_GRID.md has accessibility section', scheduleGridDoc.includes('Accessibilità'));
   check('SCHEDULE_GRID.md has examples', scheduleGridDoc.includes('Esempio'));
 } catch (e) {
-  check('SCHEDULE_GRID.md readable', false, e.message);
+  if (e.code === 'ENOENT') {
+    check('SCHEDULE_GRID.md exists', false, 'File not found');
+  } else {
+    check('SCHEDULE_GRID.md readable', false, `Read error: ${e.message}`);
+  }
 }
 
 try {
@@ -129,7 +153,11 @@ try {
   check('DATA_PERSISTENCE.md has API usage', persistenceDoc.includes('API Usage'));
   check('DATA_PERSISTENCE.md has fallback strategy', persistenceDoc.includes('Fallback Strategy'));
 } catch (e) {
-  check('DATA_PERSISTENCE.md readable', false, e.message);
+  if (e.code === 'ENOENT') {
+    check('DATA_PERSISTENCE.md exists', false, 'File not found');
+  } else {
+    check('DATA_PERSISTENCE.md readable', false, `Read error: ${e.message}`);
+  }
 }
 
 try {
@@ -137,7 +165,11 @@ try {
   check('VALIDATION_CHECKLIST.md has test categories', validationDoc.includes('Test Categories'));
   check('VALIDATION_CHECKLIST.md has checklist items', validationDoc.includes('- [ ]'));
 } catch (e) {
-  check('VALIDATION_CHECKLIST.md readable', false, e.message);
+  if (e.code === 'ENOENT') {
+    check('VALIDATION_CHECKLIST.md exists', false, 'File not found');
+  } else {
+    check('VALIDATION_CHECKLIST.md readable', false, `Read error: ${e.message}`);
+  }
 }
 
 console.log('\n' + '='.repeat(50));
