@@ -5,6 +5,7 @@
   "main": "index.html",
   "scripts": {
     "test": "playwright test",
+    "test:unit": "playwright test --config=playwright-unit.config.js",
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
     "test:validate": "node scripts/validate-tests.js",
