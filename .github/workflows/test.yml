@@ -53,40 +53,40 @@ jobs:
       - name: Create Playwright test
         run: |
           cat > playwright.config.js <<'EOF'
-module.exports = {
-  testDir: './playwright-tests',
-  timeout: 60000,
-  retries: process.env.CI ? 1 : 0,
-  use: {
-    baseURL: 'http://localhost:8080',
-    headless: true,
-    trace: 'on-first-retry',
-    screenshot: 'only-on-failure',
-    video: 'retain-on-failure'
-  },
-};
-EOF
+          module.exports = {
+          testDir: './playwright-tests',
+          timeout: 60000,
+          retries: process.env.CI ? 1 : 0,
+          use: {
+            baseURL: 'http://localhost:8080',
+            headless: true,
+            trace: 'on-first-retry',
+            screenshot: 'only-on-failure',
+            video: 'retain-on-failure'
+            },
+          };
+          EOF
           mkdir -p playwright-tests
           # keep existing test file in repo; create only if not present
           if [ ! -f playwright-tests/test-runner.spec.js ]; then
-cat > playwright-tests/test-runner.spec.js <<'EOF'
-const { test, expect } = require('@playwright/test');
-// minimal placeholder; repo already has a richer test
-test('OrarioDoc automated tests', async ({ page }) => {
-  await page.goto('/tests/test-runner.html');
-  await page.waitForLoadState('domcontentloaded');
-  await page.waitForSelector('#run-tests');
-  await page.click('#run-tests');
-  await page.waitForSelector('.status.success, .status.failed', { timeout: 120000 });
-  const stats = await page.evaluate(() => ({
-    total: parseInt(document.getElementById('stat-total')?.textContent || '0', 10),
-    passed: parseInt(document.getElementById('stat-passed')?.textContent || '0', 10),
-    failed: parseInt(document.getElementById('stat-failed')?.textContent || '0', 10),
-    skipped: parseInt(document.getElementById('stat-skipped')?.textContent || '0', 10)
-  }));
-  expect(stats.failed).toBe(0);
-});
-EOF
+            cat > playwright-tests/test-runner.spec.js <<'EOF'
+              const { test, expect } = require('@playwright/test');
+              // minimal placeholder; repo already has a richer test
+              test('OrarioDoc automated tests', async ({ page }) => {
+              await page.goto('/tests/test-runner.html');
+              await page.waitForLoadState('domcontentloaded');
+              await page.waitForSelector('#run-tests');
+              await page.click('#run-tests');
+              await page.waitForSelector('.status.success, .status.failed', { timeout: 120000 });
+             const stats = await page.evaluate(() => ({
+               total: parseInt(document.getElementById('stat-total')?.textContent || '0', 10),
+               passed: parseInt(document.getElementById('stat-passed')?.textContent || '0', 10),
+               failed: parseInt(document.getElementById('stat-failed')?.textContent || '0', 10),
+               skipped: parseInt(document.getElementById('stat-skipped')?.textContent || '0', 10)
+             }));
+             expect(stats.failed).toBe(0);
+          });
+          EOF
           fi
 
       - name: Run Playwright tests
