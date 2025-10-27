@@ -50,6 +50,7 @@ Per istruzioni dettagliate, consulta **[docs/QUICKSTART.md](docs/QUICKSTART.md)*
 - **[FAQ.md](docs/FAQ.md)** - Domande frequenti
 - **[docs/](docs/)** - Documentazione tecnica dettagliata
   - [ARCHITECTURE.md](docs/ARCHITECTURE.md) - Architettura del sistema
+  - [SCHEDULE_TABLE.md](docs/SCHEDULE_TABLE.md) - Documentazione Tabella Orario
   - [THEMES.md](docs/THEMES.md) - Sistema temi Material Design 3
   - [COMPONENTS.md](docs/COMPONENTS.md) - Componenti riutilizzabili
   - [STYLE_GUIDE.md](docs/STYLE_GUIDE.md) - Linee guida codice
@@ -185,6 +186,25 @@ Tutte definite in `theme.css`:
 - **Material Design 3** - Design system e componenti
 - **Roboto Flex** - Font variabile Google Fonts
 - **Playwright** - Test E2E automatizzati
+
+## 🧪 Testing
+
+OrarioDoc include una suite di test completa per garantire la qualità del codice:
+
+### Copertura Test Schedule Table
+- ✅ **85+ test unitari** per validazione, persistenza e conflitti
+- ✅ **45+ test modali** per interazioni e focus management
+- ✅ **40+ test navigazione** per keyboard e accessibilità
+- ✅ **Test integrazione** per flussi completi add/edit/delete
+
+### Esecuzione Test
+```bash
+npm test              # Esegui tutti i test
+npm run test:unit     # Solo test unitari
+npm run test:headed   # Test con browser visibile
+```
+
+Per dettagli completi sui test, consulta [docs/SCHEDULE_TABLE.md](docs/SCHEDULE_TABLE.md#testing).
 
 ## 👨‍💻 Per Sviluppatori
 
