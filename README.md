@@ -204,9 +204,7 @@ npm run test:unit     # Solo test unitari
 npm run test:headed   # Test con browser visibile
 ```
 
-Per dettagli completi sui test, consulta:
-- [docs/TEST_STRATEGY.md](docs/TEST_STRATEGY.md) - Strategia generale
-- [docs/SCHEDULE_TABLE.md](docs/SCHEDULE_TABLE.md#testing) - Test specifici tabella orario
+Per dettagli completi sui test, consulta [docs/SCHEDULE_TABLE.md](docs/SCHEDULE_TABLE.md#testing).
 
 ## 👨‍💻 Per Sviluppatori
 
