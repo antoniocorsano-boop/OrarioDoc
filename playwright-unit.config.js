@@ -2,10 +2,12 @@
 const { defineConfig, devices } = require('@playwright/test');
 
 /**
+ * Unit tests configuration - extends base config but with custom reporter
  * @see https://playwright.dev/docs/test-configuration
  */
 module.exports = defineConfig({
   testDir: './playwright-tests',
+  testMatch: '**/unit-tests.spec.js',
   
   /* Maximum time one test can run for */
   timeout: 120000,
@@ -22,11 +24,9 @@ module.exports = defineConfig({
   /* Opt out of parallel tests on CI */
   workers: process.env.CI ? 1 : undefined,
   
-  /* Reporter to use */
+  /* Reporter to use - list only for unit tests */
   reporter: [
-    ['html'],
     ['list'],
-    ['json', { outputFile: 'test-results.json' }]
   ],
   
   /* Shared settings for all the projects below */

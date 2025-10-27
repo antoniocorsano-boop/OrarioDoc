@@ -39,15 +39,17 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
       
-      - name: Start local server
-        run: |
-          python3 -m http.server 8080 &
-          sleep 2
-      
-      - name: Run Playwright tests
-        run: npm test
+      - name: Run unit tests on pull requests
+        if: github.event_name == 'pull_request'
+        run: npm run test:unit
         continue-on-error: true
         id: playwright_tests
+      
+      - name: Run all tests on main branch
+        if: github.event_name != 'pull_request'
+        run: npm test
+        continue-on-error: true
+        id: playwright_all_tests
       
       - name: Upload test results
         uses: actions/upload-artifact@v4
@@ -143,7 +145,7 @@ jobs:
             }
       
       - name: Fail if tests failed
-        if: steps.playwright_tests.outcome == 'failure'
+        if: steps.playwright_tests.outcome == 'failure' || steps.playwright_all_tests.outcome == 'failure'
         run: exit 1
   
   test-summary:

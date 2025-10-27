@@ -12,26 +12,26 @@
     "maxFailures": 0,
     "metadata": {
       "ci": {
-        "commitHref": "https://github.com/antoniocorsano-boop/OrarioDoc/commit/94816fe64224544248dd8d793af11bd1ab4e8333",
-        "commitHash": "94816fe64224544248dd8d793af11bd1ab4e8333",
-        "buildHref": "https://github.com/antoniocorsano-boop/OrarioDoc/actions/runs/18828366903"
+        "commitHref": "https://github.com/antoniocorsano-boop/OrarioDoc/commit/fbedc773bf3d70a40ad1568b1ef862940495b524",
+        "commitHash": "fbedc773bf3d70a40ad1568b1ef862940495b524",
+        "buildHref": "https://github.com/antoniocorsano-boop/OrarioDoc/actions/runs/18829466126"
       },
       "gitCommit": {
-        "shortHash": "94816fe",
-        "hash": "94816fe64224544248dd8d793af11bd1ab4e8333",
+        "shortHash": "fbedc77",
+        "hash": "fbedc773bf3d70a40ad1568b1ef862940495b524",
         "subject": "Initial plan",
         "body": "Initial plan\n",
         "author": {
           "name": "copilot-swe-agent[bot]",
           "email": "198982749+Copilot@users.noreply.github.com",
-          "time": 1761533934000
+          "time": 1761537928000
         },
         "committer": {
           "name": "copilot-swe-agent[bot]",
           "email": "198982749+Copilot@users.noreply.github.com",
-          "time": 1761533934000
+          "time": 1761537928000
         },
-        "branch": "copilot/implement-test-cases-for-orariodoc"
+        "branch": "copilot/update-test-scripts-and-config"
       },
       "actualWorkers": 1
     },
@@ -64,26 +64,26 @@
         "retries": 1,
         "metadata": {
           "ci": {
-            "commitHref": "https://github.com/antoniocorsano-boop/OrarioDoc/commit/94816fe64224544248dd8d793af11bd1ab4e8333",
-            "commitHash": "94816fe64224544248dd8d793af11bd1ab4e8333",
-            "buildHref": "https://github.com/antoniocorsano-boop/OrarioDoc/actions/runs/18828366903"
+            "commitHref": "https://github.com/antoniocorsano-boop/OrarioDoc/commit/fbedc773bf3d70a40ad1568b1ef862940495b524",
+            "commitHash": "fbedc773bf3d70a40ad1568b1ef862940495b524",
+            "buildHref": "https://github.com/antoniocorsano-boop/OrarioDoc/actions/runs/18829466126"
           },
           "gitCommit": {
-            "shortHash": "94816fe",
-            "hash": "94816fe64224544248dd8d793af11bd1ab4e8333",
+            "shortHash": "fbedc77",
+            "hash": "fbedc773bf3d70a40ad1568b1ef862940495b524",
             "subject": "Initial plan",
             "body": "Initial plan\n",
             "author": {
               "name": "copilot-swe-agent[bot]",
               "email": "198982749+Copilot@users.noreply.github.com",
-              "time": 1761533934000
+              "time": 1761537928000
             },
             "committer": {
               "name": "copilot-swe-agent[bot]",
               "email": "198982749+Copilot@users.noreply.github.com",
-              "time": 1761533934000
+              "time": 1761537928000
             },
-            "branch": "copilot/implement-test-cases-for-orariodoc"
+            "branch": "copilot/update-test-scripts-and-config"
           },
           "actualWorkers": 1
         },
@@ -102,7 +102,11 @@
     "updateSourceMethod": "patch",
     "version": "1.56.1",
     "workers": 1,
-    "webServer": null
+    "webServer": {
+      "command": "python3 -m http.server 8080",
+      "port": 8080,
+      "reuseExistingServer": false
+    }
   },
   "suites": [
     {
@@ -113,7 +117,7 @@
       "specs": [
         {
           "title": "OrarioDoc automated tests",
-          "ok": false,
+          "ok": true,
           "tags": [],
           "tests": [
             {
@@ -126,53 +130,22 @@
                 {
                   "workerIndex": 0,
                   "parallelIndex": 0,
-                  "status": "failed",
-                  "duration": 4,
-                  "error": {
-                    "message": "Error: browserType.launch: Executable doesn't exist at /home/runner/.cache/ms-playwright/chromium_headless_shell-1194/chrome-linux/headless_shell\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                    "stack": "Error: browserType.launch: Executable doesn't exist at /home/runner/.cache/ms-playwright/chromium_headless_shell-1194/chrome-linux/headless_shell\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                  },
-                  "errors": [
+                  "status": "passed",
+                  "duration": 1646,
+                  "errors": [],
+                  "stdout": [
                     {
-                      "message": "Error: browserType.launch: Executable doesn't exist at /home/runner/.cache/ms-playwright/chromium_headless_shell-1194/chrome-linux/headless_shell\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                      "text": "Test Results: { total: \u001b[33m18\u001b[39m, passed: \u001b[33m18\u001b[39m, failed: \u001b[33m0\u001b[39m, skipped: \u001b[33m0\u001b[39m, failedItems: [] }\n"
                     }
                   ],
-                  "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2025-10-27T03:01:25.179Z",
+                  "startTime": "2025-10-27T04:16:29.407Z",
                   "annotations": [],
                   "attachments": []
-                },
-                {
-                  "workerIndex": 1,
-                  "parallelIndex": 0,
-                  "status": "failed",
-                  "duration": 5,
-                  "error": {
-                    "message": "Error: browserType.launch: Executable doesn't exist at /home/runner/.cache/ms-playwright/chromium_headless_shell-1194/chrome-linux/headless_shell\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
-                    "stack": "Error: browserType.launch: Executable doesn't exist at /home/runner/.cache/ms-playwright/chromium_headless_shell-1194/chrome-linux/headless_shell\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                  },
-                  "errors": [
-                    {
-                      "message": "Error: browserType.launch: Executable doesn't exist at /home/runner/.cache/ms-playwright/chromium_headless_shell-1194/chrome-linux/headless_shell\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
-                    }
-                  ],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 1,
-                  "startTime": "2025-10-27T03:01:25.778Z",
-                  "annotations": [],
-                  "attachments": [
-                    {
-                      "name": "trace",
-                      "contentType": "application/zip",
-                      "path": "/home/runner/work/OrarioDoc/OrarioDoc/test-results/test-runner-OrarioDoc-automated-tests-chromium-retry1/trace.zip"
-                    }
-                  ]
                 }
               ],
-              "status": "unexpected"
+              "status": "expected"
             }
           ],
           "id": "77339129e3eb1659e266-8a45369f0d91c222b7d3",
@@ -181,15 +154,61 @@
           "column": 1
         }
       ]
+    },
+    {
+      "title": "unit-tests.spec.js",
+      "file": "unit-tests.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "OrarioDoc unit tests",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2154,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Unit Test Results: { total: \u001b[33m33\u001b[39m, passed: \u001b[33m33\u001b[39m, failed: \u001b[33m0\u001b[39m, skipped: \u001b[33m0\u001b[39m, failedItems: [] }\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2025-10-27T04:16:31.146Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "36eeeb05938298e40cee-422de271b858860bc193",
+          "file": "unit-tests.spec.js",
+          "line": 5,
+          "column": 1
+        }
+      ]
     }
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-10-27T03:01:24.557Z",
-    "duration": 1284.373,
-    "expected": 0,
+    "startTime": "2025-10-27T04:16:28.611Z",
+    "duration": 4745.055,
+    "expected": 2,
     "skipped": 0,
-    "unexpected": 1,
+    "unexpected": 0,
     "flaky": 0
   }
 }
