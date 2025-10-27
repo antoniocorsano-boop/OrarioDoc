@@ -71,25 +71,24 @@ jobs:
           # keep existing test file in repo; create only if not present
           if [ ! -f playwright-tests/test-runner.spec.js ]; then
             cat > playwright-tests/test-runner.spec.js <<'EOF'
-const { test, expect } = require('@playwright/test');
-// minimal placeholder; repo already has a richer test
-test('OrarioDoc automated tests', async ({ page }) => {
-  await page.goto('/tests/test-runner.html');
-  await page.waitForLoadState('domcontentloaded');
-  await page.waitForSelector('#run-tests');
-  await page.click('#run-tests');
-  await page.waitForSelector('.status.success, .status.failed', { timeout: 120000 });
-  const stats = await page.evaluate(() => ({
-    total: parseInt(document.getElementById('stat-total')?.textContent || '0', 10),
-    passed: parseInt(document.getElementById('stat-passed')?.textContent || '0', 10),
-    failed: parseInt(document.getElementById('stat-failed')?.textContent || '0', 10),
-    skipped: parseInt(document.getElementById('stat-skipped')?.textContent || '0', 10)
-  }));
-  expect(stats.failed).toBe(0);
-});
-EOF
-          fi
-
+            const { test, expect } = require('@playwright/test');
+            // minimal placeholder; repo already has a richer test
+            test('OrarioDoc automated tests', async ({ page }) => {
+            await page.goto('/tests/test-runner.html');
+            await page.waitForLoadState('domcontentloaded');
+            await page.waitForSelector('#run-tests');
+            await page.click('#run-tests');
+            await page.waitForSelector('.status.success, .status.failed', { timeout: 120000 });
+            const stats = await page.evaluate(() => ({
+            total: parseInt(document.getElementById('stat-total')?.textContent || '0', 10),
+            passed: parseInt(document.getElementById('stat-passed')?.textContent || '0', 10),
+            failed: parseInt(document.getElementById('stat-failed')?.textContent || '0', 10),
+            skipped: parseInt(document.getElementById('stat-skipped')?.textContent || '0', 10)
+          }));
+          expect(stats.failed).toBe(0);
+          });
+          EOF
+          
       - name: Run Playwright tests
         run: |
           # Run committed tests; produce JSON report too for artifacts
