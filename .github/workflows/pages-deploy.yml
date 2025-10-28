@@ -30,3 +30,4 @@ jobs:
           publish_dir: .
           publish_branch: gh-pages
           force_orphan: true
+          exclude_assets: 'node_modules,.git,.github,test-results,playwright-report,.npm'

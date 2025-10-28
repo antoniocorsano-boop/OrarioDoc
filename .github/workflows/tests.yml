@@ -29,7 +29,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-npm-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-npm-
       
@@ -37,7 +37,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-playwright-
       
@@ -53,15 +53,24 @@ jobs:
           REPO_NAME="${{ github.event.repository.name }}"
           PAGES_URL="https://${{ github.repository_owner }}.github.io/${REPO_NAME}"
           
-          echo "Checking if GitHub Pages is available at: ${PAGES_URL}/tests/test-runner.html"
+          echo "Checking if GitHub Pages is available at: ${PAGES_URL}"
           
-          # Check if GitHub Pages serves the test runner
-          if curl -s -o /dev/null -w "%{http_code}" "${PAGES_URL}/tests/test-runner.html" | grep -q "200"; then
-            echo "GitHub Pages is available, using it for tests"
-            echo "BASE_URL=${PAGES_URL}" >> $GITHUB_ENV
-            echo "USE_PAGES=true" >> $GITHUB_ENV
+          # Check if GitHub Pages root is accessible and then verify test-runner.html exists
+          ROOT_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${PAGES_URL}/")
+          if [ "$ROOT_STATUS" = "200" ]; then
+            # Root is accessible, now check if test-runner.html exists
+            TEST_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${PAGES_URL}/tests/test-runner.html")
+            if [ "$TEST_STATUS" = "200" ]; then
+              echo "GitHub Pages is available with test-runner.html, using it for tests"
+              echo "BASE_URL=${PAGES_URL}" >> $GITHUB_ENV
+              echo "USE_PAGES=true" >> $GITHUB_ENV
+            else
+              echo "GitHub Pages root accessible but test-runner.html not found (status: ${TEST_STATUS})"
+              echo "BASE_URL=http://localhost:8080" >> $GITHUB_ENV
+              echo "USE_PAGES=false" >> $GITHUB_ENV
+            fi
           else
-            echo "GitHub Pages not available, will use local server"
+            echo "GitHub Pages not available (status: ${ROOT_STATUS}), will use local server"
             echo "BASE_URL=http://localhost:8080" >> $GITHUB_ENV
             echo "USE_PAGES=false" >> $GITHUB_ENV
           fi
@@ -99,7 +108,7 @@ jobs:
           echo "BASE_URL used: ${{ env.BASE_URL }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           
-          if [ -f "test-results/test-results.json" ]; then
+          if [ -f "test-results.json" ]; then
             echo "Test execution completed!" >> $GITHUB_STEP_SUMMARY
           else
             echo "Test results not found." >> $GITHUB_STEP_SUMMARY
