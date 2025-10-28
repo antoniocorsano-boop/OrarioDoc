@@ -62,6 +62,9 @@ module.exports = defineConfig({
   webServer: {
     command: 'python3 -m http.server 8080',
     port: 8080,
+    timeout: 30000,
     reuseExistingServer: !process.env.CI,
+    stdout: 'ignore',
+    stderr: 'pipe',
   },
 });
