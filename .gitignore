@@ -168,12 +168,7 @@ coverage/
 test-results/
 playwright-report/
 playwright/.cache/
-playwright-tests/
-playwright.config.js
 test-results.png
-
-# Package lock (for CI/CD temporary installations)
-package-lock.json
 
 # Temporary files
 *.tmp

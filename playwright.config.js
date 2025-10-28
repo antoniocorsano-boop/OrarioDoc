@@ -32,7 +32,7 @@ module.exports = defineConfig({
   /* Shared settings for all the projects below */
   use: {
     /* Base URL to use in actions like `await page.goto('/')` */
-    baseURL: 'http://localhost:8080',
+    baseURL: process.env.BASE_URL || 'http://localhost:8080',
     
     /* Run browser in headless mode */
     headless: true,
@@ -57,11 +57,4 @@ module.exports = defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
   ],
-
-  /* Run your local dev server before starting the tests */
-  webServer: {
-    command: 'python3 -m http.server 8080',
-    port: 8080,
-    reuseExistingServer: !process.env.CI,
-  },
 });
