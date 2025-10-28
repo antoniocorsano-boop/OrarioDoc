@@ -38,11 +38,7 @@ test.describe('Data Persistence', () => {
     
     // Reload page and verify data persists
     await page.reload();
-    await page.waitForLoadState('domcontentloaded');
-    
-    // Wait for grid to be rendered
-    await page.waitForSelector('#scheduleGrid', { state: 'visible' });
-    await page.waitForTimeout(500); // Allow time for storage load and render
+    await page.waitForLoadState('networkidle');
     
     const lessonAfterReload = await page.locator('.item:has-text("Matematica")').count();
     expect(lessonAfterReload).toBeGreaterThan(0);
@@ -81,8 +77,7 @@ test.describe('Data Persistence', () => {
     
     // Reload and verify all lessons persist
     await page.reload();
-    await page.waitForLoadState('domcontentloaded');
-    await page.waitForTimeout(500); // Allow time for storage load and render
+    await page.waitForLoadState('networkidle');
     
     for (const lesson of lessons) {
       const count = await page.locator(`.item:has-text("${lesson.name}")`).count();
@@ -108,10 +103,7 @@ test.describe('Data Persistence', () => {
     
     // Reload to trigger migration
     await page.reload();
-    await page.waitForLoadState('domcontentloaded');
-    
-    // Wait for migration to complete
-    await page.waitForTimeout(1000);
+    await page.waitForLoadState('networkidle');
     
     // Verify lesson appears (from migrated data)
     const lessonCount = await page.locator('.item:has-text("Storia")').count();
@@ -150,8 +142,7 @@ test.describe('Data Persistence', () => {
     
     // Reload and verify update persisted
     await page.reload();
-    await page.waitForLoadState('domcontentloaded');
-    await page.waitForTimeout(500); // Allow time for storage load and render
+    await page.waitForLoadState('networkidle');
     
     const updatedLesson = await page.locator('.item:has-text("Chimica Organica")').count();
     expect(updatedLesson).toBeGreaterThan(0);
@@ -193,8 +184,7 @@ test.describe('Data Persistence', () => {
     
     // Reload and verify deletion persisted
     await page.reload();
-    await page.waitForLoadState('domcontentloaded');
-    await page.waitForTimeout(500); // Allow time for storage load and render
+    await page.waitForLoadState('networkidle');
     
     const lessonAfterReload = await page.locator('.item:has-text("Geografia")').count();
     expect(lessonAfterReload).toBe(0);
