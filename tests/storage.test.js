@@ -132,7 +132,7 @@ describe('Storage Module', () => {
   
   // Storage capacity tests
   test('should report when storage is available', () => {
-    expect(typeof Storage).toBe('function');
+    expect(typeof localStorage).toBe('object');
     expect(localStorage).toBeDefined();
   });
   
