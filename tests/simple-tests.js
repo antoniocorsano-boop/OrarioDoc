@@ -124,26 +124,32 @@ SimpleTest.test('Toast can create notification', () => {
   
   const container = document.getElementById('toast-container');
   assert(container !== null, 'Toast container should be created');
+  assert(container.parentElement === document.body, 'Container should be in body');
   
   // Clean up
   if (container) container.remove();
 });
 
 SimpleTest.test('Toast creates correct type classes', () => {
+  // Clean up
   const existing = document.getElementById('toast-container');
   if (existing) existing.remove();
   
   Toast.showToast('Success', 'success');
   
-  const toast = document.querySelector('.toast--success');
+  // Wait for toast to be added to DOM
+  const container = document.getElementById('toast-container');
+  assert(container !== null, 'Toast container should exist');
+  
+  const toast = container.querySelector('.toast--success');
   assert(toast !== null, 'Toast should have success class');
   
   // Clean up
-  const container = document.getElementById('toast-container');
   if (container) container.remove();
 });
 
 SimpleTest.test('Toast has accessibility attributes', () => {
+  // Clean up
   const existing = document.getElementById('toast-container');
   if (existing) existing.remove();
   
@@ -151,6 +157,7 @@ SimpleTest.test('Toast has accessibility attributes', () => {
   
   const container = document.getElementById('toast-container');
   assert(container !== null, 'Toast container should exist');
+  assert(container.parentElement === document.body, 'Container should be attached to DOM');
   
   const ariaLive = container.getAttribute('aria-live');
   assertEqual(ariaLive, 'polite', 'Should have aria-live="polite"');
