@@ -48,6 +48,7 @@ jobs:
         run: npx playwright install --with-deps chromium
       
       - name: Determine BASE_URL
+        id: base-url
         run: |
           # Construct GitHub Pages URL
           REPO_NAME="${{ github.event.repository.name }}"
@@ -63,31 +64,33 @@ jobs:
             if [ "$TEST_STATUS" = "200" ]; then
               echo "GitHub Pages is available with test-runner.html, using it for tests"
               echo "BASE_URL=${PAGES_URL}" >> $GITHUB_ENV
-              echo "USE_PAGES=true" >> $GITHUB_ENV
+              echo "use_pages=true" >> $GITHUB_OUTPUT
             else
               echo "GitHub Pages root accessible but test-runner.html not found (status: ${TEST_STATUS})"
               echo "BASE_URL=http://localhost:8080" >> $GITHUB_ENV
-              echo "USE_PAGES=false" >> $GITHUB_ENV
+              echo "use_pages=false" >> $GITHUB_OUTPUT
             fi
           else
             echo "GitHub Pages not available (status: ${ROOT_STATUS}), will use local server"
             echo "BASE_URL=http://localhost:8080" >> $GITHUB_ENV
-            echo "USE_PAGES=false" >> $GITHUB_ENV
+            echo "use_pages=false" >> $GITHUB_OUTPUT
           fi
       
       - name: Setup Python (if local server needed)
-        if: env.USE_PAGES == 'false'
+        if: steps.base-url.outputs.use_pages == 'false'
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
       
       - name: Start local HTTP server (if needed)
-        if: env.USE_PAGES == 'false'
+        if: steps.base-url.outputs.use_pages == 'false'
         run: |
           cd ${{ github.workspace }}
           python3 -m http.server 8080 &
-          sleep 2
+          sleep 3
           echo "Server started on port 8080"
+          # Verify server is responding
+          curl -s http://localhost:8080/ > /dev/null && echo "Server is responding" || echo "Server not responding"
       
       - name: Run Playwright tests
         run: npx playwright test
