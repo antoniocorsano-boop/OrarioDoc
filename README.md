@@ -53,6 +53,8 @@ Per istruzioni dettagliate, consulta **[docs/QUICKSTART.md](docs/QUICKSTART.md)*
   - [SCHEDULE_TABLE.md](docs/SCHEDULE_TABLE.md) - Documentazione Tabella Orario
   - [THEMES.md](docs/THEMES.md) - Sistema temi Material Design 3
   - [COMPONENTS.md](docs/COMPONENTS.md) - Componenti riutilizzabili
+  - [SCHEDULE_GRID.md](docs/SCHEDULE_GRID.md) - Componente griglia orario
+  - [DATA_PERSISTENCE.md](docs/DATA_PERSISTENCE.md) - Pattern persistenza dati
   - [STYLE_GUIDE.md](docs/STYLE_GUIDE.md) - Linee guida codice
   - [RESPONSIVE.md](docs/RESPONSIVE.md) - Design responsive
   - [PERFORMANCE.md](docs/PERFORMANCE.md) - Ottimizzazioni performance
