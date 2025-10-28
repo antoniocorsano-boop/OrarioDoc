@@ -168,6 +168,53 @@ Componente list con 3 varianti:
 </div>
 ```
 
+### 9. Tabella Orario (`orario-table/`)
+Componente complesso per visualizzare l'orario scolastico settimanale:
+- **Griglia responsive** - Layout adattivo per desktop, tablet, mobile
+- **Slot orari** - Fasce orarie configurabili
+- **Card lezioni** - Visualizzazione lezioni con colori per materia
+- **Interattività** - Click per aggiungere/modificare lezioni
+
+**Elementi:** Header giorni, Slot temporali, Card lezioni, Pulsanti add  
+**Stati:** Slot vuoti, Slot occupati, Hover, Focus  
+**Varianti colore:** Matematica (primary), Italiano (secondary), Storia/Geografia (tertiary), Lingue (error)  
+**Uso:** Visualizzazione e gestione orario settimanale
+
+**File:**
+- `src/components/orario-table/orario-table.html` - Template struttura
+- `src/components/orario-table/orario-table.css` - Stili componente
+- `src/components/orario-table/orario-table.js` - Logica e rendering
+- `src/components/orario-table/README.md` - Documentazione dettagliata
+- `src/components/orario-table/checklist.md` - Tracciamento implementazione
+
+```html
+<div id="scheduleContainer"></div>
+<script src="/src/components/orario-table/orario-table.js"></script>
+<script>
+  const orarioTable = new OrarioTable(
+    document.getElementById('scheduleContainer'),
+    {
+      startHour: 8,
+      endHour: 18,
+      showSaturday: true,
+      lessons: [
+        {
+          id: '1',
+          name: 'Matematica',
+          class: '3A',
+          subject: 'matematica',
+          day: 0,
+          time: '08:00',
+          duration: 60
+        }
+      ],
+      onLessonClick: (lesson) => console.log('Clicked:', lesson),
+      onSlotClick: ({ day, time }) => console.log('Add at:', day, time)
+    }
+  );
+</script>
+```
+
 ## 🎨 Sistema di Variabili
 
 Tutti i componenti utilizzano le variabili CSS da `theme.css`:

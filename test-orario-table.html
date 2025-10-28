@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="it" data-theme="expressive">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Tabella Orario - OrarioDoc</title>
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="/theme.css"/>
+  <link rel="stylesheet" href="/src/components/orario-table/orario-table.css"/>
+  
+  <style>
+    body {
+      font-family: var(--md-sys-typescale-font-family);
+      background-color: var(--md-sys-color-background);
+      color: var(--md-sys-color-on-background);
+      margin: 0;
+      padding: var(--md-sys-spacing-2xl);
+    }
+    
+    .test-header {
+      margin-bottom: var(--md-sys-spacing-3xl);
+    }
+    
+    .test-title {
+      font-size: var(--md-sys-typescale-headline-large-size);
+      font-weight: var(--md-sys-typescale-headline-large-weight);
+      margin: 0 0 var(--md-sys-spacing-md) 0;
+    }
+    
+    .test-description {
+      font-size: var(--md-sys-typescale-body-large-size);
+      margin: 0 0 var(--md-sys-spacing-lg) 0;
+      opacity: 0.8;
+    }
+    
+    .theme-switcher {
+      display: flex;
+      gap: var(--md-sys-spacing-sm);
+      margin-bottom: var(--md-sys-spacing-2xl);
+    }
+    
+    .theme-btn {
+      padding: var(--md-sys-spacing-sm) var(--md-sys-spacing-lg);
+      background-color: var(--md-sys-color-surface-container);
+      color: var(--md-sys-color-on-surface);
+      border: 1px solid var(--md-sys-color-outline);
+      border-radius: var(--md-sys-shape-corner-full);
+      cursor: pointer;
+      font-family: var(--md-sys-typescale-font-family);
+      font-size: var(--md-sys-typescale-label-large-size);
+      transition: all 0.2s;
+    }
+    
+    .theme-btn:hover {
+      background-color: var(--md-sys-color-surface-container-high);
+    }
+    
+    .theme-btn.active {
+      background-color: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
+      border-color: var(--md-sys-color-primary);
+    }
+    
+    .test-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    .info-box {
+      background-color: var(--md-sys-color-primary-container);
+      color: var(--md-sys-color-on-primary-container);
+      padding: var(--md-sys-spacing-lg);
+      border-radius: var(--md-sys-shape-corner-medium);
+      margin-top: var(--md-sys-spacing-3xl);
+    }
+    
+    .info-box h3 {
+      margin: 0 0 var(--md-sys-spacing-sm) 0;
+      font-size: var(--md-sys-typescale-title-medium-size);
+    }
+    
+    .info-box p {
+      margin: 0;
+      font-size: var(--md-sys-typescale-body-medium-size);
+    }
+  </style>
+</head>
+<body>
+  <div class="test-container">
+    <!-- Header -->
+    <div class="test-header">
+      <h1 class="test-title">Test Componente Tabella Orario</h1>
+      <p class="test-description">
+        Demo del componente Tabella Orario con dati di esempio. 
+        Prova a cambiare tema e ridimensionare la finestra per testare la responsività.
+      </p>
+    </div>
+    
+    <!-- Theme Switcher -->
+    <div class="theme-switcher">
+      <button class="theme-btn" data-theme="light">Light</button>
+      <button class="theme-btn" data-theme="dark">Dark</button>
+      <button class="theme-btn active" data-theme="expressive">Expressive</button>
+    </div>
+    
+    <!-- Orario Table Container -->
+    <div id="orarioContainer"></div>
+    
+    <!-- Info Box -->
+    <div class="info-box">
+      <h3>Istruzioni Test</h3>
+      <p>
+        <strong>Click su una lezione:</strong> Mostra i dettagli in console<br>
+        <strong>Click su slot vuoto (+):</strong> Mostra day e time in console<br>
+        <strong>Tastiera:</strong> Tab per navigare, Enter/Space per attivare<br>
+        <strong>Responsive:</strong> Ridimensiona la finestra per vedere gli adattamenti
+      </p>
+    </div>
+  </div>
+  
+  <!-- Script -->
+  <script src="/src/components/orario-table/orario-table.js"></script>
+  <script>
+    // Sample lessons data
+    const sampleLessons = [
+      {
+        id: '1',
+        name: 'Matematica',
+        class: '3A',
+        subject: 'matematica',
+        day: 0, // Lunedì
+        time: '08:00',
+        duration: 60
+      },
+      {
+        id: '2',
+        name: 'Italiano',
+        class: '3A',
+        subject: 'italiano',
+        day: 0,
+        time: '09:00',
+        duration: 60
+      },
+      {
+        id: '3',
+        name: 'Storia',
+        class: '3B',
+        subject: 'storia',
+        day: 1, // Martedì
+        time: '08:00',
+        duration: 60
+      },
+      {
+        id: '4',
+        name: 'Inglese',
+        class: '3A',
+        subject: 'inglese',
+        day: 1,
+        time: '10:00',
+        duration: 60
+      },
+      {
+        id: '5',
+        name: 'Matematica',
+        class: '3B',
+        subject: 'matematica',
+        day: 2, // Mercoledì
+        time: '08:00',
+        duration: 60
+      },
+      {
+        id: '6',
+        name: 'Geografia',
+        class: '3A',
+        subject: 'geografia',
+        day: 2,
+        time: '11:00',
+        duration: 60
+      },
+      {
+        id: '7',
+        name: 'Italiano',
+        class: '3B',
+        subject: 'italiano',
+        day: 3, // Giovedì
+        time: '09:00',
+        duration: 60
+      },
+      {
+        id: '8',
+        name: 'Matematica',
+        class: '3A',
+        subject: 'matematica',
+        day: 4, // Venerdì
+        time: '08:00',
+        duration: 60
+      },
+      {
+        id: '9',
+        name: 'Scienze',
+        class: '3A',
+        subject: 'default',
+        day: 4,
+        time: '10:00',
+        duration: 60
+      }
+    ];
+    
+    // Initialize OrarioTable
+    const container = document.getElementById('orarioContainer');
+    const orarioTable = new OrarioTable(container, {
+      startHour: 8,
+      endHour: 14,
+      timeSlotMinutes: 60,
+      showSaturday: true,
+      lessons: sampleLessons,
+      onLessonClick: (lesson) => {
+        console.log('📚 Lezione cliccata:', lesson);
+        alert(`Lezione: ${lesson.name}\nClasse: ${lesson.class || 'N/A'}\nDurata: ${lesson.duration} min`);
+      },
+      onSlotClick: ({ day, time }) => {
+        console.log('➕ Slot vuoto cliccato:', { day, time });
+        const dayNames = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+        alert(`Vuoi aggiungere una lezione?\nGiorno: ${dayNames[day]}\nOra: ${time}`);
+      }
+    });
+    
+    console.log('✅ OrarioTable inizializzata con successo!');
+    console.log('📊 Lezioni caricate:', sampleLessons.length);
+    
+    // Theme switcher
+    const themeBtns = document.querySelectorAll('.theme-btn');
+    themeBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const theme = btn.dataset.theme;
+        document.documentElement.setAttribute('data-theme', theme);
+        
+        // Update active state
+        themeBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        console.log('🎨 Tema cambiato:', theme);
+      });
+    });
+  </script>
+</body>
+</html>

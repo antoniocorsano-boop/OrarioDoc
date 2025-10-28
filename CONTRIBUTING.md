@@ -85,9 +85,12 @@ Le richieste di funzionalità sono benvenute! Prima di proporre una nuova funzio
 
 3. **Testa le modifiche**:
    ```bash
+   # Avvia server locale
+   python3 -m http.server 8080
+   
+   # In altra finestra: esegui test
    npm test
-   npm run lint
-   npm run build
+   npm run test:unit
    ```
 
 4. **Commit** le modifiche con messaggi chiari:
@@ -130,9 +133,9 @@ Le richieste di funzionalità sono benvenute! Prima di proporre una nuova funzio
 
 - Scrivi test per ogni nuova funzionalità
 - Mantieni la copertura dei test sopra l'80%
-- Usa test unitari per la logica isolata
-- Usa test di integrazione per i componenti React
+- Usa Playwright per test E2E
 - Testa l'accessibilità con jest-axe
+- Esegui test con: `npm test`, `npm run test:unit`, `npm run test:headed`
 
 ### Commit Messages
 
@@ -202,10 +205,12 @@ Una PR sarà mergiata se:
 
 ## Risorse utili
 
-- [Guida React](https://react.dev/)
+- [Documentazione OrarioDoc](docs/)
+- [Material Design 3](https://m3.material.io/)
 - [WCAG 2.1 Guidelines](https://www.w3.org/WAI/WCAG21/quickref/)
 - [Conventional Commits](https://www.conventionalcommits.org/)
 - [Progressive Web Apps](https://web.dev/progressive-web-apps/)
+- [Playwright Testing](https://playwright.dev/)
 
 ## Domande?
 

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OrarioDoc - Unit Test Runner</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    h1 {
+      color: #333;
+      border-bottom: 3px solid #6750a4;
+      padding-bottom: 10px;
+    }
+    .controls {
+      margin: 20px 0;
+      padding: 15px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    button {
+      background: #6750a4;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+    }
+    button:hover {
+      background: #5a43a0;
+    }
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    .stats {
+      display: flex;
+      gap: 20px;
+      margin: 20px 0;
+    }
+    .stat {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      flex: 1;
+      text-align: center;
+    }
+    .stat-label {
+      font-size: 14px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .stat-value {
+      font-size: 32px;
+      font-weight: bold;
+      margin-top: 8px;
+    }
+    #stat-passed { color: #4caf50; }
+    #stat-failed { color: #f44336; }
+    #stat-skipped { color: #ff9800; }
+    #stat-total { color: #2196f3; }
+    .status {
+      padding: 10px 20px;
+      border-radius: 4px;
+      margin: 20px 0;
+      font-weight: 500;
+      display: none;
+    }
+    .status.success {
+      background: #e8f5e9;
+      color: #2e7d32;
+      border-left: 4px solid #4caf50;
+      display: block;
+    }
+    .status.failed {
+      background: #ffebee;
+      color: #c62828;
+      border-left: 4px solid #f44336;
+      display: block;
+    }
+    .status.running {
+      background: #e3f2fd;
+      color: #1565c0;
+      border-left: 4px solid #2196f3;
+      display: block;
+    }
+    #results {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin: 20px 0;
+    }
+    .test {
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 4px;
+      border-left: 4px solid #ddd;
+    }
+    .test.pass {
+      background: #e8f5e9;
+      border-left-color: #4caf50;
+    }
+    .test.fail {
+      background: #ffebee;
+      border-left-color: #f44336;
+    }
+    .test.skip {
+      background: #fff3e0;
+      border-left-color: #ff9800;
+    }
+    .test-name {
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+    .test-error {
+      color: #c62828;
+      font-size: 14px;
+      font-family: monospace;
+      margin-top: 8px;
+      padding: 8px;
+      background: #fff;
+      border-radius: 4px;
+    }
+    .progress {
+      height: 6px;
+      background: #e0e0e0;
+      border-radius: 3px;
+      overflow: hidden;
+      margin: 20px 0;
+    }
+    .progress-bar {
+      height: 100%;
+      background: #6750a4;
+      width: 0;
+      transition: width 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+  <h1>OrarioDoc Unit Test Runner</h1>
+  
+  <div class="controls">
+    <button id="run-tests">Run Unit Tests</button>
+  </div>
+
+  <div class="progress" id="progress" style="display:none;">
+    <div class="progress-bar" id="progress-bar"></div>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-label">Total</div>
+      <div class="stat-value" id="stat-total">0</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Passed</div>
+      <div class="stat-value" id="stat-passed">0</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Failed</div>
+      <div class="stat-value" id="stat-failed">0</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Skipped</div>
+      <div class="stat-value" id="stat-skipped">0</div>
+    </div>
+  </div>
+
+  <div class="status" id="status"></div>
+
+  <div id="results"></div>
+
+  <script>
+    // Simple test framework
+    class TestRunner {
+      constructor() {
+        this.tests = [];
+        this.results = {
+          total: 0,
+          passed: 0,
+          failed: 0,
+          skipped: 0
+        };
+      }
+
+      test(name, fn) {
+        this.tests.push({ name, fn });
+      }
+
+      async run() {
+        const resultsDiv = document.getElementById('results');
+        const statusDiv = document.getElementById('status');
+        const runButton = document.getElementById('run-tests');
+        const progressBar = document.getElementById('progress-bar');
+        const progressDiv = document.getElementById('progress');
+        
+        resultsDiv.innerHTML = '';
+        runButton.disabled = true;
+        progressDiv.style.display = 'block';
+        
+        statusDiv.className = 'status running';
+        statusDiv.textContent = 'Running unit tests...';
+        
+        this.results = { total: 0, passed: 0, failed: 0, skipped: 0 };
+        
+        for (let i = 0; i < this.tests.length; i++) {
+          const { name, fn } = this.tests[i];
+          const progress = ((i + 1) / this.tests.length) * 100;
+          progressBar.style.width = progress + '%';
+          
+          const testDiv = document.createElement('div');
+          testDiv.className = 'test';
+          testDiv.innerHTML = `<div class="test-name">${name}</div>`;
+          resultsDiv.appendChild(testDiv);
+          
+          this.results.total++;
+          this.updateStats();
+          
+          try {
+            await fn();
+            testDiv.classList.add('pass');
+            testDiv.innerHTML += `<div style="color: #4caf50;">✓ Passed</div>`;
+            this.results.passed++;
+          } catch (error) {
+            testDiv.classList.add('fail');
+            testDiv.innerHTML += `<div style="color: #f44336;">✗ Failed</div>`;
+            testDiv.innerHTML += `<div class="test-error">${error.message}</div>`;
+            this.results.failed++;
+          }
+          
+          this.updateStats();
+          
+          // Small delay between tests for visibility
+          await new Promise(resolve => setTimeout(resolve, 50));
+        }
+        
+        runButton.disabled = false;
+        progressDiv.style.display = 'none';
+        
+        if (this.results.failed === 0) {
+          statusDiv.className = 'status success';
+          statusDiv.textContent = `All unit tests passed! (${this.results.passed}/${this.results.total})`;
+        } else {
+          statusDiv.className = 'status failed';
+          statusDiv.textContent = `${this.results.failed} unit test(s) failed`;
+        }
+      }
+
+      updateStats() {
+        document.getElementById('stat-total').textContent = this.results.total;
+        document.getElementById('stat-passed').textContent = this.results.passed;
+        document.getElementById('stat-failed').textContent = this.results.failed;
+        document.getElementById('stat-skipped').textContent = this.results.skipped;
+      }
+    }
+
+    // Create test runner instance
+    const runner = new TestRunner();
+
+    // Helper functions
+    function assert(condition, message) {
+      if (!condition) {
+        throw new Error(message || 'Assertion failed');
+      }
+    }
+
+    function assertEqual(actual, expected, message) {
+      if (actual !== expected) {
+        throw new Error(message || `Expected ${expected}, got ${actual}`);
+      }
+    }
+
+    function assertNotNull(value, message) {
+      if (value === null || value === undefined) {
+        throw new Error(message || 'Value is null or undefined');
+      }
+    }
+
+    // Make runner globally available
+    window.runner = runner;
+  </script>
+  
+  <!-- Load unit tests for core OrarioDoc functionality -->
+  <script src="unit-tests.js"></script>
+  <script src="modal-persistence-tests.js"></script>
+  <script src="keyboard-navigation-tests.js"></script>
+  
+  <script>
+    // Set up event listeners
+    document.getElementById('run-tests').addEventListener('click', () => {
+      runner.run();
+    });
+
+    // Auto-run tests on page load (useful for automated testing)
+    window.addEventListener('load', () => {
+      // Small delay to ensure everything is loaded
+      setTimeout(() => {
+        document.getElementById('run-tests').click();
+      }, 100);
+    });
+  </script>
+</body>
+</html>

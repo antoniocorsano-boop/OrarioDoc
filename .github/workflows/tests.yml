@@ -45,7 +45,7 @@ jobs:
       
       - name: Create Playwright test
         run: |
-          cat > playwright.config.js << 'EOF'
+          cat > playwright.config.js <<'EOF'
           module.exports = {
             testDir: './playwright-tests',
             timeout: 30000,
