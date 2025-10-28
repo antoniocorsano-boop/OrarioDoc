@@ -3,439 +3,435 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OrarioDoc - Test Runner</title>
+  <title>OrarioDoc Test Runner</title>
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+      padding: 20px;
+    }
+    
+    .container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 20px;
-      background: #f5f5f5;
-    }
-    h1 {
-      color: #333;
-      border-bottom: 3px solid #6750a4;
-      padding-bottom: 10px;
-    }
-    .controls {
-      margin: 20px 0;
-      padding: 15px;
       background: white;
+      padding: 30px;
       border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-    button {
-      background: #6750a4;
-      color: white;
-      border: none;
-      padding: 12px 24px;
+    
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+    
+    .subtitle {
+      color: #7f8c8d;
+      margin-bottom: 30px;
+    }
+    
+    .status {
+      padding: 15px;
       border-radius: 4px;
-      cursor: pointer;
-      font-size: 16px;
+      margin-bottom: 20px;
       font-weight: 500;
     }
-    button:hover {
-      background: #5a43a0;
+    
+    .status.running {
+      background: #3498db;
+      color: white;
     }
-    button:disabled {
-      background: #ccc;
-      cursor: not-allowed;
+    
+    .status.success {
+      background: #2ecc71;
+      color: white;
     }
+    
+    .status.failed {
+      background: #e74c3c;
+      color: white;
+    }
+    
     .stats {
-      display: flex;
-      gap: 20px;
-      margin: 20px 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-bottom: 30px;
     }
-    .stat {
-      background: white;
+    
+    .stat-card {
       padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      flex: 1;
+      border-radius: 4px;
       text-align: center;
     }
+    
+    .stat-card.total {
+      background: #ecf0f1;
+      color: #2c3e50;
+    }
+    
+    .stat-card.passed {
+      background: #d5f4e6;
+      color: #27ae60;
+    }
+    
+    .stat-card.failed {
+      background: #fadbd8;
+      color: #c0392b;
+    }
+    
+    .stat-card.skipped {
+      background: #fef5e7;
+      color: #f39c12;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+    
     .stat-label {
       font-size: 14px;
-      color: #666;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 1px;
     }
-    .stat-value {
-      font-size: 32px;
-      font-weight: bold;
-      margin-top: 8px;
-    }
-    #stat-passed { color: #4caf50; }
-    #stat-failed { color: #f44336; }
-    #stat-skipped { color: #ff9800; }
-    #stat-total { color: #2196f3; }
-    .status {
-      padding: 10px 20px;
-      border-radius: 4px;
-      margin: 20px 0;
-      font-weight: 500;
-      display: none;
-    }
-    .status.success {
-      background: #e8f5e9;
-      color: #2e7d32;
-      border-left: 4px solid #4caf50;
-      display: block;
-    }
-    .status.failed {
-      background: #ffebee;
-      color: #c62828;
-      border-left: 4px solid #f44336;
-      display: block;
-    }
-    .status.running {
-      background: #e3f2fd;
-      color: #1565c0;
-      border-left: 4px solid #2196f3;
-      display: block;
-    }
-    #results {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      margin: 20px 0;
-    }
-    .test {
-      padding: 12px;
-      margin: 8px 0;
-      border-radius: 4px;
-      border-left: 4px solid #ddd;
-    }
-    .test.pass {
-      background: #e8f5e9;
-      border-left-color: #4caf50;
-    }
-    .test.fail {
-      background: #ffebee;
-      border-left-color: #f44336;
-    }
-    .test.skip {
-      background: #fff3e0;
-      border-left-color: #ff9800;
-    }
-    .test-name {
-      font-weight: 500;
-      margin-bottom: 4px;
-    }
-    .test-error {
-      color: #c62828;
-      font-size: 14px;
-      font-family: monospace;
-      margin-top: 8px;
-      padding: 8px;
-      background: #fff;
-      border-radius: 4px;
-    }
-    .progress {
-      height: 6px;
-      background: #e0e0e0;
-      border-radius: 3px;
-      overflow: hidden;
-      margin: 20px 0;
-    }
+    
     .progress-bar {
+      height: 30px;
+      background: #ecf0f1;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 30px;
+      position: relative;
+    }
+    
+    .progress-fill {
       height: 100%;
-      background: #6750a4;
-      width: 0;
+      background: linear-gradient(90deg, #2ecc71, #27ae60);
       transition: width 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+    
+    .results {
+      margin-top: 30px;
+    }
+    
+    .suite {
+      margin-bottom: 20px;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .suite-header {
+      background: #34495e;
+      color: white;
+      padding: 15px;
+      font-weight: 600;
+      font-size: 16px;
+    }
+    
+    .test-result {
+      padding: 12px 15px;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .test-result:last-child {
+      border-bottom: none;
+    }
+    
+    .test-result.passed {
+      background: #f0fdf4;
+    }
+    
+    .test-result.failed {
+      background: #fef2f2;
+    }
+    
+    .test-result.skipped {
+      background: #fffbeb;
+    }
+    
+    .test-icon {
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    
+    .test-description {
+      flex-grow: 1;
+    }
+    
+    .test-error {
+      margin-top: 10px;
+      padding: 10px;
+      background: #fee;
+      border-left: 3px solid #e74c3c;
+      font-family: monospace;
+      font-size: 12px;
+      color: #c0392b;
+      white-space: pre-wrap;
+    }
+    
+    #console-output {
+      margin-top: 30px;
+      padding: 20px;
+      background: #2c3e50;
+      color: #ecf0f1;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      max-height: 400px;
+      overflow-y: auto;
+      line-height: 1.6;
+    }
+    
+    .console-line {
+      margin-bottom: 5px;
+    }
+    
+    .console-error {
+      color: #e74c3c;
+    }
+    
+    .console-success {
+      color: #2ecc71;
+    }
+    
+    .console-header {
+      color: #3498db;
+      font-weight: bold;
+    }
+    
+    button {
+      padding: 12px 24px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+    
+    button:hover {
+      background: #2980b9;
+    }
+    
+    button:disabled {
+      background: #bdc3c7;
+      cursor: not-allowed;
     }
   </style>
 </head>
 <body>
-  <h1>OrarioDoc Test Runner</h1>
+  <div class="container">
+    <h1>🧪 OrarioDoc Test Runner</h1>
+    <p class="subtitle">Browser-based automated testing suite</p>
+    
+    <button id="run-tests" onclick="runAllTests()">Run Tests</button>
+    
+    <div id="status" class="status running" style="display: none;">
+      Running tests...
+    </div>
+    
+    <div id="stats" class="stats" style="display: none;">
+      <div class="stat-card total">
+        <span class="stat-number" id="stat-total">0</span>
+        <span class="stat-label">Total</span>
+      </div>
+      <div class="stat-card passed">
+        <span class="stat-number" id="stat-passed">0</span>
+        <span class="stat-label">Passed</span>
+      </div>
+      <div class="stat-card failed">
+        <span class="stat-number" id="stat-failed">0</span>
+        <span class="stat-label">Failed</span>
+      </div>
+      <div class="stat-card skipped">
+        <span class="stat-number" id="stat-skipped">0</span>
+        <span class="stat-label">Skipped</span>
+      </div>
+    </div>
+    
+    <div id="progress" class="progress-bar" style="display: none;">
+      <div class="progress-fill" id="progress-fill" style="width: 0%;">
+        0%
+      </div>
+    </div>
+    
+    <div id="results" class="results"></div>
+    
+    <div id="console-output"></div>
+  </div>
   
-  <div class="controls">
-    <button id="run-tests">Run Tests</button>
-  </div>
-
-  <div class="progress" id="progress" style="display:none;">
-    <div class="progress-bar" id="progress-bar"></div>
-  </div>
-
-  <div class="stats">
-    <div class="stat">
-      <div class="stat-label">Total</div>
-      <div class="stat-value" id="stat-total">0</div>
-    </div>
-    <div class="stat">
-      <div class="stat-label">Passed</div>
-      <div class="stat-value" id="stat-passed">0</div>
-    </div>
-    <div class="stat">
-      <div class="stat-label">Failed</div>
-      <div class="stat-value" id="stat-failed">0</div>
-    </div>
-    <div class="stat">
-      <div class="stat-label">Skipped</div>
-      <div class="stat-value" id="stat-skipped">0</div>
-    </div>
-  </div>
-
-  <div class="status" id="status"></div>
-
-  <div id="results"></div>
-
+  <!-- Load dependencies -->
+  <script src="../src/storage/indexeddb.js"></script>
+  <script src="../src/storage.js"></script>
+  <script src="../src/utils/theme.js"></script>
+  <script src="../src/utils/toast.js"></script>
+  
+  <!-- Load test framework -->
+  <script src="./test-framework.js"></script>
+  
+  <!-- Load test files -->
+  <script src="./storage.test.js"></script>
+  <script src="./theme.test.js"></script>
+  <script src="./toast.test.js"></script>
+  
   <script>
-    // Simple test framework
-    class TestRunner {
-      constructor() {
-        this.tests = [];
-        this.results = {
-          total: 0,
-          passed: 0,
-          failed: 0,
-          skipped: 0
-        };
-      }
-
-      test(name, fn) {
-        this.tests.push({ name, fn });
-      }
-
-      async run() {
-        const resultsDiv = document.getElementById('results');
-        const statusDiv = document.getElementById('status');
-        const runButton = document.getElementById('run-tests');
-        const progressBar = document.getElementById('progress-bar');
-        const progressDiv = document.getElementById('progress');
+    // Capture console output
+    const consoleOutput = document.getElementById('console-output');
+    const originalLog = console.log;
+    const originalError = console.error;
+    
+    function addConsoleLine(message, type = 'log') {
+      const line = document.createElement('div');
+      line.className = `console-line console-${type}`;
+      line.textContent = message;
+      consoleOutput.appendChild(line);
+      consoleOutput.scrollTop = consoleOutput.scrollHeight;
+    }
+    
+    console.log = function(...args) {
+      originalLog.apply(console, args);
+      addConsoleLine(args.join(' '), 'log');
+    };
+    
+    console.error = function(...args) {
+      originalError.apply(console, args);
+      addConsoleLine(args.join(' '), 'error');
+    };
+    
+    // Run tests function
+    async function runAllTests() {
+      const button = document.getElementById('run-tests');
+      button.disabled = true;
+      button.textContent = 'Running...';
+      
+      // Clear previous results
+      document.getElementById('results').innerHTML = '';
+      consoleOutput.innerHTML = '';
+      
+      // Show status
+      const statusDiv = document.getElementById('status');
+      statusDiv.style.display = 'block';
+      statusDiv.className = 'status running';
+      statusDiv.textContent = 'Running tests...';
+      
+      document.getElementById('stats').style.display = 'grid';
+      document.getElementById('progress').style.display = 'block';
+      
+      try {
+        // Run tests
+        const stats = await TestRunner.run();
+        const { results } = TestRunner.getResults();
         
-        resultsDiv.innerHTML = '';
-        runButton.disabled = true;
-        progressDiv.style.display = 'block';
+        // Update stats
+        document.getElementById('stat-total').textContent = stats.total;
+        document.getElementById('stat-passed').textContent = stats.passed;
+        document.getElementById('stat-failed').textContent = stats.failed;
+        document.getElementById('stat-skipped').textContent = stats.skipped;
         
-        statusDiv.className = 'status running';
-        statusDiv.textContent = 'Running tests...';
+        // Update progress bar
+        const passRate = stats.total > 0 ? (stats.passed / stats.total) * 100 : 0;
+        const progressFill = document.getElementById('progress-fill');
+        progressFill.style.width = passRate + '%';
+        progressFill.textContent = passRate.toFixed(1) + '%';
         
-        this.results = { total: 0, passed: 0, failed: 0, skipped: 0 };
-        
-        for (let i = 0; i < this.tests.length; i++) {
-          const { name, fn } = this.tests[i];
-          const progress = ((i + 1) / this.tests.length) * 100;
-          progressBar.style.width = progress + '%';
-          
-          const testDiv = document.createElement('div');
-          testDiv.className = 'test';
-          testDiv.innerHTML = `<div class="test-name">${name}</div>`;
-          resultsDiv.appendChild(testDiv);
-          
-          this.results.total++;
-          this.updateStats();
-          
-          try {
-            await fn();
-            testDiv.classList.add('pass');
-            testDiv.innerHTML += `<div style="color: #4caf50;">✓ Passed</div>`;
-            this.results.passed++;
-          } catch (error) {
-            testDiv.classList.add('fail');
-            testDiv.innerHTML += `<div style="color: #f44336;">✗ Failed</div>`;
-            testDiv.innerHTML += `<div class="test-error">${error.message}</div>`;
-            this.results.failed++;
-          }
-          
-          this.updateStats();
-          
-          // Small delay between tests for visibility
-          await new Promise(resolve => setTimeout(resolve, 50));
-        }
-        
-        runButton.disabled = false;
-        progressDiv.style.display = 'none';
-        
-        if (this.results.failed === 0) {
+        // Update status
+        if (stats.failed === 0) {
           statusDiv.className = 'status success';
-          statusDiv.textContent = `All tests passed! (${this.results.passed}/${this.results.total})`;
+          statusDiv.textContent = '✓ All tests passed!';
         } else {
           statusDiv.className = 'status failed';
-          statusDiv.textContent = `${this.results.failed} test(s) failed`;
+          statusDiv.textContent = `✗ ${stats.failed} test(s) failed`;
         }
+        
+        // Render results
+        renderResults(results);
+        
+      } catch (error) {
+        statusDiv.className = 'status failed';
+        statusDiv.textContent = '✗ Test execution failed: ' + error.message;
+        console.error(error);
       }
-
-      updateStats() {
-        document.getElementById('stat-total').textContent = this.results.total;
-        document.getElementById('stat-passed').textContent = this.results.passed;
-        document.getElementById('stat-failed').textContent = this.results.failed;
-        document.getElementById('stat-skipped').textContent = this.results.skipped;
-      }
+      
+      button.disabled = false;
+      button.textContent = 'Run Tests Again';
     }
-
-    // Create test runner instance
-    const runner = new TestRunner();
-
-    // Helper functions
-    function assert(condition, message) {
-      if (!condition) {
-        throw new Error(message || 'Assertion failed');
-      }
-    }
-
-    function assertEqual(actual, expected, message) {
-      if (actual !== expected) {
-        throw new Error(message || `Expected ${expected}, got ${actual}`);
-      }
-    }
-
-    function assertNotNull(value, message) {
-      if (value === null || value === undefined) {
-        throw new Error(message || 'Value is null or undefined');
-      }
-    }
-
-    // Define tests
-    runner.test('Basic HTML structure exists', () => {
-      assertNotNull(document.body, 'Body element should exist');
-      assertNotNull(document.head, 'Head element should exist');
-    });
-
-    runner.test('Test runner UI elements are present', () => {
-      assertNotNull(document.getElementById('run-tests'), 'Run tests button should exist');
-      assertNotNull(document.getElementById('results'), 'Results div should exist');
-      assertNotNull(document.getElementById('status'), 'Status div should exist');
-    });
-
-    runner.test('Statistics counters exist', () => {
-      assertNotNull(document.getElementById('stat-total'), 'Total stat should exist');
-      assertNotNull(document.getElementById('stat-passed'), 'Passed stat should exist');
-      assertNotNull(document.getElementById('stat-failed'), 'Failed stat should exist');
-      assertNotNull(document.getElementById('stat-skipped'), 'Skipped stat should exist');
-    });
-
-    runner.test('Local Storage is available', () => {
-      assert(typeof localStorage !== 'undefined', 'localStorage should be available');
-      localStorage.setItem('test-key', 'test-value');
-      assertEqual(localStorage.getItem('test-key'), 'test-value', 'localStorage should work');
-      localStorage.removeItem('test-key');
-    });
-
-    runner.test('IndexedDB is available', () => {
-      assert(typeof indexedDB !== 'undefined', 'IndexedDB should be available');
-    });
-
-    runner.test('Fetch API is available', () => {
-      assert(typeof fetch !== 'undefined', 'Fetch API should be available');
-    });
-
-    runner.test('Promise support', () => {
-      assert(typeof Promise !== 'undefined', 'Promise should be available');
-      return Promise.resolve(42).then(value => {
-        assertEqual(value, 42, 'Promise should resolve correctly');
+    
+    function renderResults(results) {
+      const resultsDiv = document.getElementById('results');
+      
+      // Group by suite
+      const suites = {};
+      results.forEach(result => {
+        if (!suites[result.suite]) {
+          suites[result.suite] = [];
+        }
+        suites[result.suite].push(result);
       });
-    });
-
-    runner.test('Async/await support', async () => {
-      const result = await Promise.resolve(100);
-      assertEqual(result, 100, 'Async/await should work correctly');
-    });
-
-    runner.test('Array methods available', () => {
-      const arr = [1, 2, 3, 4, 5];
-      const doubled = arr.map(x => x * 2);
-      assertEqual(doubled.length, 5, 'Array map should work');
-      assertEqual(doubled[0], 2, 'Array map should double values');
-    });
-
-    runner.test('Object methods available', () => {
-      const obj = { a: 1, b: 2, c: 3 };
-      const keys = Object.keys(obj);
-      assertEqual(keys.length, 3, 'Object.keys should return all keys');
-    });
-
-    runner.test('JSON stringify and parse', () => {
-      const data = { name: 'Test', value: 42 };
-      const json = JSON.stringify(data);
-      const parsed = JSON.parse(json);
-      assertEqual(parsed.name, 'Test', 'JSON should parse correctly');
-      assertEqual(parsed.value, 42, 'JSON should preserve values');
-    });
-
-    runner.test('Date object works', () => {
-      const now = new Date();
-      assert(now instanceof Date, 'Date should create an instance');
-      assert(!isNaN(now.getTime()), 'Date should have valid time');
-    });
-
-    runner.test('Math object works', () => {
-      assertEqual(Math.max(1, 2, 3), 3, 'Math.max should work');
-      assertEqual(Math.min(1, 2, 3), 1, 'Math.min should work');
-      assert(Math.random() >= 0 && Math.random() < 1, 'Math.random should return valid range');
-    });
-
-    runner.test('String methods work', () => {
-      const str = 'Hello World';
-      assertEqual(str.toLowerCase(), 'hello world', 'toLowerCase should work');
-      assertEqual(str.toUpperCase(), 'HELLO WORLD', 'toUpperCase should work');
-      assert(str.includes('World'), 'includes should work');
-    });
-
-    runner.test('DOM manipulation works', () => {
-      const div = document.createElement('div');
-      div.id = 'test-div';
-      div.textContent = 'Test';
-      document.body.appendChild(div);
       
-      const found = document.getElementById('test-div');
-      assertNotNull(found, 'Element should be found');
-      assertEqual(found.textContent, 'Test', 'Content should match');
-      
-      document.body.removeChild(div);
-    });
-
-    runner.test('Event listeners work', () => {
-      return new Promise((resolve) => {
-        const button = document.createElement('button');
-        button.addEventListener('click', () => {
-          resolve();
+      // Render each suite
+      Object.keys(suites).forEach(suiteName => {
+        const suiteDiv = document.createElement('div');
+        suiteDiv.className = 'suite';
+        
+        const header = document.createElement('div');
+        header.className = 'suite-header';
+        header.textContent = suiteName;
+        suiteDiv.appendChild(header);
+        
+        // Render tests
+        suites[suiteName].forEach(result => {
+          const testDiv = document.createElement('div');
+          testDiv.className = `test-result ${result.status}`;
+          
+          const icon = document.createElement('span');
+          icon.className = 'test-icon';
+          icon.textContent = result.status === 'passed' ? '✓' : 
+                           result.status === 'failed' ? '✗' : '⊘';
+          testDiv.appendChild(icon);
+          
+          const description = document.createElement('span');
+          description.className = 'test-description';
+          description.textContent = result.test;
+          testDiv.appendChild(description);
+          
+          // Add error if failed
+          if (result.status === 'failed' && result.error) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'test-error';
+            errorDiv.textContent = result.error;
+            testDiv.appendChild(errorDiv);
+          }
+          
+          suiteDiv.appendChild(testDiv);
         });
-        button.click();
+        
+        resultsDiv.appendChild(suiteDiv);
       });
-    });
-
-    runner.test('setTimeout works', () => {
-      return new Promise((resolve) => {
-        let executed = false;
-        setTimeout(() => {
-          executed = true;
-          resolve();
-        }, 10);
-      });
-    });
-
-    runner.test('CSS computed styles work', () => {
-      const div = document.createElement('div');
-      div.style.display = 'none';
-      document.body.appendChild(div);
-      
-      const styles = window.getComputedStyle(div);
-      assertEqual(styles.display, 'none', 'Computed styles should work');
-      
-      document.body.removeChild(div);
-    });
-  </script>
-  
-  <!-- Load unit tests for core OrarioDoc functionality -->
-  <script src="unit-tests.js"></script>
-  
-  <!-- Load integration tests for workflow testing -->
-  <script src="integration-tests.js"></script>
-  
-  <script>
-    // Set up event listeners
-    document.getElementById('run-tests').addEventListener('click', () => {
-      runner.run();
-    });
-
-    // Auto-run tests on page load (useful for automated testing)
+    }
+    
+    // Auto-run tests on page load
     window.addEventListener('load', () => {
-      // Small delay to ensure everything is loaded
-      setTimeout(() => {
-        document.getElementById('run-tests').click();
-      }, 100);
+      console.log('Test runner loaded. Click "Run Tests" to start.');
     });
   </script>
 </body>

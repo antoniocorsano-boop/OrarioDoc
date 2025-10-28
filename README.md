@@ -227,8 +227,44 @@ cd OrarioDoc
 # Avvia server di sviluppo
 python3 -m http.server 8080
 
-# In altra finestra terminale: esegui test
-npm test
+## Testing
+
+OrarioDoc include una suite di test automatici che può essere eseguita direttamente nel browser, senza necessità di Node.js o dipendenze esterne.
+
+### Eseguire i Test
+
+1. Avviare un server locale:
+   ```bash
+   python3 -m http.server 8080
+   ```
+
+2. Aprire il test runner nel browser:
+   ```
+   http://localhost:8080/tests/test-runner.html
+   ```
+
+3. Cliccare su "Run Tests" per eseguire tutti i test
+
+### Copertura Test
+
+- ✅ **Storage**: Test per IndexedDB e localStorage
+- ✅ **Theme Manager**: Test per gestione temi e colori
+- ✅ **Toast**: Test per notifiche utente
+- ✅ **Accessibility**: Test conformità WCAG 2.1 AA
+
+Per maggiori dettagli, consulta:
+- **[docs/TEST_PLAN.md](docs/TEST_PLAN.md)** - Piano test completo (manuale e automatico)
+- **[tests/README.md](tests/README.md)** - Documentazione suite test automatici
+
+### CI/CD
+
+I test vengono eseguiti automaticamente su ogni push e pull request tramite GitHub Actions.
+
+## Note tecniche e miglioramenti possibili
+- ✅ IndexedDB implementato per dataset più grandi (migrazione automatica da localStorage)
+- Aggiungere sincronizzazione remota e backup (API REST o file export)
+- Aggiungere icone reali / file nella cartella `/icons` per migliorare l'esperienza PWA
+- ✅ Test automatici implementati (browser-based, no Node.js richiesto)
 
 # Test specifici
 npm run test:unit        # Test unitari

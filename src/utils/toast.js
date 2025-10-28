@@ -3,8 +3,8 @@
   let toastContainer = null;
   
   function init(){
-    // Create toast container if it doesn't exist
-    if(!toastContainer){
+    // Create toast container if it doesn't exist or was removed
+    if(!toastContainer || !document.body.contains(toastContainer)){
       toastContainer = document.createElement('div');
       toastContainer.id = 'toast-container';
       toastContainer.className = 'toast-container';

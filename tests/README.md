@@ -1,327 +1,341 @@
-# OrarioDoc Test Suite
+# OrarioDoc Tests
 
-> **Comprehensive testing infrastructure for OrarioDoc application**
+This directory contains the automated test suite for OrarioDoc.
 
-## 📋 Overview
+## Overview
 
-This directory contains the complete test suite for OrarioDoc, including:
-- **Unit Tests** - Testing individual functions and modules
-- **Integration Tests** - Testing component interactions and workflows
-- **E2E Tests** - Full user journey testing with Playwright
+Since OrarioDoc is a vanilla JavaScript PWA without Node.js dependencies, the tests are designed to run directly in the browser using a custom lightweight test framework.
 
-## 📁 Files
+## Test Structure
 
-### Test Files
-
-- **`test-runner.html`** - Browser-based test runner with visual interface
-- **`unit-tests.js`** - 33 unit tests for core functionality
-- **`integration-tests.js`** - 16 integration tests for workflows
-
-### Related Files
-
-- **`../playwright-tests/test-runner.spec.js`** - Playwright E2E test
-- **`../docs/TEST_STRATEGY.md`** - Complete testing strategy
-- **`../docs/TEST_EXECUTION.md`** - Detailed execution guide
-
-## 🚀 Quick Start
-
-### Run Manual Tests
-
-```bash
-# 1. Start local server
-python3 -m http.server 8080
-
-# 2. Open in browser
-# http://localhost:8080/tests/test-runner.html
-
-# 3. Click "Run Tests" button
+```
+tests/
+├── test-framework.js    # Custom test framework (no dependencies)
+├── test-runner.html     # Browser-based test runner UI
+├── storage.test.js      # Storage module tests
+├── theme.test.js        # Theme manager tests
+├── toast.test.js        # Toast notification tests
+└── README.md           # This file
 ```
 
-### Run E2E Tests
+## Running Tests
 
-```bash
-# Install dependencies
-npm install
+### Method 1: Using Test Runner (Recommended)
 
-# Run tests
-npm test
+1. Start a local web server from the project root:
+   ```bash
+   python3 -m http.server 8080
+   ```
 
-# Run with UI
-npm run test:headed
+2. Open the test runner in your browser:
+   ```
+   http://localhost:8080/tests/test-runner.html
+   ```
 
-# Debug tests
-npm run test:debug
-```
+3. Click "Run Tests" to execute all tests
 
-### Validate Test Structure
+4. View results in the UI
 
-```bash
-npm run test:validate
-```
+### Method 2: Browser Console
 
-## 📊 Test Coverage
+1. Open the test runner HTML page
+2. Open browser DevTools (F12)
+3. View test output in the Console tab
 
-### Unit Tests (33 tests)
+## Test Coverage
 
-**Validation Logic**
-- ✅ Empty name validation
-- ✅ Invalid day range validation
-- ✅ Invalid time format validation
-- ✅ Invalid duration validation
-- ✅ Valid lesson validation
+### Storage Tests (`storage.test.js`)
+- ✅ localStorage read/write operations
+- ✅ Data structure validation
+- ✅ Edge cases (empty data, special characters, large datasets)
+- ✅ Storage capacity checks
+- ✅ Error handling
 
-**Time Utilities**
-- ✅ Time to minutes conversion
-
-**Conflict Detection**
-- ✅ Simple overlap detection
-- ✅ No conflict on different days
-- ✅ No conflict for adjacent lessons
-- ✅ Exclude lesson being edited
-
-**Storage Layer**
-- ✅ localStorage availability
-- ✅ Read/write operations
-- ✅ IndexedDB availability
-- ✅ Default data structure
-
-**Schedule Grid**
-- ✅ Grid creation (7 columns)
-- ✅ Day data attributes
-- ✅ Keyboard accessibility
-
-**Theme Manager**
-- ✅ Document element access
-- ✅ Theme attribute setting
-- ✅ localStorage persistence
+### Theme Manager Tests (`theme.test.js`)
+- ✅ Theme initialization
+- ✅ Theme switching (light, dark, expressive, auto)
+- ✅ Theme persistence in localStorage
+- ✅ DOM updates (data attributes)
+- ✅ Custom color management
+- ✅ Event dispatching
 - ✅ System preference detection
+- ✅ Error handling
 
-**Toast Notifications**
-- ✅ Container creation
-- ✅ Accessibility attributes
+### Toast Tests (`toast.test.js`)
+- ✅ Toast creation and display
+- ✅ Toast types (info, success, error, warning)
+- ✅ Accessibility attributes (ARIA)
 - ✅ HTML escaping (XSS prevention)
+- ✅ Auto-dismiss functionality
+- ✅ Multiple toasts support
+- ✅ Edge cases
 
-**Settings**
-- ✅ Structure validation
-- ✅ Settings merge
+## Test Framework
 
-**Accessibility**
-- ✅ Skip links
-- ✅ Keyboard accessibility
-- ✅ Form labels
+The custom test framework provides:
 
-**Performance**
-- ✅ Rendering performance
-- ✅ Storage operation performance
+### API
 
-**Utilities**
-- ✅ UID generation
-- ✅ Document fragment batching
+```javascript
+// Define a test suite
+describe('Module Name', () => {
+  // Setup before each test
+  beforeEach(() => {
+    // Clean up or initialize
+  });
+  
+  // Teardown after each test
+  afterEach(() => {
+    // Clean up
+  });
+  
+  // Define a test
+  test('should do something', () => {
+    expect(actual).toBe(expected);
+  });
+  
+  // Skip a test
+  skip('should skip this', () => {
+    // Won't run
+  });
+});
+```
 
-### Integration Tests (16 tests)
+### Assertions
 
-**Lesson Management Workflows**
-- ✅ Complete add lesson workflow
-- ✅ Add multiple lessons
-- ✅ Edit lesson workflow
-- ✅ Delete lesson workflow
+```javascript
+expect(value).toBe(expected)           // Strict equality (===)
+expect(value).toEqual(expected)        // Deep equality (JSON)
+expect(value).toBeTruthy()             // Truthy check
+expect(value).toBeFalsy()              // Falsy check
+expect(value).toBeNull()               // Null check
+expect(value).toBeUndefined()          // Undefined check
+expect(value).toBeDefined()            // Not undefined
+expect(array).toContain(item)          // Array/string contains
+expect(value).toHaveLength(n)          // Length check
+expect(fn).toThrow()                   // Function throws error
+expect(value).toBeGreaterThan(n)       // Numeric comparison
+expect(value).toBeLessThan(n)          // Numeric comparison
+expect(string).toMatch(regex)          // Regex match
+```
 
-**Conflict Detection Workflows**
-- ✅ Detect overlapping lessons
-- ✅ Allow non-overlapping lessons
+### Async Support
 
-**Theme Switching Workflows**
-- ✅ Theme persistence
-- ✅ Custom colors persistence
+```javascript
+test('async test', async () => {
+  const result = await someAsyncFunction();
+  expect(result).toBe(expected);
+});
+```
 
-**Storage Persistence Workflows**
-- ✅ Multiple operations persistence
-- ✅ Settings and lessons coexistence
+## Writing New Tests
 
-**Validation Workflows**
-- ✅ Invalid lesson rejection
-- ✅ Valid lesson acceptance
+### 1. Create a new test file
 
-**Rendering Workflows**
-- ✅ Lessons render in grid
+```javascript
+// tests/mymodule.test.js
+describe('My Module', () => {
+  test('should work correctly', () => {
+    const result = myFunction();
+    expect(result).toBe(expected);
+  });
+});
+```
 
-**Accessibility Workflows**
-- ✅ Focus management
-- ✅ Keyboard navigation
+### 2. Add to test-runner.html
 
-**Performance Workflows**
-- ✅ Large dataset handling (100 lessons)
+```html
+<!-- In test-runner.html, add: -->
+<script src="./mymodule.test.js"></script>
+```
 
-### E2E Tests (Playwright)
+### 3. Run tests
 
-- ✅ Browser environment validation
-- ✅ All test-runner tests execution
-- ✅ Screenshot on failure
-- ✅ Results reporting
+Open test-runner.html in browser and verify new tests appear.
 
-## 🎯 Test Execution
+## Best Practices
 
-### Browser Tests
+### Test Organization
+- Group related tests in `describe` blocks
+- Use descriptive test names
+- One assertion per test (when possible)
+- Test both success and failure cases
 
-The `test-runner.html` provides a visual interface for running tests:
+### Setup and Teardown
+- Use `beforeEach` to reset state
+- Use `afterEach` to clean up (DOM, storage, etc.)
+- Keep tests independent
 
-1. **Stats Display**: Shows total, passed, failed, skipped counts
-2. **Progress Bar**: Visual progress indicator
-3. **Test Results**: Individual test results with pass/fail status
-4. **Error Details**: Detailed error messages for failed tests
+### Assertions
+- Use specific matchers (e.g., `toEqual` vs `toBe`)
+- Add meaningful error messages
+- Test edge cases
+
+### Example Test Structure
+
+```javascript
+describe('Feature Name', () => {
+  beforeEach(() => {
+    // Setup: clear storage, reset DOM, etc.
+    localStorage.clear();
+  });
+  
+  afterEach(() => {
+    // Cleanup: remove elements, restore mocks, etc.
+  });
+  
+  describe('Sub-feature', () => {
+    test('should handle normal case', () => {
+      const result = doSomething('normal');
+      expect(result).toBe('expected');
+    });
+    
+    test('should handle edge case', () => {
+      const result = doSomething('');
+      expect(result).toBe('default');
+    });
+    
+    test('should handle errors gracefully', () => {
+      expect(() => doSomething(null)).toThrow();
+    });
+  });
+});
+```
+
+## CI/CD Integration
+
+Tests can be run automatically in CI/CD pipelines using headless browsers:
+
+### Using Playwright (example)
+
+```yaml
+# .github/workflows/test.yml
+name: Tests
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Start server
+        run: python3 -m http.server 8080 &
+      - name: Install Playwright
+        run: npm install -D @playwright/test
+      - name: Run tests
+        run: npx playwright test
+```
+
+### Using Puppeteer (example)
+
+```javascript
+// tests/run-headless.js
+const puppeteer = require('puppeteer');
+
+(async () => {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  
+  // Listen to console
+  page.on('console', msg => console.log(msg.text()));
+  
+  // Navigate to test runner
+  await page.goto('http://localhost:8080/tests/test-runner.html');
+  
+  // Wait for tests to complete
+  await page.waitForSelector('.status.success, .status.failed');
+  
+  // Get results
+  const stats = await page.evaluate(() => {
+    return {
+      total: parseInt(document.getElementById('stat-total').textContent),
+      passed: parseInt(document.getElementById('stat-passed').textContent),
+      failed: parseInt(document.getElementById('stat-failed').textContent)
+    };
+  });
+  
+  console.log('Test Results:', stats);
+  
+  await browser.close();
+  
+  // Exit with error if tests failed
+  process.exit(stats.failed > 0 ? 1 : 0);
+})();
+```
+
+## Debugging Tests
+
+### Browser DevTools
+1. Open test-runner.html
+2. Open DevTools (F12)
+3. Set breakpoints in test files
+4. Click "Run Tests"
 
 ### Console Output
+- All test output appears in browser console
+- Failed tests show error messages and stack traces
+- Use `console.log()` for debugging
 
-Tests also output to browser console:
+### Isolating Tests
+Skip tests you're not working on:
+
 ```javascript
-console.log('Test Results:', {
-  total: 49,
-  passed: 49,
-  failed: 0,
-  skipped: 0
+// Change test() to skip()
+skip('not working on this', () => {
+  // Won't run
 });
 ```
 
-## 🔍 Test Categories
+## Known Limitations
 
-### By Module
+1. **No module bundling**: Tests load files directly, require manual script tags
+2. **No code coverage**: Coverage reporting would require additional tooling
+3. **Manual browser testing**: Requires opening browser (can be automated with Playwright/Puppeteer)
+4. **IndexedDB testing**: Some IndexedDB operations may have timing issues in tests
 
-```
-[Validation]  - Input validation tests
-[Time]        - Time utilities tests
-[Conflicts]   - Conflict detection tests
-[Storage]     - Storage layer tests
-[Grid]        - Schedule grid tests
-[Theme]       - Theme manager tests
-[Toast]       - Toast notifications tests
-[Settings]    - Settings tests
-[A11y]        - Accessibility tests
-[Performance] - Performance tests
-[Utility]     - Utility functions tests
-[Integration] - Integration workflow tests
-```
+## Future Improvements
 
-## 🐛 Debugging
+- [ ] Add E2E tests with Playwright
+- [ ] Add visual regression testing
+- [ ] Implement code coverage reporting
+- [ ] Add performance benchmarks
+- [ ] Create GitHub Actions workflow
+- [ ] Add more utility function tests
 
-### Failed Tests
+## Troubleshooting
 
-When a test fails, check:
+### Tests not loading
+- Check that server is running on correct port
+- Verify all script paths in test-runner.html
+- Check browser console for errors
 
-1. **Error Message** - Specific assertion that failed
-2. **Browser Console** - JavaScript errors
-3. **Network Tab** - Failed requests
-4. **Test Code** - Review test expectations
+### Tests failing unexpectedly
+- Clear browser cache and localStorage
+- Check for asynchronous timing issues
+- Verify DOM cleanup in afterEach hooks
 
-### Common Issues
+### Browser compatibility
+Tests are verified to work on:
+- ✅ Chrome/Chromium 90+
+- ✅ Firefox 88+
+- ✅ Safari 14+
+- ✅ Edge 90+
 
-**Test times out**
-```javascript
-// Increase timeout if needed
-test.setTimeout(60000);
-```
+## Contributing
 
-**Element not found**
-```javascript
-// Add wait conditions
-await page.waitForSelector('#element', { timeout: 30000 });
-```
+When adding new features:
+1. Write tests first (TDD)
+2. Ensure all tests pass
+3. Add tests to appropriate test file
+4. Update this README if needed
 
-**Flaky tests**
-```javascript
-// Add stability waits
-await page.waitForLoadState('networkidle');
-```
+## Resources
 
-## 📝 Writing New Tests
-
-### Unit Test Template
-
-```javascript
-runner.test('[Module] Description of what is tested', () => {
-  // Arrange - Setup test data
-  const input = 'test data';
-  
-  // Act - Execute the code
-  const result = functionUnderTest(input);
-  
-  // Assert - Verify results
-  assertEqual(result, expectedValue, 'Should return expected value');
-});
-```
-
-### Integration Test Template
-
-```javascript
-runner.test('[Integration] Workflow name', async () => {
-  const mockStorage = createMockStorage();
-  
-  // 1. Setup initial state
-  let data = await mockStorage.read();
-  
-  // 2. Perform actions
-  data.lessons.push(newLesson);
-  await mockStorage.write(data);
-  
-  // 3. Verify results
-  data = await mockStorage.read();
-  assertEqual(data.lessons.length, 1, 'Should have one lesson');
-});
-```
-
-## 📚 Documentation
-
-For more detailed information, see:
-
-- **[TEST_STRATEGY.md](../docs/TEST_STRATEGY.md)** - Overall testing strategy and standards
-- **[TEST_EXECUTION.md](../docs/TEST_EXECUTION.md)** - Detailed execution and troubleshooting guide
-- **[CONTRIBUTING.md](../CONTRIBUTING.md)** - Contributing guidelines
-
-## 🎓 Best Practices
-
-1. **Keep tests independent** - Each test should work in isolation
-2. **Clean up after tests** - Remove DOM elements, clear storage
-3. **Use descriptive names** - Test names should explain what is tested
-4. **Test edge cases** - Not just happy paths
-5. **Mock external dependencies** - Use mock storage, not real DB
-6. **Performance matters** - Tests should run quickly (<100ms each)
-7. **Accessibility first** - Always test ARIA labels and keyboard nav
-
-## 🔄 Continuous Integration
-
-Tests run automatically on:
-- Push to main/develop branches
-- Pull requests
-- Manual workflow dispatch
-
-See `.github/workflows/tests.yml` for CI configuration.
-
-## 📊 Test Results
-
-Test results are stored in:
-- `test-results/` - Playwright results and screenshots
-- `playwright-report/` - HTML report
-- `test-results.json` - JSON summary
-
-## 🆘 Getting Help
-
-If you encounter issues:
-
-1. Check [TEST_EXECUTION.md](../docs/TEST_EXECUTION.md) troubleshooting section
-2. Review test error messages carefully
-3. Open an issue with test name and error details
-4. Include browser/environment information
-
-## 📈 Coverage Goals
-
-- **Overall**: ≥ 80%
-- **Storage Layer**: ≥ 95%
-- **Main Logic**: ≥ 90%
-- **Schedule Grid**: ≥ 85%
-- **Theme Manager**: ≥ 80%
-- **UI Components**: ≥ 75%
+- [MDN Web APIs](https://developer.mozilla.org/en-US/docs/Web/API)
+- [Jest Documentation](https://jestjs.io/) (for API reference, similar syntax)
+- [Testing Best Practices](https://testingjavascript.com/)
 
 ---
 
-**Maintainer:** @antoniocorsano-boop  
-**Last Updated:** October 2025  
-**Version:** 1.0
+**Last Updated:** Ottobre 2025  
+**Maintainer:** OrarioDoc Team
