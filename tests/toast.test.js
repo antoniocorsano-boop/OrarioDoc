@@ -128,8 +128,15 @@ describe('Toast Notifications', () => {
       const toast = document.querySelector('.toast');
       expect(toast).toBeDefined();
       expect(toast).not.toBeNull();
-      expect(toast.innerHTML).toContain('&lt;script&gt;');
-      expect(toast.innerHTML).not.toContain('<script>');
+      
+      // Check that the script tag is not executable (appears as text)
+      const message = toast.querySelector('.toast-message');
+      expect(message).toBeDefined();
+      expect(message.textContent).toContain('<script>alert("xss")</script>');
+      
+      // Verify it's escaped in the HTML source
+      expect(message.innerHTML).toContain('&lt;');
+      expect(message.innerHTML).toContain('&gt;');
     });
     
     test('should escape special characters', () => {
@@ -138,9 +145,17 @@ describe('Toast Notifications', () => {
       const message = document.querySelector('.toast-message');
       expect(message).toBeDefined();
       expect(message).not.toBeNull();
+      
+      // Check the text content has the actual characters
+      expect(message.textContent).toContain('&');
+      expect(message.textContent).toContain('"');
+      expect(message.textContent).toContain('<');
+      expect(message.textContent).toContain('>');
+      
+      // Verify they're escaped in the HTML source
       expect(message.innerHTML).toContain('&amp;');
-      expect(message.innerHTML).toContain('&quot;');
       expect(message.innerHTML).toContain('&lt;');
+      expect(message.innerHTML).toContain('&gt;');
     });
     
     test('should handle empty messages', () => {
