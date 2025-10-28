@@ -126,6 +126,8 @@ describe('Toast Notifications', () => {
       Toast.showToast('<script>alert("xss")</script>');
       
       const toast = document.querySelector('.toast');
+      expect(toast).toBeDefined();
+      expect(toast).not.toBeNull();
       expect(toast.innerHTML).toContain('&lt;script&gt;');
       expect(toast.innerHTML).not.toContain('<script>');
     });
@@ -134,6 +136,8 @@ describe('Toast Notifications', () => {
       Toast.showToast('Test & "quotes" <tags>');
       
       const message = document.querySelector('.toast-message');
+      expect(message).toBeDefined();
+      expect(message).not.toBeNull();
       expect(message.innerHTML).toContain('&amp;');
       expect(message.innerHTML).toContain('&quot;');
       expect(message.innerHTML).toContain('&lt;');
@@ -159,6 +163,8 @@ describe('Toast Notifications', () => {
       Toast.showToast('Test');
       
       const toast = document.querySelector('.toast');
+      expect(toast).toBeDefined();
+      expect(toast).not.toBeNull();
       
       await new Promise(resolve => setTimeout(resolve, 50));
       expect(toast.classList.contains('toast--visible')).toBeTruthy();
@@ -216,6 +222,7 @@ describe('Toast Notifications', () => {
       
       const toast = document.querySelector('.toast');
       expect(toast).toBeDefined();
+      expect(toast).not.toBeNull();
       expect(toast.textContent).toContain('A');
     });
     
@@ -223,6 +230,8 @@ describe('Toast Notifications', () => {
       Toast.showToast('Test™ © ® € £ ¥');
       
       const toast = document.querySelector('.toast');
+      expect(toast).toBeDefined();
+      expect(toast).not.toBeNull();
       expect(toast.textContent).toContain('™');
     });
     
