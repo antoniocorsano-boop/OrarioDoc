@@ -30,11 +30,13 @@
   const TestRunner = {
     // Define a test suite
     describe(name, fn) {
+      const parentSuite = state.currentSuite;
+      
       const suite = {
         name,
         tests: [],
-        beforeEach: null,
-        afterEach: null
+        beforeEach: parentSuite ? parentSuite.beforeEach : null,
+        afterEach: parentSuite ? parentSuite.afterEach : null
       };
       
       state.suites.push(suite);
@@ -42,7 +44,7 @@
       
       fn();
       
-      state.currentSuite = null;
+      state.currentSuite = parentSuite;
     },
     
     // Define a test case
