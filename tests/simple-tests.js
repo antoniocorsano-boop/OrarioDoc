@@ -150,6 +150,8 @@ SimpleTest.test('Toast has accessibility attributes', () => {
   Toast.showToast('Test');
   
   const container = document.getElementById('toast-container');
+  assert(container !== null, 'Toast container should exist');
+  
   const ariaLive = container.getAttribute('aria-live');
   assertEqual(ariaLive, 'polite', 'Should have aria-live="polite"');
   
