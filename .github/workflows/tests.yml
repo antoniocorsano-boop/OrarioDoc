@@ -89,6 +89,26 @@ jobs:
             const status = await page.locator('#status').textContent();
             console.log('Status:', status);
             
+            // Get detailed results of failed tests
+            const failedTests = await page.evaluate(() => {
+              const results = [];
+              const failedElements = document.querySelectorAll('.test-result.failed');
+              failedElements.forEach(el => {
+                const description = el.querySelector('.test-description')?.textContent || 'Unknown';
+                const error = el.querySelector('.test-error')?.textContent || 'No error message';
+                results.push({ description, error });
+              });
+              return results;
+            });
+            
+            if (failedTests.length > 0) {
+              console.log('\n=== Failed Tests Details ===');
+              failedTests.forEach((test, i) => {
+                console.log(`\n${i + 1}. ${test.description}`);
+                console.log(`   Error: ${test.error.substring(0, 200)}...`);
+              });
+            }
+            
             // Take screenshot
             await page.screenshot({ path: 'test-results.png', fullPage: true });
             
