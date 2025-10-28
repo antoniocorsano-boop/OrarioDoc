@@ -327,6 +327,7 @@
   // Export to global
   global.describe = TestRunner.describe.bind(TestRunner);
   global.test = TestRunner.test.bind(TestRunner);
+  global.test.skip = TestRunner.skip.bind(TestRunner); // Add test.skip alias
   global.skip = TestRunner.skip.bind(TestRunner);
   global.beforeEach = TestRunner.beforeEach.bind(TestRunner);
   global.afterEach = TestRunner.afterEach.bind(TestRunner);

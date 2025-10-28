@@ -12,26 +12,26 @@
     "maxFailures": 0,
     "metadata": {
       "ci": {
-        "commitHref": "https://github.com/antoniocorsano-boop/OrarioDoc/commit/2f96542c806e7911a403cb27d5f697992d7503a5",
-        "commitHash": "2f96542c806e7911a403cb27d5f697992d7503a5",
-        "buildHref": "https://github.com/antoniocorsano-boop/OrarioDoc/actions/runs/18864719874"
+        "commitHref": "https://github.com/antoniocorsano-boop/OrarioDoc/commit/231eda249930cf3a3cd774caaf25669622e0eb71",
+        "commitHash": "231eda249930cf3a3cd774caaf25669622e0eb71",
+        "buildHref": "https://github.com/antoniocorsano-boop/OrarioDoc/actions/runs/18865094679"
       },
       "gitCommit": {
-        "shortHash": "2f96542",
-        "hash": "2f96542c806e7911a403cb27d5f697992d7503a5",
-        "subject": "Initial plan",
-        "body": "Initial plan\n",
+        "shortHash": "231eda2",
+        "hash": "231eda249930cf3a3cd774caaf25669622e0eb71",
+        "subject": "Remove duplicate tests-mitigations.yml workflow to prevent parallel runs",
+        "body": "Remove duplicate tests-mitigations.yml workflow to prevent parallel runs\n\nCo-authored-by: antoniocorsano-boop <233439245+antoniocorsano-boop@users.noreply.github.com>\n",
         "author": {
           "name": "copilot-swe-agent[bot]",
           "email": "198982749+Copilot@users.noreply.github.com",
-          "time": 1761627970000
+          "time": 1761627173000
         },
         "committer": {
           "name": "copilot-swe-agent[bot]",
           "email": "198982749+Copilot@users.noreply.github.com",
-          "time": 1761627970000
+          "time": 1761627173000
         },
-        "branch": "copilot/fix-test-error"
+        "branch": "copilot/update-playwright-testing-setup"
       },
       "actualWorkers": 1
     },
@@ -64,26 +64,26 @@
         "retries": 1,
         "metadata": {
           "ci": {
-            "commitHref": "https://github.com/antoniocorsano-boop/OrarioDoc/commit/2f96542c806e7911a403cb27d5f697992d7503a5",
-            "commitHash": "2f96542c806e7911a403cb27d5f697992d7503a5",
-            "buildHref": "https://github.com/antoniocorsano-boop/OrarioDoc/actions/runs/18864719874"
+            "commitHref": "https://github.com/antoniocorsano-boop/OrarioDoc/commit/231eda249930cf3a3cd774caaf25669622e0eb71",
+            "commitHash": "231eda249930cf3a3cd774caaf25669622e0eb71",
+            "buildHref": "https://github.com/antoniocorsano-boop/OrarioDoc/actions/runs/18865094679"
           },
           "gitCommit": {
-            "shortHash": "2f96542",
-            "hash": "2f96542c806e7911a403cb27d5f697992d7503a5",
-            "subject": "Initial plan",
-            "body": "Initial plan\n",
+            "shortHash": "231eda2",
+            "hash": "231eda249930cf3a3cd774caaf25669622e0eb71",
+            "subject": "Remove duplicate tests-mitigations.yml workflow to prevent parallel runs",
+            "body": "Remove duplicate tests-mitigations.yml workflow to prevent parallel runs\n\nCo-authored-by: antoniocorsano-boop <233439245+antoniocorsano-boop@users.noreply.github.com>\n",
             "author": {
               "name": "copilot-swe-agent[bot]",
               "email": "198982749+Copilot@users.noreply.github.com",
-              "time": 1761627970000
+              "time": 1761627173000
             },
             "committer": {
               "name": "copilot-swe-agent[bot]",
               "email": "198982749+Copilot@users.noreply.github.com",
-              "time": 1761627970000
+              "time": 1761627173000
             },
-            "branch": "copilot/fix-test-error"
+            "branch": "copilot/update-playwright-testing-setup"
           },
           "actualWorkers": 1
         },
@@ -102,11 +102,7 @@
     "updateSourceMethod": "patch",
     "version": "1.56.1",
     "workers": 1,
-    "webServer": {
-      "command": "python3 -m http.server 8080",
-      "port": 8080,
-      "reuseExistingServer": false
-    }
+    "webServer": null
   },
   "suites": [
     {
@@ -144,7 +140,7 @@
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2025-10-28T05:11:30.500Z",
+                  "startTime": "2025-10-28T05:31:30.033Z",
                   "annotations": [],
                   "attachments": []
                 },
@@ -165,7 +161,7 @@
                   "stdout": [],
                   "stderr": [],
                   "retry": 1,
-                  "startTime": "2025-10-28T05:11:31.117Z",
+                  "startTime": "2025-10-28T05:31:30.665Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -221,7 +217,7 @@
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2025-10-28T05:11:31.735Z",
+                  "startTime": "2025-10-28T05:31:31.314Z",
                   "annotations": [],
                   "attachments": []
                 },
@@ -242,7 +238,7 @@
                   "stdout": [],
                   "stderr": [],
                   "retry": 1,
-                  "startTime": "2025-10-28T05:11:32.340Z",
+                  "startTime": "2025-10-28T05:31:31.929Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -266,8 +262,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-10-28T05:11:29.792Z",
-    "duration": 2611.767,
+    "startTime": "2025-10-28T05:31:29.335Z",
+    "duration": 2658.889,
     "expected": 0,
     "skipped": 0,
     "unexpected": 2,

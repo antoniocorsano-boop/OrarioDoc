@@ -20,101 +20,83 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: Setup Python
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Restore npm cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+      
+      - name: Restore Playwright browsers cache
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+      
+      - name: Install Node dependencies
+        run: npm install
+      
+      - name: Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+      
+      - name: Verify Playwright browsers (use cached)
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: npx playwright install chromium
+      
+      - name: Determine BASE_URL
+        id: base-url
+        run: |
+          # Construct GitHub Pages URL
+          REPO_NAME="${{ github.event.repository.name }}"
+          PAGES_URL="https://${{ github.repository_owner }}.github.io/${REPO_NAME}"
+          
+          echo "Checking if GitHub Pages is available at: ${PAGES_URL}"
+          
+          # Check if GitHub Pages root is accessible and then verify test-runner.html exists
+          ROOT_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${PAGES_URL}/")
+          if [ "$ROOT_STATUS" = "200" ]; then
+            # Root is accessible, now check if test-runner.html exists
+            TEST_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${PAGES_URL}/tests/test-runner.html")
+            if [ "$TEST_STATUS" = "200" ]; then
+              echo "GitHub Pages is available with test-runner.html, using it for tests"
+              echo "BASE_URL=${PAGES_URL}" >> $GITHUB_ENV
+              echo "use_pages=true" >> $GITHUB_OUTPUT
+            else
+              echo "GitHub Pages root accessible but test-runner.html not found (status: ${TEST_STATUS})"
+              echo "BASE_URL=http://localhost:8080" >> $GITHUB_ENV
+              echo "use_pages=false" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "GitHub Pages not available (status: ${ROOT_STATUS}), will use local server"
+            echo "BASE_URL=http://localhost:8080" >> $GITHUB_ENV
+            echo "use_pages=false" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Setup Python (if local server needed)
+        if: steps.base-url.outputs.use_pages == 'false'
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
       
-      - name: Start HTTP server
+      - name: Start local HTTP server (if needed)
+        if: steps.base-url.outputs.use_pages == 'false'
         run: |
           cd ${{ github.workspace }}
           python3 -m http.server 8080 &
-          sleep 2
+          sleep 3
           echo "Server started on port 8080"
-      
-      - name: Setup Node.js for Playwright
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-      
-      - name: Cache Playwright browsers
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-playwright-
-      
-      - name: Install Playwright
-        run: |
-          npm init -y
-          npm install -D @playwright/test
-          npx playwright install --with-deps chromium
-      
-      - name: Create Playwright test
-        run: |
-          cat > playwright.config.js <<'EOF'
-          module.exports = {
-            testDir: './playwright-tests',
-            timeout: 30000,
-            use: {
-              baseURL: 'http://localhost:8080',
-              headless: true,
-            },
-          };
-          EOF
-          
-          mkdir -p playwright-tests
-          cat > playwright-tests/test-runner.spec.js << 'EOF'
-          const { test, expect } = require('@playwright/test');
-
-          test('OrarioDoc streamlined tests', async ({ page }) => {
-            // Navigate to simple test runner
-            await page.goto('/tests/simple-runner.html');
-            
-            // Wait for page to load
-            await page.waitForLoadState('domcontentloaded');
-            
-            // Click run tests button
-            await page.click('#run-btn');
-            
-            // Wait for tests to complete (status appears)
-            await page.waitForSelector('.status.visible', { timeout: 15000 });
-            
-            // Get test statistics
-            const stats = await page.evaluate(() => {
-              return {
-                total: parseInt(document.getElementById('total').textContent),
-                passed: parseInt(document.getElementById('passed').textContent),
-                failed: parseInt(document.getElementById('failed').textContent)
-              };
-            });
-            
-            console.log('Test Results:', stats);
-            
-            // Get status message
-            const status = await page.locator('#status').textContent();
-            console.log('Status:', status);
-            
-            // Get console output for debugging
-            const consoleOutput = await page.evaluate(() => {
-              return document.getElementById('output').textContent;
-            });
-            
-            if (stats.failed > 0) {
-              console.log('\n=== Test Output ===');
-              console.log(consoleOutput);
-            }
-            
-            // Take screenshot
-            await page.screenshot({ path: 'test-results.png', fullPage: true });
-            
-            // Assert all tests passed
-            expect(stats.failed).toBe(0);
-            expect(stats.passed).toBeGreaterThan(0);
-          });
-          EOF
+          # Verify server is responding
+          curl -s http://localhost:8080/ > /dev/null && echo "Server is responding" || echo "Server not responding"
       
       - name: Run Playwright tests
         run: npx playwright test
@@ -124,7 +106,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: test-results
-          path: test-results.png
+          path: test-results/
           retention-days: 30
       
       - name: Test Summary
@@ -132,6 +114,14 @@ jobs:
         run: |
           echo "## Test Results 🧪" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Test runner executed successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "BASE_URL used: ${{ env.BASE_URL }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "View the test results screenshot in the artifacts." >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f "test-results.json" ]; then
+            echo "Test execution completed!" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "Test results not found." >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "View the detailed test results in the artifacts." >> $GITHUB_STEP_SUMMARY
